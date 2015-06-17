@@ -1,0 +1,6 @@
+[submodule "TouchScript"]
+	path = Libraries/TouchScript
+	url = https://github.com/TouchScript/TouchScript
+[submodule "LeanTween"]
+	path = Libraries/LeanTween
+	url = https://github.com/dentedpixel/LeanTween
