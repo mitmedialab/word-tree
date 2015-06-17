@@ -1,0 +1,61 @@
+# =============== #
+# Unity generated #
+# =============== #
+[Tt]emp/
+[Oo]bj/
+[Bb]uild
+[Ll]ibrary/
+sysinfo.txt
+# ===================================== #
+# Visual Studio / MonoDevelop generated #
+# ===================================== #
+[Ee]xported[Oo]bj/
+*.userprefs
+sar-opal-base/*.csproj
+*.pidb
+*.suo
+sar-opal-base/*.sln*
+*.user
+*.unityproj
+*.booproj
+# ============ #
+# OS generated #
+# ============ #
+.DS_Store*
+._*
+.Spotlight-V100
+.Trashes
+Icon?
+ehthumbs.db
+[Tt]humbs.db 
+# ======================== #
+# ignore packaged app also #
+# ======================== #
+*.apk
+# ========================================= #
+# websocket config since it changes so much
+# ========================================= #
+sar-opal-base/Assets/Resources/websocket_config.txt
+# ======================================================== #
+# app content - images and audio - except for some samples
+# ======================================================== #
+sar-opal-base/Assets/Resources/audio/*.wav
+sar-opal-base/Assets/Resources/audio/*.wav.meta
+sar-opal-base/Assets/Resources/graphics/base-images/*.png
+sar-opal-base/Assets/Resources/graphics/base-images/*.png.meta
+!sar-opal-base/Assets/Resources/audio/chimes.wav
+!sar-opal-base/Assets/Resources/audio/chimes.wav.meta
+!sar-opal-base/Assets/Resources/audio/wakeup.wav
+!sar-opal-base/Assets/Resources/audio/wakeup.wav.meta
+!sar-opal-base/Assets/Resources/graphics/base-images/toucan*.png
+!sar-opal-base/Assets/Resources/graphics/base-images/toucan*.png.meta
+!sar-opal-base/Assets/Resources/graphics/base-images/bird1.png
+!sar-opal-base/Assets/Resources/graphics/base-images/bird1.png.meta
+!sar-opal-base/Assets/Resources/graphics/base-images/dragon.png
+!sar-opal-base/Assets/Resources/graphics/base-images/dragon.png.meta
+!sar-opal-base/Assets/Resources/graphics/base-images/playground.png
+!sar-opal-base/Assets/Resources/graphics/base-images/playground.png.meta
+!sar-opal-base/Assets/Resources/graphics/base-images/ball.png
+!sar-opal-base/Assets/Resources/graphics/base-images/ball.png.meta
+!sar-opal-base/Assets/Resources/graphics/base-images/ball2.png
+!sar-opal-base/Assets/Resources/graphics/base-images/ball2.png.meta
