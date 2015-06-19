@@ -4,9 +4,3 @@
 [submodule "LeanTween"]
 	path = Libraries/LeanTween
 	url = https://github.com/dentedpixel/LeanTween
-[submodule "Libraries/TouchScript"]
-	path = Libraries/TouchScript
-	url = https://github.com/TouchScript/TouchScript
-[submodule "Libraries/LeanTween"]
-	path = Libraries/LeanTween
-	url = https://github.com/dentedpixel/LeanTween
