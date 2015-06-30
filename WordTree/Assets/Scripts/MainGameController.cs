@@ -1,15 +1,34 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class MainGameController : MonoBehaviour {
+namespace WordTree
+{
 
-	// Use this for initialization
-	void Start () {
-	
-	}
-	
-	// Update is called once per frame
-	void Update () {
-	
+	public class MainGameController : MonoBehaviour {
+
+		private GestureManager gestureManager = null;
+
+		void Awake () {
+			FindGestureManager();
+		}
+
+		void Start () {
+		
+		}
+
+		void Update () {
+		
+		}
+
+		private void FindGestureManager ()
+		{
+			this.gestureManager = (GestureManager)GameObject.FindGameObjectWithTag
+				("GestureMan").GetComponent<GestureManager>();
+			if(this.gestureManager == null) {
+				Debug.Log("ERROR: Could not find gesture manager!");
+			} else {
+				Debug.Log("Got gesture manager");
+			}
+		}
 	}
 }

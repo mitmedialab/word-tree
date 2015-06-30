@@ -5,11 +5,11 @@
 	<Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
 	<ProductVersion>10.0.20506</ProductVersion>
 	<SchemaVersion>2.0</SchemaVersion>
-	<ProjectGuid>{E5C173AD-7E1D-40E4-1CA7-3CF3C9C2B12E}</ProjectGuid>
+	<ProjectGuid>{F0A3E7BC-C39E-7775-0636-F937C1B5218F}</ProjectGuid>
 	<OutputType>Library</OutputType>
 	<AppDesignerFolder>Properties</AppDesignerFolder>
 	<RootNamespace></RootNamespace>
-	<AssemblyName>Assembly-CSharp</AssemblyName>
+	<AssemblyName>Assembly-CSharp-firstpass</AssemblyName>
 	<TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
 	<FileAlignment>512</FileAlignment>
 	<BaseDirectory>Assets</BaseDirectory>
@@ -46,18 +46,13 @@
 	</Reference>
   </ItemGroup>
   <ItemGroup>
-     <Compile Include="Assets\Scripts\GestureManager.cs" />
-     <Compile Include="Assets\Scripts\MainGameController.cs" />
+     <Compile Include="Assets\Plugins\LeanTween.cs" />
  <Reference Include="UnityEngine.UI">
  <HintPath>C:/Program Files (x86)/Unity/Editor/Data/UnityExtensions/Unity/GUISystem/4.6.5/UnityEngine.UI.dll</HintPath>
  </Reference>
  <Reference Include="TouchScript">
  <HintPath>C:/Users/Stacy/Documents/UROP/word-tree/WordTree/Assets/Plugins/TouchScript.dll</HintPath>
  </Reference>
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="Assembly-CSharp-firstpass.csproj">
-      <Project>{F0A3E7BC-C39E-7775-0636-F937C1B5218F}</Project>      <Name>Assembly-CSharp-firstpass</Name>    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
