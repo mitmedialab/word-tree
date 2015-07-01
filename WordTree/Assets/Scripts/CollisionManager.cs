@@ -16,16 +16,14 @@ namespace WordTree
 			if (other.name == gameObject.name) {
 				SpriteRenderer sprite = other.GetComponent<SpriteRenderer> ();
 				sprite.color = Color.gray;
-				Debug.Log ("Collision occurred");
+				Debug.Log ("Collision on " + other.name);
 
 				PanGesture pg = other.GetComponent<PanGesture>();
-				if (pg != null){
-					pg.enabled = false;
-					Debug.Log ("Pan disabled for" + other.name);
-				}
+				pg.enabled = false;
+				Debug.Log ("Disabled touch for " + other.name);
+		
 
 				other.transform.position = gameObject.transform.position;
-
 
 			}
 		}
