@@ -114,8 +114,6 @@ namespace WordTree
 				Debug.Log ("PRESS on " + gesture.gameObject.name + " at " + hit2d.Point);
 			}
 
-			if(this.allowTouch)
-
 			Debug.Log("going to play a sound for " + gesture.gameObject.name);
 			if(this.allowTouch) 
 				PlaySound(gesture.gameObject);

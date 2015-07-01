@@ -46,6 +46,7 @@
 	</Reference>
   </ItemGroup>
   <ItemGroup>
+     <Compile Include="Assets\Scripts\CollisionManager.cs" />
      <Compile Include="Assets\Scripts\GestureManager.cs" />
      <Compile Include="Assets\Scripts\MainGameController.cs" />
  <Reference Include="UnityEngine.UI">
