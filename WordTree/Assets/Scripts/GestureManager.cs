@@ -100,7 +100,7 @@ namespace WordTree
 			}
 
 			if (gesture.gameObject.tag == "LevelSymbol")
-				Application.LoadLevel ("Choose Word");
+				Application.LoadLevel ("3. Choose Word");
 			if (gesture.gameObject.tag == "WordObject")
 				Application.LoadLevel ("4. Spell Word");
 

@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 using System.Collections;
-using UnityEditor;
+
 
 namespace WordTree
 {
@@ -14,7 +14,8 @@ namespace WordTree
 
 		void Start () {
 
-			CreateFruitScene ();
+			LevelProperties.CreateLevel ("Fruits",new string[] {"Apple","Banana","Orange","Grape"},new float[,]{{.8f,.8f},{1,1},{1,1},{1,1}},4);
+			WordProperties.CreateWord (new string[] {"A","P","P","L","E"},new string[] {"A-long","P","P","LE","LE"},"MovableLetter",5);
 
 
 		}
@@ -25,7 +26,7 @@ namespace WordTree
 
 
 
-		void InstantiateObject (ObjectProperties prop)
+		public static void InstantiateObject (ObjectProperties prop)
 		{
 			GameObject go = new GameObject();
 
@@ -81,24 +82,6 @@ namespace WordTree
 			}
 
 
-		}
-
-		void CreateFruitScene()
-		{
-			int x = 4;
-			int y = 2;
-
-			ObjectProperties apple = ObjectProperties.CreateInstance ("Apple", "WordObject", new Vector3 (-x, y, 0), new Vector3 (.7f, .7f, 1), "Fruits/Apple", "Apple");
-			InstantiateObject (apple);
-			
-			ObjectProperties banana = ObjectProperties.CreateInstance ("Banana", "WordObject", new Vector3 (x, y, 0), new Vector3 (1, 1, 1), "Fruits/Banana", null);
-			InstantiateObject (banana);
-			
-			ObjectProperties grape = ObjectProperties.CreateInstance ("Grape", "WordObject", new Vector3 (-x, -y, 0), new Vector3 (1, 1, 1), "Fruits/Grape", "Grape");
-			InstantiateObject (grape);
-			
-			ObjectProperties orange = ObjectProperties.CreateInstance ("Orange", "WordObject", new Vector3 (x, -y, 0), new Vector3 (1, 1, 1), "Fruits/Orange", "Orange");
-			InstantiateObject (orange);
 		}
 
 
