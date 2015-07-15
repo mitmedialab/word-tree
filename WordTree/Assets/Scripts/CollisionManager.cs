@@ -18,26 +18,25 @@ namespace WordTree
 				sprite.color = Color.grey;
 				Debug.Log ("Collision on " + other.name);
 
-				PanGesture pg = other.GetComponent<PanGesture>();
-				pg.enabled = false;
+				GestureManager gm = other.GetComponent<GestureManager>();
+				gm.DisableGestures(other.gameObject);
 				Debug.Log ("Disabled touch for " + other.name);
-		
 
-				other.transform.position = gameObject.transform.position;
+				PulseBehavior pb = other.GetComponent<PulseBehavior>();
+				pb.StopPulsing (other.gameObject);
+				Debug.Log ("Stopped pulsing for " + other.name);
 
-				if (CheckCompletedWord() == true){
-
-					PlayEntireWord ();
-
-				}
+				other.transform.position = new Vector3 (gameObject.transform.position.x,gameObject.transform.position.y,-1);
 
 			}
+
 		}
+
 
 
 		bool CheckCompletedWord ()
 		{
-			GameObject[] gos = GameObject.FindGameObjectsWithTag ("PlayObject");
+			GameObject[] gos = GameObject.FindGameObjectsWithTag ("MovableLetter");
 			foreach (GameObject go in gos) {
 				PanGesture pg = go.GetComponent<PanGesture> ();
 				if (pg.enabled == true)
@@ -48,23 +47,29 @@ namespace WordTree
 			return true;
 		}
 
-		void PlayLetterSounds ()
+
+
+		void Update()
 		{
-			GameObject[] gos = GameObject.FindGameObjectsWithTag ("PlayObject");
-			AudioSource[] sounds = new AudioSource[gos.Length];
-
-			int j = 0;
-			foreach (GameObject go in gos) {
-				AudioSource audio = go.GetComponent<AudioSource>();
-				sounds[j] = audio;
-				j = j+1;
+			if (CheckCompletedWord () == true) {
+				PlayNextLetter();
 			}
-
-			for (var k = 0; k < sounds.Length; k++) {
-				sounds[k].PlayDelayed (1);
-			}
-
 		}
+
+
+		void PlayNextLetter()
+		{
+			int musicNumber = 0;
+			AudioSource[] sounds = GameObject.FindObjectsOfType (typeof(AudioSource)) as AudioSource[];
+
+			if (musicNumber < sounds.Length){
+				audio.clip = sounds[musicNumber].clip;
+				audio.Play ();
+				musicNumber = musicNumber+1;
+			}
+		}
+
+
 
 		void PlayEntireWord()
 		{

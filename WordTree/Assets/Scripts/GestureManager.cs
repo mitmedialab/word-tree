@@ -10,83 +10,84 @@ namespace WordTree
 {
 	public class GestureManager : MonoBehaviour {
 
-		public bool allowTouch = true;
 
-		private void OnEnable () {
-			GameObject[] gos = GameObject.FindGameObjectsWithTag ("PlayObject");
-			foreach (GameObject go in gos) {
-				AddAndSubscribeToGestures (go, true);
-
-				StartPulsing(go);
-
-				}
-			}
-
-		private void OnDestroy () {
-			GameObject[] gos = GameObject.FindGameObjectsWithTag ("PlayObject");
-			foreach (GameObject go in gos) {
-				TapGesture tg = go.GetComponent<TapGesture> ();
-				if (tg != null) {
-					tg.Tapped -= tappedHandler;
-					Debug.Log (go.name + " unsubscribed from tap events");
-				}
-				PanGesture pg = go.GetComponent<PanGesture> ();
-				if (pg != null) {
-					pg.Panned -= pannedHandler;
-					pg.PanCompleted -= panCompleteHandler;
-					pg.PanStarted -= panStartedHandler;
-					Debug.Log (go.name + " unsubscribed from pan events");
-				}
-				PressGesture prg = go.GetComponent<PressGesture> ();
-				if (prg != null) {
-					prg.Pressed -= pressedHandler;
-					Debug.Log (go.name + " unsubscribed from press events");
-				}
-				ReleaseGesture rg = go.GetComponent<ReleaseGesture> ();
-				if (rg != null) {
-					rg.Released -= releasedHandler;
-					Debug.Log (go.name + " unsubscribed from release events");
-				}
-			}
-		}
-
-		public void AddAndSubscribeToGestures (GameObject go, bool draggable)
+		public void AddAndSubscribeToGestures (GameObject go)
 		{
-			TapGesture tg = go.GetComponent<TapGesture>();
-		
-			if(tg != null) {
+			if (go.tag == "WordObject") {
+
+				TapGesture tg = go.AddComponent<TapGesture> ();
 				tg.Tapped += tappedHandler;
-				Debug.Log(go.name + " subscribed to tap events");
+				Debug.Log (go.name + " subscribed to tap events");
 			}
 
-			if (draggable) {
-				PanGesture pg = go.GetComponent<PanGesture> ();
+			if (go.tag == "MovableLetter") {
 
-				if (pg != null) {
-					pg.CombineTouchesInterval = 0.2f;
-					pg.PanStarted += panStartedHandler;
-					pg.Panned += pannedHandler;
-					pg.PanCompleted += panCompleteHandler;
-					Debug.Log (go.name + " subscribed to pan events");
-				}
-			}
+				PanGesture pg = go.AddComponent<PanGesture> ();
+				pg.CombineTouchesInterval = 0.2f;
+				pg.PanStarted += panStartedHandler;
+				pg.Panned += pannedHandler;
+				pg.PanCompleted += panCompleteHandler;
+				Debug.Log (go.name + " subscribed to pan events");
 
-			PressGesture prg = go.GetComponent<PressGesture> ();
-
-			if (prg != null) {
+				PressGesture prg = go.AddComponent<PressGesture> ();
 				prg.Pressed += pressedHandler;
 				Debug.Log (go.name + " subscribed to press events");
-			}
 
-			ReleaseGesture rg = go.GetComponent<ReleaseGesture> ();
-
-			if (rg != null) {
+				ReleaseGesture rg = go.AddComponent<ReleaseGesture> ();
 				rg.Released += releasedHandler;
 				Debug.Log (go.name + " subscribed to release events");
+
+				Transformer2D t2d = go.AddComponent<Transformer2D>();
+
 			}
-
-
 		}
+
+		public void UnsubscribeFromGestures (GameObject go)
+		{
+			TapGesture tg = go.GetComponent<TapGesture> ();
+			if (tg != null) {
+				tg.Tapped -= tappedHandler;
+				Debug.Log (go.name + " unsubscribed from tap events");
+			}
+			PanGesture pg = go.GetComponent<PanGesture> ();
+			if (pg != null) {
+				pg.Panned -= pannedHandler;
+				pg.PanCompleted -= panCompleteHandler;
+				pg.PanStarted -= panStartedHandler;
+				Debug.Log (go.name + " unsubscribed from pan events");
+			}
+			PressGesture prg = go.GetComponent<PressGesture> ();
+			if (prg != null) {
+				prg.Pressed -= pressedHandler;
+				Debug.Log (go.name + " unsubscribed from press events");
+			}
+			ReleaseGesture rg = go.GetComponent<ReleaseGesture> ();
+			if (rg != null) {
+				rg.Released -= releasedHandler;
+				Debug.Log (go.name + " unsubscribed from release events");
+			}
+		}
+
+		public void DisableGestures (GameObject go)
+		{
+			TapGesture tg = go.GetComponent<TapGesture> ();
+			if (tg != null) {
+				tg.enabled = false;
+			}
+			PanGesture pg = go.GetComponent<PanGesture> ();
+			if (pg != null) {
+				pg.enabled = false;
+			}
+			PressGesture prg = go.GetComponent<PressGesture> ();
+			if (prg != null) {
+				prg.enabled = false;
+			}
+			ReleaseGesture rg = go.GetComponent<ReleaseGesture> ();
+			if (rg != null) {
+				rg.enabled = false;
+			}
+		}
+
 
 		private void tappedHandler (object sender, EventArgs e)
 		{
@@ -95,12 +96,14 @@ namespace WordTree
 
 			if (gesture.GetTargetHitResult (out hit)) { 
 				ITouchHit2D hit2d = (ITouchHit2D)hit; 
-				Debug.Log ("TAP registered on " + gesture.gameObject.name + " at " + hit2d.Point);
+				Debug.Log ("TAP on " + gesture.gameObject.name + " at " + hit2d.Point);
 			}
 
+			if (gesture.gameObject.tag == "LevelSymbol")
+				Application.LoadLevel ("Choose Word");
+			if (gesture.gameObject.tag == "WordObject")
+				Application.LoadLevel ("4. Spell Word");
 
-			Debug.Log ("Loading next scene");
-			Application.LoadLevel (gesture.gameObject.name);
 
 		}
 
@@ -114,9 +117,7 @@ namespace WordTree
 				Debug.Log ("PRESS on " + gesture.gameObject.name + " at " + hit2d.Point);
 			}
 
-			Debug.Log("going to play a sound for " + gesture.gameObject.name);
-			if(this.allowTouch) 
-				PlaySound(gesture.gameObject);
+			PlaySound(gesture.gameObject);
 		}
 		
 		private void releasedHandler (object sender, EventArgs e)
@@ -146,9 +147,9 @@ namespace WordTree
 			if (gesture.GetTargetHitResult (out hit)) {
 				ITouchHit2D hit2d = (ITouchHit2D)hit; 
 				Debug.Log ("PAN on " + gesture.gameObject.name + " at " + hit2d.Point);
-				if (this.allowTouch) {
-					gesture.gameObject.transform.position = hit2d.Point;
-				}
+
+				gesture.gameObject.transform.position = hit2d.Point;
+
 			
 			}
 
@@ -161,32 +162,16 @@ namespace WordTree
 		}
 
 
-
-
-		private bool PlaySound (GameObject go)
+		public void PlaySound (GameObject go)
 		{ 
 			AudioSource auds = go.GetComponent<AudioSource>();
-			if(auds != null && auds.clip != null) {
-				Debug.Log("playing clip for object " + go.name);
-
-				if(!go.audio.isPlaying)
-					go.audio.Play();
-				
-				return true;   
-			} else {
-				Debug.Log("no sound found for " + go.name + "!");
-				return false;
+			if (auds != null && auds.clip != null) {
+				Debug.Log("Playing clip for " + go.name);
+				go.audio.Play ();  
+			} 
+			else {
+				Debug.Log ("No clip found for " + go.name);
 			}
-		}
-
-
-		public void StartPulsing (GameObject go)
-		{
-			float scaleUpBy = 1.1f; 
-
-			LeanTween.scale(go, new Vector3(go.transform.localScale.x * scaleUpBy, go.transform.localScale.y * scaleUpBy, 
-			                                        go.transform.localScale.z * scaleUpBy), 1.0f)
-				.setEase(LeanTweenType.easeOutSine).setLoopPingPong();
 		}
 
 		
