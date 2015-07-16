@@ -7,6 +7,10 @@ namespace WordTree
 
 	public class GameDirector : MonoBehaviour {
 
+		public static string currentWord = "";
+
+		public static string currentLevel = "";
+
 
 		void Awake () {
 
@@ -14,14 +18,11 @@ namespace WordTree
 
 		void Start () {
 
-			LevelProperties.CreateLevel ("Fruits",new string[] {"Apple","Banana","Orange","Grape"},new float[,]{{.8f,.8f},{1,1},{1,1},{1,1}},4);
-			WordProperties.CreateWord (new string[] {"A","P","P","L","E"},new string[] {"A-long","P","P","LE","LE"},"MovableLetter",5);
-
 
 		}
 
 		void Update () {
-		
+			
 		}
 
 
@@ -51,7 +52,7 @@ namespace WordTree
 				AudioSource audioSource = go.AddComponent<AudioSource>();
 				AudioClip clip = Resources.Load("Audio/" + prop.AudioFile ()) as AudioClip;
 				if (clip == null)
-					Debug.Log ("ERROR: could not load audioclip" + prop.AudioFile ());
+					Debug.Log ("ERROR: could not load audioclip " + prop.AudioFile ());
 				audioSource.clip = clip;
 				audioSource.playOnAwake = false;
 			}
@@ -67,18 +68,13 @@ namespace WordTree
 				rb2d.gravityScale = 0;
 			}
 
-			if (go.tag == "TargetLetter") 
-			{
-				CollisionManager cm = go.AddComponent<CollisionManager> ();
-			}
-
 
 			if (go.tag == "WordObject" || go.tag == "MovableLetter") 
 			{	
 				GestureManager gm = go.AddComponent<GestureManager> ();
 				gm.AddAndSubscribeToGestures (go); 
 
-				PulseBehavior pb = go.AddComponent<PulseBehavior> ();
+				go.AddComponent<PulseBehavior> ();
 			}
 
 

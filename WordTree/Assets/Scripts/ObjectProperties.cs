@@ -5,7 +5,7 @@ namespace WordTree
 {
 	public class ObjectProperties : ScriptableObject {
 
-		private string name;
+		private string objName;
 
 		private string tag;
 
@@ -21,7 +21,7 @@ namespace WordTree
 		public void Init (string name, string tag, Vector3 posn, Vector3 scale, string sprite, string audioFile)
 		{
 
-			this.name = name;
+			this.objName = name;
 
 			this.tag = tag;
 
@@ -46,7 +46,7 @@ namespace WordTree
 
 		public string Name()
 		{
-			return this.name;
+			return this.objName;
 		}
 
 		public string Tag()

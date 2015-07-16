@@ -13,7 +13,7 @@ namespace WordTree
 
 		public void AddAndSubscribeToGestures (GameObject go)
 		{
-			if (go.tag == "WordObject") {
+			if (go.tag == "LevelIcon" || go.tag == "WordObject" || go.tag == "Arrow") {
 
 				TapGesture tg = go.AddComponent<TapGesture> ();
 				tg.Tapped += tappedHandler;
@@ -37,7 +37,7 @@ namespace WordTree
 				rg.Released += releasedHandler;
 				Debug.Log (go.name + " subscribed to release events");
 
-				Transformer2D t2d = go.AddComponent<Transformer2D>();
+				go.AddComponent<Transformer2D>();
 
 			}
 		}
@@ -99,10 +99,21 @@ namespace WordTree
 				Debug.Log ("TAP on " + gesture.gameObject.name + " at " + hit2d.Point);
 			}
 
-			if (gesture.gameObject.tag == "LevelSymbol")
+			if (gesture.gameObject.tag == "LevelIcon") {
 				Application.LoadLevel ("3. Choose Word");
-			if (gesture.gameObject.tag == "WordObject")
+				GameDirector.currentLevel = gesture.gameObject.name;
+			}
+
+			if (gesture.gameObject.tag == "WordObject") {
 				Application.LoadLevel ("4. Spell Word");
+				GameDirector.currentWord = gesture.gameObject.name;
+			}
+
+			if (gesture.gameObject.name == "BackArrow4")
+				Application.LoadLevel ("3. Choose Word");
+
+			if (gesture.gameObject.name == "BackArrow3")
+				Application.LoadLevel ("2. Word Tree");
 
 
 		}
