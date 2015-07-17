@@ -5,13 +5,13 @@ namespace WordTree
 {
 	public class LevelCreation : MonoBehaviour {
 
-		public static void CreateLevel(string level, string[] objects, float[,] scale, int numObjects)
+		public static void CreateLevel(string level, string[] objects, float[] scale, int numObjects)
 		{
 			Vector3[] Position = new Vector3[numObjects];
 
 			if (numObjects == 4) {
-				int x = 4;
-				int y = 2;
+				float x = 5;
+				float y = 2.5f;
 				Position = new Vector3[4] {
 					new Vector3 (-x, y, 0),
 					new Vector3 (x, y, 0),
@@ -21,9 +21,9 @@ namespace WordTree
 			}
 
 			if (numObjects == 5) {
-				int x1 = 4;
-				int x2 = 2;
-				int y1 = 2;
+				float x1 = 6;
+				float x2 = 2;
+				float y1 = 2.5f;
 				Position = new Vector3[5] {
 					new Vector3 (-x1, 0, 0),
 					new Vector3 (0, y1, 0),
@@ -33,20 +33,20 @@ namespace WordTree
 				};
 			}
 			
-			ObjectProperties obj1= ObjectProperties.CreateInstance (objects[0], "WordObject", Position[0], new Vector3 (scale[0,0], scale[0,1], 1), level+"/"+objects[0], objects[0]);
+			ObjectProperties obj1= ObjectProperties.CreateInstance (objects[0], "WordObject", Position[0], new Vector3 (scale[0], scale[0], 1), level+"/"+objects[0], objects[0]);
 			GameDirector.InstantiateObject (obj1);
 			
-			ObjectProperties obj2 = ObjectProperties.CreateInstance (objects[1], "WordObject", Position[1], new Vector3 (scale[1,0], scale[1,1], 1), level+"/"+objects[1], objects[1]);
+			ObjectProperties obj2 = ObjectProperties.CreateInstance (objects[1], "WordObject", Position[1], new Vector3 (scale[1], scale[1], 1), level+"/"+objects[1], objects[1]);
 			GameDirector.InstantiateObject (obj2);
 			
-			ObjectProperties obj3 = ObjectProperties.CreateInstance (objects[2], "WordObject", Position[2], new Vector3 (scale[2,0], scale[2,1], 1), level+"/"+objects[2], objects[2]);
+			ObjectProperties obj3 = ObjectProperties.CreateInstance (objects[2], "WordObject", Position[2], new Vector3 (scale[2], scale[2], 1), level+"/"+objects[2], objects[2]);
 			GameDirector.InstantiateObject (obj3);
 			
-			ObjectProperties obj4 = ObjectProperties.CreateInstance (objects [3], "WordObject", Position[3], new Vector3 (scale[3,0], scale[3,1], 1), level+"/"+objects[3], objects [3]);
+			ObjectProperties obj4 = ObjectProperties.CreateInstance (objects [3], "WordObject", Position[3], new Vector3 (scale[3], scale[3], 1), level+"/"+objects[3], objects [3]);
 			GameDirector.InstantiateObject (obj4);
 
 			if (numObjects >= 5) {
-				ObjectProperties obj5 = ObjectProperties.CreateInstance (objects [4], "WordObject", Position [4], new Vector3 (scale [4, 0], scale [4, 1], 1), level + "/" + objects [4], objects [4]);
+				ObjectProperties obj5 = ObjectProperties.CreateInstance (objects [4], "WordObject", Position [4], new Vector3 (scale [4], scale [4], 1), level + "/" + objects [4], objects [4]);
 				GameDirector.InstantiateObject (obj5);
 			}
 		}

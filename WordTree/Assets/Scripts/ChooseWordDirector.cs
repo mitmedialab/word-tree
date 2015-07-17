@@ -27,7 +27,12 @@ namespace WordTree
 				
 			case "Fruits":
 
-				LevelCreation.CreateLevel ("Fruits",new string[] {"Apple","Banana","Orange","Grape"},new float[,]{{.7f,.7f},{1,1},{1,1},{1,1}},4);
+				LevelCreation.CreateLevel ("Fruits",new string[] {"Apple","Banana","Grape","Orange","Peach"},new float[] {.7f, 1f, 1f, 1f, 1.4f}, 5);
+				break;
+
+			case "Animals":
+				
+				LevelCreation.CreateLevel ("Animals",new string[] {"Bird","Camel","Fish","Goat","Horse"},new float[] {.6f, .7f, 1.1f, .05f, .8f}, 5);
 				break;
 
 				

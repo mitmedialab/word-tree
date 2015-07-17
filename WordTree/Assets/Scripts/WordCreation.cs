@@ -5,7 +5,18 @@ namespace WordTree
 {
 	public class WordCreation : MonoBehaviour {
 
-		public static void CreateWord(string[] word, string[] sounds, string tag, int numLetters)
+
+		public static void CreateMovableAndTargetWords(string word, string[] soundArray)
+		{
+			string[] letterArray = new string[word.Length];
+			for (int i=0; i<word.Length; i++)
+				letterArray [i] = System.Char.ToString(word [i]);
+
+			CreateWord (letterArray, soundArray, "MovableLetter", word.Length);
+			CreateWord (letterArray, soundArray, "TargetLetter", word.Length);
+		}
+
+		static void CreateWord(string[] word, string[] sounds, string tag, int numLetters)
 		{
 			float xScale = .3f;
 			float yScale = .3f;

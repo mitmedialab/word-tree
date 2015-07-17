@@ -10,7 +10,7 @@ namespace WordTree
 
 			StartCoroutine(LightOff(0));
 
-			CreateWordAndObject (GameDirector.currentWord);
+			VocabList.CreateWordsAndObjectSwitch (GameDirector.currentWord);
 
 			GameObject arrow = GameObject.FindGameObjectWithTag ("Arrow");
 			arrow.AddComponent<GestureManager> ().AddAndSubscribeToGestures (arrow);
@@ -37,6 +37,15 @@ namespace WordTree
 			GameObject[] gos = GameObject.FindGameObjectsWithTag ("MovableLetter");
 			Vector3[] Position = new Vector3[gos.Length];
 
+			if (gos.Length == 4) {
+				int z = -1;
+				Position = new Vector3[4] {
+					new Vector3 (-6, 0, z),
+					new Vector3 (-3, 2, z),
+					new Vector3 (3, 2, z),
+					new Vector3 (6, 0, z)
+				};
+			}
 			
 			if (gos.Length == 5) {
 				int z = -1;
@@ -170,44 +179,5 @@ namespace WordTree
 		}
 
 
-		void CreateWordAndObject(string word)
-		{
-			switch(word)
-			{
-
-			case "Apple":
-				WordCreation.CreateWord (new string[] {"A","P","P","L","E"}, new string[] {"A-short","P","P","LE","LE"}, "MovableLetter", 5);
-				WordCreation.CreateWord (new string[] {"A","P","P","L","E"}, new string[] {null,null,null,null,null}, "TargetLetter", 5);
-			
-				ObjectProperties apple = ObjectProperties.CreateInstance ("Apple", "WordObject", new Vector3 (0, 2, 0), new Vector3 (1, 1, 1), "Fruits/Apple", "Apple");
-				GameDirector.InstantiateObject (apple);
-				break;
-			
-			case "Banana":
-				WordCreation.CreateWord (new string[] {"B","A","N","A","N","A"}, new string[] {null,null,null,null,null,null}, "MovableLetter", 6);
-				WordCreation.CreateWord (new string[] {"B","A","N","A","N","A"}, new string[] {null,null,null,null,null,null}, "TargetLetter", 6);
-				
-				ObjectProperties banana = ObjectProperties.CreateInstance ("Banana", "WordObject", new Vector3 (0, 2, 0), new Vector3 (1, 1, 1), "Fruits/Banana", "Banana");
-				GameDirector.InstantiateObject (banana);
-				break;
-
-			case "Grape":
-				WordCreation.CreateWord (new string[] {"G","R","A","P","E"}, new string[] {null,"R","A-long","P",null}, "MovableLetter", 5);
-				WordCreation.CreateWord (new string[] {"G","R","A","P","E"}, new string[] {null,null,null,null,null}, "TargetLetter", 5);
-				
-				ObjectProperties grape = ObjectProperties.CreateInstance ("Grape", "WordObject", new Vector3 (0, 2, 0), new Vector3 (1, 1, 1), "Fruits/Grape", "Grape");
-				GameDirector.InstantiateObject (grape);
-				break;
-
-			case "Orange":
-				WordCreation.CreateWord (new string[] {"O","R","A","N","G","E"}, new string[] {null,null,null,null,null,null}, "MovableLetter", 6);
-				WordCreation.CreateWord (new string[] {"O","R","A","N","G","E"}, new string[] {null,null,null,null,null,null}, "TargetLetter", 6);
-				
-				ObjectProperties orange = ObjectProperties.CreateInstance ("Orange", "WordObject", new Vector3 (0, 2, 0), new Vector3 (1, 1, 1), "Fruits/Orange", "Orange");
-				GameDirector.InstantiateObject (orange);
-				break;
-
-			}
-		}
 	}
 }
