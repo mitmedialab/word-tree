@@ -1,5 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
+using System.Collections.Generic;
+using System.Linq;
 
 
 namespace WordTree
@@ -10,6 +12,10 @@ namespace WordTree
 		public static string currentWord = "";
 
 		public static string currentLevel = "";
+
+		public static List<string> completedWords = new List<string>();
+
+		public static List<string> completedLevels = new List<string>();
 
 
 		void Awake () {
@@ -76,6 +82,7 @@ namespace WordTree
 
 				go.AddComponent<PulseBehavior> ();
 			}
+
 
 
 		}

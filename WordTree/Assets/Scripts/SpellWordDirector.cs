@@ -5,6 +5,7 @@ namespace WordTree
 {
 	public class SpellWordDirector : MonoBehaviour {
 
+		float clipLength = .8f;
 
 		void Start () {
 
@@ -40,18 +41,18 @@ namespace WordTree
 			if (gos.Length == 4) {
 				int z = -1;
 				Position = new Vector3[4] {
-					new Vector3 (-6, 0, z),
-					new Vector3 (-3, 2, z),
-					new Vector3 (3, 2, z),
-					new Vector3 (6, 0, z)
+					new Vector3 (-7, 0, z),
+					new Vector3 (-4, 2, z),
+					new Vector3 (4, 2, z),
+					new Vector3 (7, 0, z)
 				};
 			}
 			
 			if (gos.Length == 5) {
 				int z = -1;
 				Position = new Vector3[5] {
-					new Vector3 (-9, 0, z),
-					new Vector3 (-6, 2, z),
+					new Vector3 (-7, 0, z),
+					new Vector3 (-4, 2, z),
 					new Vector3 (3, 3, z),
 					new Vector3 (6, 1.5f, z),
 					new Vector3 (9, 0, z)
@@ -83,12 +84,11 @@ namespace WordTree
 			GameObject[] gos = GameObject.FindGameObjectsWithTag ("TargetLetter"); 
 			foreach (GameObject go in gos)
 				go.AddComponent<CollisionManager> ();
-			Debug.Log ("Added Collision Manager");
+			Debug.Log ("Enabled Collisions");
 		}
 
 		public void SpellOutWord()
 		{
-			float clipLength = .8f;
 			GameObject[] gos = GameObject.FindGameObjectsWithTag ("MovableLetter");
 			
 			PlaySoundAndHighlightLetter (gos [0], 0);
@@ -103,35 +103,33 @@ namespace WordTree
 				
 			PlaySoundAndHighlightWord ();
 
-			StartCoroutine(CongratsAnimation((gos.Length+1f) * clipLength));
+			StartCoroutine(CongratsAnimation((gos.Length+1f) * this.clipLength));
 				
 		}
 
 		void PlaySoundAndHighlightLetter(GameObject go, float index)
 		{
-			float clipLength = .8f;
 
 			if (go.audio != null && go.audio.clip != null) {
 				Debug.Log ("Playing clip for " + go.name);
-				go.audio.PlayDelayed (index*clipLength);  
+				go.audio.PlayDelayed (index*this.clipLength);  
 			}
 
-			StartCoroutine(LightOn (go.transform.position,index*clipLength,"letter"));
-			StartCoroutine (LightOff ((index+.5f) * clipLength));
+			StartCoroutine(LightOn (go.transform.position,index*this.clipLength,"letter"));
+			StartCoroutine (LightOff ((index+.5f) * this.clipLength));
 		}
 
 		void PlaySoundAndHighlightWord()
 		{
-			float clipLength = .8f;
 			GameObject[] gos = GameObject.FindGameObjectsWithTag ("MovableLetter");
 			GameObject go = GameObject.FindGameObjectWithTag ("WordObject");
 			if (go.audio != null && go.audio.clip != null) {
 				Debug.Log ("Playing clip for " + go.name);
-				go.audio.PlayDelayed ((gos.Length) * clipLength);
+				go.audio.PlayDelayed ((gos.Length) * this.clipLength);
 			}
 
-			StartCoroutine (LightOn (new Vector3(0,-2,-1),(gos.Length)*clipLength,"word"));
-			StartCoroutine (LightOff ((gos.Length+.5f) * clipLength));
+			StartCoroutine (LightOn (new Vector3(0,-2,-1),(gos.Length)*this.clipLength,"word"));
+			StartCoroutine (LightOff ((gos.Length+.5f) * this.clipLength));
 		}
 
 
@@ -173,7 +171,7 @@ namespace WordTree
 
 			Debug.Log ("Playing clip for congrats");
 			AudioSource audio = go.AddComponent<AudioSource> ();
-			audio.clip = Resources.Load ("Audio/Congrats") as AudioClip;
+			audio.clip = Resources.Load ("Audio/CongratsSound") as AudioClip;
 			audio.Play ();
 
 		}

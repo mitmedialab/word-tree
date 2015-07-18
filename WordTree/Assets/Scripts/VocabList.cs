@@ -7,7 +7,7 @@ namespace WordTree
 		
 		static void CreateObject(string word, float scale)
 		{
-			ObjectProperties Obj = ObjectProperties.CreateInstance (word, "WordObject", new Vector3 (0, 2, 0), new Vector3 (scale, scale, 1), GameDirector.currentLevel + "/" + word, word);
+			ObjectProperties Obj = ObjectProperties.CreateInstance (word, "WordObject", new Vector3 (0, 2, 0), new Vector3 (scale, scale, 1), GameDirector.currentLevel + "/" + word, "Words/"+word);
 			GameDirector.InstantiateObject (Obj);
 		}
 		
@@ -28,6 +28,12 @@ namespace WordTree
 				WordCreation.CreateMovableAndTargetWords("BANANA",new string[] {"B","A","N","A","N","A"});
 				CreateObject("Banana",1);
 				break;
+
+			case "Cherry":
+				
+				WordCreation.CreateMovableAndTargetWords("CHERRY",new string[] {"C","H","E","R","R","Y"});
+				CreateObject("Cherry",.7f);
+				break;
 				
 			case "Grape":
 				
@@ -41,12 +47,6 @@ namespace WordTree
 				CreateObject("Orange",1);
 				break;
 
-			case "Peach":
-				
-				WordCreation.CreateMovableAndTargetWords("PEACH",new string[] {"P","E","A","C","H"});
-				CreateObject("Peach",1.4f);
-				break;
-
 				
 			//Animals Level
 			case "Bird":
@@ -54,31 +54,247 @@ namespace WordTree
 				WordCreation.CreateMovableAndTargetWords("BIRD",new string[] {"B","I","R","D"});
 				CreateObject("Bird",.6f);
 				break;
-				
-			case "Camel":
-				
-				WordCreation.CreateMovableAndTargetWords("CAMEL",new string[] {"C","A","M","E","L"});
-				CreateObject("Camel",.7f);
-				break;
-				
+
 			case "Fish":
 				
 				WordCreation.CreateMovableAndTargetWords("FISH",new string[] {"F","I","S","H"});
 				CreateObject("Fish",1.1f);
 				break;
-				
-			case "Goat":
-				
-				WordCreation.CreateMovableAndTargetWords("GOAT",new string[] {"G","O","A","T"});
-				CreateObject("Goat",.05f);
-				break;
 
 			case "Horse":
 				
 				WordCreation.CreateMovableAndTargetWords("HORSE",new string[] {"H","O","R","S","E"});
-				CreateObject("Horse",.8f);
+				CreateObject("Horse",.9f);
+				break;
+
+			case "Rabbit":
+				
+				WordCreation.CreateMovableAndTargetWords("RABBIT",new string[] {"R","A","B","B","I","T"});
+				CreateObject("Rabbit",.6f);
+				break;
+
+			case "Zebra":
+				
+				WordCreation.CreateMovableAndTargetWords("ZEBRA",new string[] {"Z","E","B","R","A"});
+				CreateObject("Zebra",.9f);
+				break;
+			
+			//SchoolSupplies Level
+			case "Book":
+				
+				WordCreation.CreateMovableAndTargetWords("BOOK",new string[] {"B","O","O","K"});
+				CreateObject("Book",.1f);
 				break;
 				
+			case "Crayon":
+				
+				WordCreation.CreateMovableAndTargetWords("CRAYON",new string[] {"C","R","A","Y","O","N"});
+				CreateObject("Crayon",.3f);
+				break;
+				
+			case "Glue":
+				
+				WordCreation.CreateMovableAndTargetWords("GLUE",new string[] {"G","L","U","E"});
+				CreateObject("Glue",.3f);
+				break;
+				
+			case "Pencil":
+				
+				WordCreation.CreateMovableAndTargetWords("PENCIL",new string[] {"P","E","N","C","I","L"});
+				CreateObject("Pencil",1f);
+				break;
+			
+			case "Tape":
+				
+				WordCreation.CreateMovableAndTargetWords("TAPE",new string[] {"T","A","P","E"});
+				CreateObject("Tape",.7f);
+				break;
+
+			//Clothes Level
+			case "Boot":
+				
+				WordCreation.CreateMovableAndTargetWords("BOOT",new string[] {"B","O","O","T"});
+				CreateObject("Boot",.6f);
+				break;
+				
+			case "Glove":
+				
+				WordCreation.CreateMovableAndTargetWords("GLOVE",new string[] {"G","L","O","V","E"});
+				CreateObject("Glove",1.2f);
+				break;
+				
+			case "Jacket":
+				
+				WordCreation.CreateMovableAndTargetWords("JACKET",new string[] {"J","A","C","K","E","T"});
+				CreateObject("Jacket",.35f);
+				break;
+				
+			case "Pants":
+				
+				WordCreation.CreateMovableAndTargetWords("PANTS",new string[] {"P","A","N","T","S"});
+				CreateObject("Pants",1f);
+				break;
+				
+			case "Shirt":
+				
+				WordCreation.CreateMovableAndTargetWords("SHIRT",new string[] {"S","H","I","R","T"});
+				CreateObject("Shirt",.6f);
+				break;
+			
+			//Jobs Level
+			case "Author":
+				
+				WordCreation.CreateMovableAndTargetWords("AUTHOR",new string[] {"A","U","T","H","O","R"});
+				CreateObject("Author",.6f);
+				break;
+				
+			case "Barber":
+				
+				WordCreation.CreateMovableAndTargetWords("BARBER",new string[] {"B","A","R","B","E","R"});
+				CreateObject("Barber",1.2f);
+				break;
+				
+			case "Chef":
+				
+				WordCreation.CreateMovableAndTargetWords("CHEF",new string[] {"C","H","E","F"});
+				CreateObject("Chef",.35f);
+				break;
+				
+			case "Nurse":
+				
+				WordCreation.CreateMovableAndTargetWords("NURSE",new string[] {"N","U","R","S","E"});
+				CreateObject("Nurse",1f);
+				break;
+				
+			case "Police":
+				
+				WordCreation.CreateMovableAndTargetWords("POLICE",new string[] {"P","O","L","I","C","E"});
+				CreateObject("Police",.6f);
+				break;
+			
+			//Sports Level
+			case "Golf":
+				
+				WordCreation.CreateMovableAndTargetWords("GOLF",new string[] {"G","O","L","F"});
+				CreateObject("Golf",.6f);
+				break;
+				
+			case "Hockey":
+				
+				WordCreation.CreateMovableAndTargetWords("HOCKEY",new string[] {"H","O","C","K","E","Y"});
+				CreateObject("Hockey",1.2f);
+				break;
+				
+			case "Soccer":
+				
+				WordCreation.CreateMovableAndTargetWords("SOCCER",new string[] {"S","O","C","C","E","R"});
+				CreateObject("Soccer",.35f);
+				break;
+				
+			case "Skate":
+				
+				WordCreation.CreateMovableAndTargetWords("SKATE",new string[] {"S","K","A","T","E"});
+				CreateObject("Skate",1f);
+				break;
+				
+			case "Track":
+				
+				WordCreation.CreateMovableAndTargetWords("TRACK",new string[] {"T","R","A","C","K"});
+				CreateObject("Track",.6f);
+				break;
+
+			//Transportation Level
+			case "Bus":
+				
+				WordCreation.CreateMovableAndTargetWords("BUS",new string[] {"B","U","S"});
+				CreateObject("Bus",.6f);
+				break;
+				
+			case "Car":
+				
+				WordCreation.CreateMovableAndTargetWords("CAR",new string[] {"C","A","R"});
+				CreateObject("Car",1.2f);
+				break;
+				
+			case "Plane":
+				
+				WordCreation.CreateMovableAndTargetWords("PLANE",new string[] {"P","L","A","N","E"});
+				CreateObject("Plane",.35f);
+				break;
+				
+			case "Ship":
+				
+				WordCreation.CreateMovableAndTargetWords("SHIP",new string[] {"S","H","I","P"});
+				CreateObject("Ship",1f);
+				break;
+				
+			case "Train":
+				
+				WordCreation.CreateMovableAndTargetWords("TRAIN",new string[] {"T","R","A","I","N"});
+				CreateObject("Train",.6f);
+				break;
+
+			//Bedroom Level
+			case "Bed":
+				
+				WordCreation.CreateMovableAndTargetWords("BED",new string[] {"B","E","D"});
+				CreateObject("Bed",.6f);
+				break;
+				
+			case "Clock":
+				
+				WordCreation.CreateMovableAndTargetWords("CLOCK",new string[] {"C","L","O","C","K"});
+				CreateObject("Clock",1.2f);
+				break;
+				
+			case "Lamp":
+				
+				WordCreation.CreateMovableAndTargetWords("LAMP",new string[] {"L","A","M","P"});
+				CreateObject("Lamp",.35f);
+				break;
+				
+			case "Mirror":
+				
+				WordCreation.CreateMovableAndTargetWords("MIRROR",new string[] {"M","I","R","R","O","R"});
+				CreateObject("Mirror",1f);
+				break;
+				
+			case "Pillow":
+				
+				WordCreation.CreateMovableAndTargetWords("PILLOW",new string[] {"P","I","L","L","O","W"});
+				CreateObject("Pillow",.6f);
+				break;
+			
+			//Vegetables Level
+			case "Bean":
+				
+				WordCreation.CreateMovableAndTargetWords("BEAN",new string[] {"B","E","A","N"});
+				CreateObject("Bean",.6f);
+				break;
+				
+			case "Carrot":
+				
+				WordCreation.CreateMovableAndTargetWords("CARROT",new string[] {"C","A","R","R","O","T"});
+				CreateObject("Carrot",1.2f);
+				break;
+				
+			case "Onion":
+				
+				WordCreation.CreateMovableAndTargetWords("ONION",new string[] {"O","N","I","O","N"});
+				CreateObject("Onion",.35f);
+				break;
+				
+			case "Pepper":
+				
+				WordCreation.CreateMovableAndTargetWords("PEPPER",new string[] {"P","E","P","P","E","R"});
+				CreateObject("Pepper",1f);
+				break;
+				
+			case "Radish":
+				
+				WordCreation.CreateMovableAndTargetWords("RADISH",new string[] {"R","A","D","I","S","H"});
+				CreateObject("Radish",.6f);
+				break;
 			}
 		}
 	}

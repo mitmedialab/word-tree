@@ -112,8 +112,9 @@ namespace WordTree
 			if (gesture.gameObject.name == "BackArrow4")
 				Application.LoadLevel ("3. Choose Word");
 
-			if (gesture.gameObject.name == "BackArrow3")
+			if (gesture.gameObject.name == "BackArrow3") 
 				Application.LoadLevel ("2. Word Tree");
+
 
 
 		}

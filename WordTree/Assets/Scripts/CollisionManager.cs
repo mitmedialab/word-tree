@@ -32,10 +32,12 @@ namespace WordTree
 
 				other.transform.position = new Vector3 (gameObject.transform.position.x,gameObject.transform.position.y,-1);
 
-				if (CheckCompletedWord()) {
+				if (CheckCompletedWord ()) {
 					GameObject SpellWordDirector = GameObject.Find("SpellWordDirector");
 					SpellWordDirector swd = SpellWordDirector.GetComponent<SpellWordDirector>();
 					swd.SpellOutWord();
+
+					AddCompletedWord(GameDirector.currentWord);
 				}
 
 			}
@@ -55,6 +57,11 @@ namespace WordTree
 			Debug.Log ("Word Completed");
 			return true;
 
+		}
+
+		public static void AddCompletedWord(string word)
+		{
+			GameDirector.completedWords.Add (word);
 		}
 
 
