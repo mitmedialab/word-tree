@@ -38,6 +38,15 @@ namespace WordTree
 			GameObject[] gos = GameObject.FindGameObjectsWithTag ("MovableLetter");
 			Vector3[] Position = new Vector3[gos.Length];
 
+			if (gos.Length == 3) {
+				int z = -1;
+				Position = new Vector3[3] {
+					new Vector3 (-5, 1, z),
+					new Vector3 (4, 2, z),
+					new Vector3 (7, 0, z)
+				};
+			}
+
 			if (gos.Length == 4) {
 				int z = -1;
 				Position = new Vector3[4] {

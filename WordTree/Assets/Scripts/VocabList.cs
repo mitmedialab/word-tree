@@ -145,87 +145,87 @@ namespace WordTree
 			case "Author":
 				
 				WordCreation.CreateMovableAndTargetWords("AUTHOR",new string[] {"A","U","T","H","O","R"});
-				CreateObject("Author",.6f);
-				break;
-				
-			case "Barber":
-				
-				WordCreation.CreateMovableAndTargetWords("BARBER",new string[] {"B","A","R","B","E","R"});
-				CreateObject("Barber",1.2f);
+				CreateObject("Author",.8f);
 				break;
 				
 			case "Chef":
 				
 				WordCreation.CreateMovableAndTargetWords("CHEF",new string[] {"C","H","E","F"});
-				CreateObject("Chef",.35f);
+				CreateObject("Chef",.7f);
+				break;
+			
+			case "Doctor":
+				
+				WordCreation.CreateMovableAndTargetWords("DOCTOR",new string[] {"D","O","C","T","O","R"});
+				CreateObject("Doctor",.9f);
 				break;
 				
 			case "Nurse":
 				
 				WordCreation.CreateMovableAndTargetWords("NURSE",new string[] {"N","U","R","S","E"});
-				CreateObject("Nurse",1f);
+				CreateObject("Nurse",.5f);
 				break;
 				
 			case "Police":
 				
 				WordCreation.CreateMovableAndTargetWords("POLICE",new string[] {"P","O","L","I","C","E"});
-				CreateObject("Police",.6f);
+				CreateObject("Police",.45f);
 				break;
 			
 			//Sports Level
 			case "Golf":
 				
 				WordCreation.CreateMovableAndTargetWords("GOLF",new string[] {"G","O","L","F"});
-				CreateObject("Golf",.6f);
+				CreateObject("Golf",.18f);
 				break;
 				
 			case "Hockey":
 				
 				WordCreation.CreateMovableAndTargetWords("HOCKEY",new string[] {"H","O","C","K","E","Y"});
-				CreateObject("Hockey",1.2f);
+				CreateObject("Hockey",.7f);
 				break;
 				
 			case "Soccer":
 				
 				WordCreation.CreateMovableAndTargetWords("SOCCER",new string[] {"S","O","C","C","E","R"});
-				CreateObject("Soccer",.35f);
+				CreateObject("Soccer",.6f);
 				break;
 				
 			case "Skate":
 				
 				WordCreation.CreateMovableAndTargetWords("SKATE",new string[] {"S","K","A","T","E"});
-				CreateObject("Skate",1f);
+				CreateObject("Skate",2.4f);
 				break;
 				
 			case "Track":
 				
 				WordCreation.CreateMovableAndTargetWords("TRACK",new string[] {"T","R","A","C","K"});
-				CreateObject("Track",.6f);
+				CreateObject("Track",.7f);
 				break;
 
 			//Transportation Level
 			case "Bus":
 				
 				WordCreation.CreateMovableAndTargetWords("BUS",new string[] {"B","U","S"});
-				CreateObject("Bus",.6f);
+				CreateObject("Bus",.12f);
 				break;
 				
 			case "Car":
 				
 				WordCreation.CreateMovableAndTargetWords("CAR",new string[] {"C","A","R"});
-				CreateObject("Car",1.2f);
+				CreateObject("Car",.8f);
 				break;
 				
 			case "Plane":
 				
 				WordCreation.CreateMovableAndTargetWords("PLANE",new string[] {"P","L","A","N","E"});
-				CreateObject("Plane",.35f);
+				CreateObject("Plane",.12f);
 				break;
 				
 			case "Ship":
 				
 				WordCreation.CreateMovableAndTargetWords("SHIP",new string[] {"S","H","I","P"});
-				CreateObject("Ship",1f);
+				CreateObject("Ship",.12f);
 				break;
 				
 			case "Train":
@@ -238,31 +238,31 @@ namespace WordTree
 			case "Bed":
 				
 				WordCreation.CreateMovableAndTargetWords("BED",new string[] {"B","E","D"});
-				CreateObject("Bed",.6f);
+				CreateObject("Bed",1f);
 				break;
 				
 			case "Clock":
 				
 				WordCreation.CreateMovableAndTargetWords("CLOCK",new string[] {"C","L","O","C","K"});
-				CreateObject("Clock",1.2f);
+				CreateObject("Clock",.6f);
 				break;
 				
 			case "Lamp":
 				
 				WordCreation.CreateMovableAndTargetWords("LAMP",new string[] {"L","A","M","P"});
-				CreateObject("Lamp",.35f);
+				CreateObject("Lamp",.5f);
 				break;
 				
 			case "Mirror":
 				
 				WordCreation.CreateMovableAndTargetWords("MIRROR",new string[] {"M","I","R","R","O","R"});
-				CreateObject("Mirror",1f);
+				CreateObject("Mirror",.3f);
 				break;
 				
 			case "Pillow":
 				
 				WordCreation.CreateMovableAndTargetWords("PILLOW",new string[] {"P","I","L","L","O","W"});
-				CreateObject("Pillow",.6f);
+				CreateObject("Pillow",.5f);
 				break;
 			
 			//Vegetables Level
@@ -275,25 +275,25 @@ namespace WordTree
 			case "Carrot":
 				
 				WordCreation.CreateMovableAndTargetWords("CARROT",new string[] {"C","A","R","R","O","T"});
-				CreateObject("Carrot",1.2f);
+				CreateObject("Carrot",.9f);
 				break;
 				
 			case "Onion":
 				
 				WordCreation.CreateMovableAndTargetWords("ONION",new string[] {"O","N","I","O","N"});
-				CreateObject("Onion",.35f);
+				CreateObject("Onion",.8f);
 				break;
 				
 			case "Pepper":
 				
 				WordCreation.CreateMovableAndTargetWords("PEPPER",new string[] {"P","E","P","P","E","R"});
-				CreateObject("Pepper",1f);
+				CreateObject("Pepper",.8f);
 				break;
 				
 			case "Radish":
 				
 				WordCreation.CreateMovableAndTargetWords("RADISH",new string[] {"R","A","D","I","S","H"});
-				CreateObject("Radish",.6f);
+				CreateObject("Radish",1.4f);
 				break;
 			}
 		}
