@@ -19,7 +19,8 @@ namespace WordTree
 				button.AddComponent<GestureManager> ().AddAndSubscribeToGestures (button);
 
 			GameObject word = GameObject.FindGameObjectWithTag ("WordObject");
-			word.GetComponent<GestureManager> ().UnsubscribeFromGestures (word);
+			word.GetComponent<GestureManager> ().DisableGestures (word);
+
 			word.audio.Play();
 
 			StartCoroutine(ExplodeWord(1));
@@ -27,7 +28,7 @@ namespace WordTree
 
 			GameObject[] gos = GameObject.FindGameObjectsWithTag ("MovableLetter");
 			foreach (GameObject go in gos) {
-				go.GetComponent<PulseBehavior>().StartPulsing(go,1.0f);
+				go.GetComponent<PulseBehavior>().StartPulsing(go);
 			}
 
 		}

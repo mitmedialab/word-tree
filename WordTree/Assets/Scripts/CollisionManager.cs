@@ -15,31 +15,46 @@ namespace WordTree
 		void OnTriggerEnter2D (Collider2D other)
 		{
 
-			if (other.name == gameObject.name) {
-			
+			if (Application.loadedLevelName == "4. Spell Word") {
+
+				if (other.name == gameObject.name) {
+
+					Debug.Log ("Collision on " + other.name);
+
+					gameObject.GetComponent<SpriteRenderer> ().color = other.GetComponent<SpriteRenderer> ().color;
+					Color color = gameObject.renderer.material.color;
+					color.a = 1.0f;
+					gameObject.renderer.material.color = color;
+
+					Debug.Log ("Destroyed draggable letter " + other.gameObject.name);
+					Destroy (other.gameObject);
+
+					DisableCollisions (gameObject);
+
+					if (CheckCompletedWord ()) {
+						GameObject SpellWordDirector = GameObject.Find ("SpellWordDirector");
+						SpellWordDirector swd = SpellWordDirector.GetComponent<SpellWordDirector> ();
+						swd.SpellOutWord ();
+
+						AddCompletedWord (GameDirector.currentWord);
+
+					}
+
+				}
+			}
+
+			if (Application.loadedLevelName == "5. Spelling Game") {
 
 				Debug.Log ("Collision on " + other.name);
 
-				gameObject.GetComponent<SpriteRenderer>().color = other.GetComponent<SpriteRenderer>().color;
-				Color color = gameObject.renderer.material.color;
-				color.a = 1.0f;
-				gameObject.renderer.material.color = color;
+				other.gameObject.GetComponent<GestureManager>().DisableGestures(other.gameObject);
 
-				Debug.Log ("Destroyed draggable letter " + other.gameObject.name);
-				Destroy (other.gameObject);
+				other.gameObject.transform.position = new Vector3(gameObject.transform.position.x,gameObject.transform.position.y,-1);
 
-				DisableCollisions(gameObject);
 
-				if (CheckCompletedWord ()) {
-					GameObject SpellWordDirector = GameObject.Find("SpellWordDirector");
-					SpellWordDirector swd = SpellWordDirector.GetComponent<SpellWordDirector>();
-					swd.SpellOutWord();
-
-					AddCompletedWord(GameDirector.currentWord);
-
-				}
 
 			}
+
 
 		}
 

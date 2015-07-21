@@ -18,28 +18,32 @@ namespace WordTree
 
 
 				Debug.Log ("Started pulsing for " + go.name);
-				go.GetComponent<PulseBehavior> ().StartPulsing (go, 1.0f);
+				go.GetComponent<PulseBehavior> ().StartPulsing (go);
 
 				if (!IsWordCompleted(go.name)){
-					//Color color = go.renderer.material.color;
-					//color.a = .8f;
-					//go.renderer.material.color = color;
-					//go.GetComponent<SpriteRenderer>().color = Color.grey;
+					//SetColorAndTransparency (go,Color.grey,.8f);
 				}
 
 				if (IsWordCompleted(go.name)){
 					Debug.Log ("Word Completed: " + go.name);
 					Debug.Log ("Brightened " + go.name);
-					Color color = go.renderer.material.color;
-					color.a = 1.0f;
-					go.renderer.material.color = color;
-					go.GetComponent<SpriteRenderer>().color = Color.white;
+					SetColorAndTransparency(go,Color.white,1.0f);
 				}
 			}
 
 			if (CheckCompletedLevel ())
 				AddCompletedLevel (GameDirector.currentLevel);
 
+
+		}
+
+		void SetColorAndTransparency(GameObject go, Color color, float transparency)
+		{
+			Color temp = go.renderer.material.color;
+			temp.a = transparency;
+			go.renderer.material.color = temp;
+
+			go.GetComponent<SpriteRenderer>().color = color;
 
 		}
 
@@ -53,8 +57,10 @@ namespace WordTree
 					completedWords = completedWords + 1;
 			}
 
-			if (completedWords == gos.Length)
+			if (completedWords == gos.Length) {
+				Debug.Log ("Level Completed: " + GameDirector.currentLevel);
 				return true;
+			}
 			return false;
 					
 		}

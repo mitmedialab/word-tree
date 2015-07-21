@@ -14,7 +14,11 @@ namespace WordTree
 			for (int i=0; i<word.Length; i++)
 				letterArray [i] = System.Char.ToString(word [i]);
 			
-			CreateWord (letterArray, soundArray, "MovableLetter", word.Length);
+			CreateWord (letterArray, soundArray, "MovableLetter");
+
+			GameObject[] mov = GameObject.FindGameObjectsWithTag ("MovableLetter");
+			foreach (GameObject go in mov)
+				go.GetComponent<SpriteRenderer> ().color = Color.white;
 		}
 
 
@@ -24,16 +28,37 @@ namespace WordTree
 			for (int i=0; i<word.Length; i++)
 				letterArray [i] = System.Char.ToString(word [i]);
 
-			CreateWord (letterArray, soundArray, "MovableLetter", word.Length);
-			CreateWord (letterArray, soundArray, "TargetLetter", word.Length);
+			CreateWord (letterArray, soundArray, "MovableLetter");
+			CreateWord (letterArray, soundArray, "TargetLetter");
+
+			GameObject[] tar = GameObject.FindGameObjectsWithTag ("TargetLetter");
+			foreach (GameObject go in tar) {
+				SpriteRenderer sprite = go.GetComponent<SpriteRenderer> ();
+				sprite.color = Color.black;
+				Color color = go.renderer.material.color;
+				color.a = .5f;
+				go.renderer.material.color = color;
+			}
+
+			GameObject[] mov = GameObject.FindGameObjectsWithTag ("MovableLetter");
+			Color[] colors = new Color[] {Color.cyan,Color.green,Color.blue,Color.grey,Color.magenta,Color.yellow};
+			for (int i=0; i<mov.Length; i++) {
+				SpriteRenderer sprite = mov[i].GetComponent<SpriteRenderer> ();
+				sprite.color = colors[i];
+			}
+				
+			
+			
+
 		}
 
-		public static void CreateWord(string[] word, string[] sounds, string tag, int numLetters)
+		public static void CreateWord(string[] word, string[] sounds, string tag)
 		{
 			xScale = .3f;
 			yScale = .3f;
 			int y = -2;
 			int z = 0;
+			int numLetters = word.Length;
 			Vector3[] Position = new Vector3[numLetters];
 
 			if (tag == "MovableLetter")
@@ -106,26 +131,6 @@ namespace WordTree
 				GameDirector.InstantiateObject (letter6);
 			}
 
-			if (tag == "TargetLetter") {
-				GameObject[] gos = GameObject.FindGameObjectsWithTag ("TargetLetter");
-				foreach (GameObject go in gos) {
-					SpriteRenderer sprite = go.GetComponent<SpriteRenderer> ();
-					sprite.color = Color.black;
-					Color color = go.renderer.material.color;
-					color.a = .5f;
-					go.renderer.material.color = color;
-				}
-			}
-
-			if (tag == "MovableLetter") {
-				Color[] colors = new Color[] {Color.cyan,Color.green,Color.blue,Color.grey,Color.magenta,Color.yellow};
-				GameObject[] gos = GameObject.FindGameObjectsWithTag ("MovableLetter");
-				for (int i=0; i<gos.Length; i++) {
-					SpriteRenderer sprite = gos[i].GetComponent<SpriteRenderer> ();
-					sprite.color = colors[i];
-				}
-
-			}
 		
 
 		}

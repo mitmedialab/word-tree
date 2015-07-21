@@ -86,6 +86,8 @@ namespace WordTree
 			if (rg != null) {
 				rg.enabled = false;
 			}
+
+			Debug.Log ("Disabled gestures for " + go.name);
 		}
 
 
@@ -100,20 +102,29 @@ namespace WordTree
 			}
 
 			if (gesture.gameObject.tag == "LevelIcon") {
-				Application.LoadLevel ("3. Choose Word");
+				WordTreeDirector.CreateModeChoices();
 				GameDirector.currentLevel = gesture.gameObject.name;
 			}
+
+			if (gesture.gameObject.name == "Learn")
+				Application.LoadLevel ("3. Choose Word");
+
+			if (gesture.gameObject.name == "Play")
+				Application.LoadLevel ("5. Spelling Game");
+			
+			if (gesture.gameObject.name == "Exit")
+				Application.LoadLevel ("2. Word Tree");
 
 			if (gesture.gameObject.tag == "WordObject") {
 				Application.LoadLevel ("4. Spell Word");
 				GameDirector.currentWord = gesture.gameObject.name;
 			}
 
+			if (gesture.gameObject.name == "BackButton3")
+				Application.LoadLevel ("2. Word Tree");
+
 			if (gesture.gameObject.name == "BackButton4")
 				Application.LoadLevel ("3. Choose Word");
-
-			if (gesture.gameObject.name == "BackButton3") 
-				Application.LoadLevel ("2. Word Tree");
 
 			if (gesture.gameObject.name == "RetryButton")
 				Application.LoadLevel ("4. Spell Word");

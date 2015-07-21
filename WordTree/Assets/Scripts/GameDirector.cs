@@ -64,7 +64,7 @@ namespace WordTree
 			}
 
 			PolygonCollider2D pc2d = go.AddComponent<PolygonCollider2D>();
-			if (go.tag == "TargetLetter")
+			if (go.tag == "TargetLetter" || go.tag == "TargetBlank")
 				pc2d.isTrigger = true;
 
 			if (go.tag == "MovableLetter")
@@ -75,7 +75,7 @@ namespace WordTree
 			}
 
 
-			if (go.tag == "WordObject" || go.tag == "MovableLetter") 
+			if (go.tag == "WordObject" || go.tag == "MovableLetter" || go.tag == "Button") 
 			{	
 				GestureManager gm = go.AddComponent<GestureManager> ();
 				gm.AddAndSubscribeToGestures (go); 
