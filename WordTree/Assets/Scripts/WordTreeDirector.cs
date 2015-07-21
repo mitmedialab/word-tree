@@ -12,14 +12,16 @@ namespace WordTree
 			foreach (GameObject go in gos) {
 				go.AddComponent<GestureManager> ().AddAndSubscribeToGestures (go);
 
-				if (!IsLevelCompleted(go.name)) {
-					go.AddComponent<PulseBehavior> ().StartPulsing (go);
-				}
+				go.AddComponent<PulseBehavior> ().StartPulsing (go,1.0f);
+
+
+				if (!IsLevelCompleted(go.name))
+					//go.GetComponent<SpriteRenderer>().color = Color.grey;
 
 				if (IsLevelCompleted(go.name)){
 					Debug.Log ("Level Completed: " + go.name);
-					Debug.Log ("Dimmed " + go.name);
-					go.GetComponent<SpriteRenderer>().color = Color.gray;
+					Debug.Log ("Brightened " + go.name);
+					go.GetComponent<SpriteRenderer>().color = Color.white;
 				}
 
 			}

@@ -5,12 +5,12 @@ namespace WordTree
 {
 	public class PulseBehavior : MonoBehaviour {
 
-		public void StartPulsing (GameObject go)
+		public void StartPulsing (GameObject go, float time)
 		{
 			float scaleUpBy = 1.1f; 
 			
 			LeanTween.scale(go, new Vector3(go.transform.localScale.x * scaleUpBy, go.transform.localScale.y * scaleUpBy, 
-			                                go.transform.localScale.z * scaleUpBy), 1.0f)
+			                                go.transform.localScale.z * scaleUpBy), time)
 				.setEase(LeanTweenType.easeOutSine).setLoopPingPong();
 		}
 		

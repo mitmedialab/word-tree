@@ -5,13 +5,13 @@ namespace WordTree
 {
 	public class VocabList : MonoBehaviour {
 		
-		static void CreateObject(string word, float scale)
+		public static void CreateObject(string word, float scale)
 		{
 			ObjectProperties Obj = ObjectProperties.CreateInstance (word, "WordObject", new Vector3 (0, 2, 0), new Vector3 (scale, scale, 1), GameDirector.currentLevel + "/" + word, "Words/"+word);
 			GameDirector.InstantiateObject (Obj);
 		}
 		
-		public static void CreateWordsAndObjectSwitch(string word)
+		public static void CreateSpellingLesson(string word)
 		{
 			switch(word)
 			{

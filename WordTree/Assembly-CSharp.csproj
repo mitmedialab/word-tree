@@ -54,6 +54,7 @@
      <Compile Include="Assets\Scripts\ObjectProperties.cs" />
      <Compile Include="Assets\Scripts\PulseBehavior.cs" />
      <Compile Include="Assets\Scripts\SpellWordDirector.cs" />
+     <Compile Include="Assets\Scripts\SpellingGameDirector.cs" />
      <Compile Include="Assets\Scripts\VocabList.cs" />
      <Compile Include="Assets\Scripts\WordCreation.cs" />
      <Compile Include="Assets\Scripts\WordTreeDirector.cs" />

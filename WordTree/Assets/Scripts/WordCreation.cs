@@ -5,6 +5,18 @@ namespace WordTree
 {
 	public class WordCreation : MonoBehaviour {
 
+		public static float xScale;
+		public static float yScale;
+
+		public static void CreateMovableWord(string word, string[] soundArray)
+		{
+			string[] letterArray = new string[word.Length];
+			for (int i=0; i<word.Length; i++)
+				letterArray [i] = System.Char.ToString(word [i]);
+			
+			CreateWord (letterArray, soundArray, "MovableLetter", word.Length);
+		}
+
 
 		public static void CreateMovableAndTargetWords(string word, string[] soundArray)
 		{
@@ -16,19 +28,19 @@ namespace WordTree
 			CreateWord (letterArray, soundArray, "TargetLetter", word.Length);
 		}
 
-		static void CreateWord(string[] word, string[] sounds, string tag, int numLetters)
+		public static void CreateWord(string[] word, string[] sounds, string tag, int numLetters)
 		{
-			float xScale = .3f;
-			float yScale = .3f;
+			xScale = .3f;
+			yScale = .3f;
 			int y = -2;
 			int z = 0;
 			Vector3[] Position = new Vector3[numLetters];
 
 			if (tag == "MovableLetter")
-				z = -1;
+				z = -2;
 
 			if (numLetters == 3) {
-				Position = new Vector3[3] {
+				Position = new Vector3[3]{
 					new Vector3 (-2, y, z),
 					new Vector3 (0, y, z),
 					new Vector3 (2, y, z)
@@ -99,7 +111,20 @@ namespace WordTree
 				foreach (GameObject go in gos) {
 					SpriteRenderer sprite = go.GetComponent<SpriteRenderer> ();
 					sprite.color = Color.black;
+					Color color = go.renderer.material.color;
+					color.a = .5f;
+					go.renderer.material.color = color;
 				}
+			}
+
+			if (tag == "MovableLetter") {
+				Color[] colors = new Color[] {Color.cyan,Color.green,Color.blue,Color.grey,Color.magenta,Color.yellow};
+				GameObject[] gos = GameObject.FindGameObjectsWithTag ("MovableLetter");
+				for (int i=0; i<gos.Length; i++) {
+					SpriteRenderer sprite = gos[i].GetComponent<SpriteRenderer> ();
+					sprite.color = colors[i];
+				}
+
 			}
 		
 

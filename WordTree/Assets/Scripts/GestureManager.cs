@@ -13,7 +13,7 @@ namespace WordTree
 
 		public void AddAndSubscribeToGestures (GameObject go)
 		{
-			if (go.tag == "LevelIcon" || go.tag == "WordObject" || go.tag == "Arrow") {
+			if (go.tag == "LevelIcon" || go.tag == "WordObject" || go.tag == "Button") {
 
 				TapGesture tg = go.AddComponent<TapGesture> ();
 				tg.Tapped += tappedHandler;
@@ -109,11 +109,14 @@ namespace WordTree
 				GameDirector.currentWord = gesture.gameObject.name;
 			}
 
-			if (gesture.gameObject.name == "BackArrow4")
+			if (gesture.gameObject.name == "BackButton4")
 				Application.LoadLevel ("3. Choose Word");
 
-			if (gesture.gameObject.name == "BackArrow3") 
+			if (gesture.gameObject.name == "BackButton3") 
 				Application.LoadLevel ("2. Word Tree");
+
+			if (gesture.gameObject.name == "RetryButton")
+				Application.LoadLevel ("4. Spell Word");
 
 
 
@@ -160,7 +163,7 @@ namespace WordTree
 				ITouchHit2D hit2d = (ITouchHit2D)hit; 
 				Debug.Log ("PAN on " + gesture.gameObject.name + " at " + hit2d.Point);
 
-				gesture.gameObject.transform.position = hit2d.Point;
+				gesture.gameObject.transform.position = new Vector3(hit2d.Point.x,hit2d.Point.y,-2);
 
 			
 			}

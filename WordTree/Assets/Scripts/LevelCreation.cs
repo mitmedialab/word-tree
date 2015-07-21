@@ -49,6 +49,7 @@ namespace WordTree
 				ObjectProperties obj5 = ObjectProperties.CreateInstance (objects [4], "WordObject", Position [4], new Vector3 (scale [4], scale [4], 1), level + "/" + objects [4], "Words/"+objects [4]);
 				GameDirector.InstantiateObject (obj5);
 			}
+
 		}
 
 	}

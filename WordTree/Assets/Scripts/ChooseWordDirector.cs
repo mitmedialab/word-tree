@@ -8,23 +8,32 @@ namespace WordTree
 
 		void Start () {
 
-			CreateLevelandBackgroundSwitch (GameDirector.currentLevel);
+			CreateLevelScene (GameDirector.currentLevel);
 
-			GameObject arrow = GameObject.FindGameObjectWithTag ("Arrow");
-			arrow.AddComponent<GestureManager> ().AddAndSubscribeToGestures (arrow);
+			GameObject button = GameObject.FindGameObjectWithTag ("Button");
+			button.AddComponent<GestureManager> ().AddAndSubscribeToGestures (button);
 
 			GameObject[] gos = GameObject.FindGameObjectsWithTag ("WordObject");
 			foreach (GameObject go in gos) {
 
+
+				Debug.Log ("Started pulsing for " + go.name);
+				go.GetComponent<PulseBehavior> ().StartPulsing (go, 1.0f);
+
 				if (!IsWordCompleted(go.name)){
-					Debug.Log ("Started pulsing for " + go.name);
-					go.GetComponent<PulseBehavior> ().StartPulsing (go);
+					//Color color = go.renderer.material.color;
+					//color.a = .8f;
+					//go.renderer.material.color = color;
+					//go.GetComponent<SpriteRenderer>().color = Color.grey;
 				}
 
 				if (IsWordCompleted(go.name)){
 					Debug.Log ("Word Completed: " + go.name);
-					Debug.Log ("Dimmed " + go.name);
-					go.GetComponent<SpriteRenderer>().color = Color.gray;
+					Debug.Log ("Brightened " + go.name);
+					Color color = go.renderer.material.color;
+					color.a = 1.0f;
+					go.renderer.material.color = color;
+					go.GetComponent<SpriteRenderer>().color = Color.white;
 				}
 			}
 
@@ -79,7 +88,7 @@ namespace WordTree
 		}
 
 
-		void CreateLevelandBackgroundSwitch(string level)
+		void CreateLevelScene(string level)
 		{
 			switch(level)
 			{
@@ -117,7 +126,7 @@ namespace WordTree
 			case "Sports":
 				
 				LevelCreation.CreateLevel ("Sports",new string[] {"Golf","Hockey","Skate","Soccer","Track"},new float[] {.18f, .7f, 2.4f, .6f, .7f}, 5);
-				CreateBackGround("Sports",new Vector3(0,0,2),new Vector3(.5f,.5f,1));
+				CreateBackGround("Sports",new Vector3(0,0,2),new Vector3(2.5f,2.5f,1));
 				break;
 
 			case "Transportation":

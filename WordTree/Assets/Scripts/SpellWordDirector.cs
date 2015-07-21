@@ -1,20 +1,22 @@
 ﻿using UnityEngine;
 using System.Collections;
 
+
 namespace WordTree
 {
 	public class SpellWordDirector : MonoBehaviour {
 
-		float clipLength = .8f;
+		float clipLength = .7f;
 
 		void Start () {
 
 			StartCoroutine(LightOff(0));
 
-			VocabList.CreateWordsAndObjectSwitch (GameDirector.currentWord);
+			VocabList.CreateSpellingLesson (GameDirector.currentWord);
 
-			GameObject arrow = GameObject.FindGameObjectWithTag ("Arrow");
-			arrow.AddComponent<GestureManager> ().AddAndSubscribeToGestures (arrow);
+			GameObject[] buttons = GameObject.FindGameObjectsWithTag ("Button");
+			foreach (GameObject button in buttons)
+				button.AddComponent<GestureManager> ().AddAndSubscribeToGestures (button);
 
 			GameObject word = GameObject.FindGameObjectWithTag ("WordObject");
 			word.GetComponent<GestureManager> ().UnsubscribeFromGestures (word);
@@ -25,7 +27,7 @@ namespace WordTree
 
 			GameObject[] gos = GameObject.FindGameObjectsWithTag ("MovableLetter");
 			foreach (GameObject go in gos) {
-				go.GetComponent<PulseBehavior>().StartPulsing(go);
+				go.GetComponent<PulseBehavior>().StartPulsing(go,1.0f);
 			}
 
 		}
@@ -36,47 +38,93 @@ namespace WordTree
 			yield return new WaitForSeconds (delayTime);
 
 			GameObject[] gos = GameObject.FindGameObjectsWithTag ("MovableLetter");
+
+			Vector3[] PositionTemplate = new Vector3[gos.Length];
 			Vector3[] Position = new Vector3[gos.Length];
+			int[] OrderTemplate = new int[gos.Length];
+			int[] Order = new int[gos.Length];
+			int z = -2;
 
 			if (gos.Length == 3) {
-				int z = -1;
-				Position = new Vector3[3] {
-					new Vector3 (-5, 1, z),
-					new Vector3 (4, 2, z),
-					new Vector3 (7, 0, z)
+
+				PositionTemplate = new Vector3[3] {
+					new Vector3 (-7, 0, z),
+					new Vector3 (6, 2, z),
+					new Vector3 (8, -3, z)
+				};
+
+				OrderTemplate = new int[3] {0,1,2};
+				Order = ShuffleArray(OrderTemplate);
+
+				Position = new Vector3[3]{
+				PositionTemplate[Order[0]],
+				PositionTemplate[Order[1]],
+				PositionTemplate[Order[2]]
 				};
 			}
 
 			if (gos.Length == 4) {
-				int z = -1;
-				Position = new Vector3[4] {
-					new Vector3 (-7, 0, z),
-					new Vector3 (-4, 2, z),
-					new Vector3 (4, 2, z),
-					new Vector3 (7, 0, z)
+
+				PositionTemplate = new Vector3[4] {
+					new Vector3 (-8, -3, z),
+					new Vector3 (-6, 2, z),
+					new Vector3 (6, 2, z),
+					new Vector3 (8, -3, z)
+				};
+
+				OrderTemplate = new int[4] {0,1,2,3};
+				Order = ShuffleArray(OrderTemplate);
+
+				Position = new Vector3[4]{
+					PositionTemplate[Order[0]],
+					PositionTemplate[Order[1]],
+					PositionTemplate[Order[2]],
+					PositionTemplate[Order[3]]
 				};
 			}
 			
 			if (gos.Length == 5) {
-				int z = -1;
-				Position = new Vector3[5] {
-					new Vector3 (-7, 0, z),
-					new Vector3 (-4, 2, z),
-					new Vector3 (3, 3, z),
-					new Vector3 (6, 1.5f, z),
-					new Vector3 (9, 0, z)
+
+				PositionTemplate = new Vector3[5] {
+					new Vector3 (-8, -2, z),
+					new Vector3 (-6, 2, z),
+					new Vector3 (5, 3, z),
+					new Vector3 (9, 0, z),
+					new Vector3 (8, -3, z)
+				};
+
+				OrderTemplate = new int[5] {0,1,2,3,4};
+				Order = ShuffleArray(OrderTemplate);
+
+				Position = new Vector3[5]{
+					PositionTemplate[Order[0]],
+					PositionTemplate[Order[1]],
+					PositionTemplate[Order[2]],
+					PositionTemplate[Order[3]],
+					PositionTemplate[Order[4]]
 				};
 			}
 
 			if (gos.Length == 6) {
-				int z = -1;
-				Position = new Vector3[6] {
+				PositionTemplate = new Vector3[6] {
+					new Vector3 (-8, -3, z),
 					new Vector3 (-9, 0, z),
-					new Vector3 (-6, 1, z),
-					new Vector3 (-3, 2, z),
-					new Vector3 (3, 2, z),
-					new Vector3 (6, 1, z),
-					new Vector3 (9, 0, z)
+					new Vector3 (-5, 3, z),
+					new Vector3 (5, 3, z),
+					new Vector3 (9, 0, z),
+					new Vector3 (8, -3, z)
+				};
+
+				OrderTemplate = new int[6] {0,1,2,3,4,5};
+				Order = ShuffleArray(OrderTemplate);
+
+				Position = new Vector3[6] {
+					PositionTemplate[Order[0]],
+					PositionTemplate[Order[1]],
+					PositionTemplate[Order[2]],
+					PositionTemplate[Order[3]],
+					PositionTemplate[Order[4]],
+					PositionTemplate[Order[5]]
 				};
 			}
 
@@ -86,6 +134,18 @@ namespace WordTree
 			Debug.Log ("Exploded draggable letters");
 		}
 
+		int[] ShuffleArray(int[] array)
+		{
+			for (int i = array.Length; i > 0; i--)
+			{
+				int j = Random.Range (0,i);
+				int temp = array[j];
+				array[j] = array[i - 1];
+				array[i - 1]  = temp;
+			}
+			return array;
+		}
+		
 		IEnumerator EnableCollisions(float delayTime)
 		{
 			yield return new WaitForSeconds (delayTime);
@@ -96,70 +156,76 @@ namespace WordTree
 			Debug.Log ("Enabled Collisions");
 		}
 
+
 		public void SpellOutWord()
 		{
-			GameObject[] gos = GameObject.FindGameObjectsWithTag ("MovableLetter");
+			GameObject[] tar = GameObject.FindGameObjectsWithTag ("TargetLetter");
 			
-			PlaySoundAndHighlightLetter (gos [0], 0);
-			PlaySoundAndHighlightLetter (gos [1], 1);
-			PlaySoundAndHighlightLetter (gos [2], 2);
-			if (gos.Length >= 4)
-				PlaySoundAndHighlightLetter (gos [3], 3);
-			if (gos.Length >= 5)
-				PlaySoundAndHighlightLetter (gos [4], 4);
-			if (gos.Length >= 6)
-				PlaySoundAndHighlightLetter (gos [5], 5);
+			PlaySoundAndHighlightLetter (tar [0], 0);
+			PlaySoundAndHighlightLetter (tar [1], 1);
+			PlaySoundAndHighlightLetter (tar [2], 2);
+			if (tar.Length >= 4)
+				PlaySoundAndHighlightLetter (tar [3], 3);
+			if (tar.Length >= 5)
+				PlaySoundAndHighlightLetter (tar [4], 4);
+			if (tar.Length >= 6)
+				PlaySoundAndHighlightLetter (tar [5], 5);
 				
 			PlaySoundAndHighlightWord ();
 
-			StartCoroutine(CongratsAnimation((gos.Length+1f) * this.clipLength));
+			StartCoroutine(CongratsAnimation((tar.Length+1f) * this.clipLength));
 				
 		}
 
-		void PlaySoundAndHighlightLetter(GameObject go, float index)
+		void PlaySoundAndHighlightLetter(GameObject targetLetter, float index)
 		{
 
-			if (go.audio != null && go.audio.clip != null) {
-				Debug.Log ("Playing clip for " + go.name);
-				go.audio.PlayDelayed (index*this.clipLength);  
+			if (targetLetter.audio != null && targetLetter.audio.clip != null) {
+				Debug.Log ("Playing clip for " + targetLetter.name);
+				targetLetter.audio.PlayDelayed (index*this.clipLength);  
 			}
 
-			StartCoroutine(LightOn (go.transform.position,index*this.clipLength,"letter"));
-			StartCoroutine (LightOff ((index+.5f) * this.clipLength));
+			StartCoroutine(LightOnAndPulse (new Vector3(targetLetter.transform.position.x,targetLetter.transform.position.y,1),index*this.clipLength,"letter",targetLetter));
+			StartCoroutine (LightOff (((index+.5f) * this.clipLength)));
 		}
 
 		void PlaySoundAndHighlightWord()
 		{
-			GameObject[] gos = GameObject.FindGameObjectsWithTag ("MovableLetter");
+			GameObject[] tar = GameObject.FindGameObjectsWithTag ("TargetLetter");
 			GameObject go = GameObject.FindGameObjectWithTag ("WordObject");
 			if (go.audio != null && go.audio.clip != null) {
 				Debug.Log ("Playing clip for " + go.name);
-				go.audio.PlayDelayed ((gos.Length) * this.clipLength);
+				go.audio.PlayDelayed ((tar.Length) * this.clipLength);
 			}
 
-			StartCoroutine (LightOn (new Vector3(0,-2,-1),(gos.Length)*this.clipLength,"word"));
-			StartCoroutine (LightOff ((gos.Length+.5f) * this.clipLength));
+			StartCoroutine (LightOnAndPulse (new Vector3(0,-2,1),(tar.Length)*this.clipLength,"word",null));
+			StartCoroutine (LightOff ((tar.Length+.5f) * this.clipLength));
 		}
 
 
-
-		IEnumerator LightOn(Vector3 location, float delayTime, string size)
+		IEnumerator LightOnAndPulse(Vector3 location, float delayTime, string size, GameObject go)
 		{
 			yield return new WaitForSeconds (delayTime);
 
 			Vector3 scale = new Vector3 (1, 1, 1);
 			if (size == "letter")
-				scale = new Vector3 (5, 5, 1);
-			if (size == "word")
-				scale = new Vector3 (20, 5, 1);
+				scale = new Vector3 (WordCreation.xScale * 17, WordCreation.yScale * 17, 1);
+			if (size == "word") {
+				GameObject[] tar = GameObject.FindGameObjectsWithTag("TargetLetter");
+				scale = new Vector3 (tar.Length * WordCreation.xScale * 12, WordCreation.yScale * 17, 1);
+			}
 
 			GameObject highlight = GameObject.FindGameObjectWithTag ("Light");
 			highlight.GetComponent<MeshRenderer> ().enabled = true;
 			highlight.transform.position = location;
 			highlight.transform.localScale = scale;
-			Debug.Log ("Highlight on" + location);
+			if (go != null)
+				Debug.Log ("Highlight on " + go.name);
+			 
+			PulseOnce (go, size);
 		}
-		
+
+
 		IEnumerator LightOff(float delayTime)
 		{
 			yield return new WaitForSeconds (delayTime);
@@ -167,6 +233,35 @@ namespace WordTree
 			GameObject highlight = GameObject.FindGameObjectWithTag ("Light");
 			highlight.GetComponent<MeshRenderer> ().enabled = false;
 			
+		}
+
+		void PulseOnce(GameObject go, string size)
+		{
+			float pulseLength = clipLength * .15f;
+			float scaleUp = 1.3f;
+
+			if (size == "letter") {
+				LeanTween.scale (go, new Vector3 (scaleUp * WordCreation.xScale, scaleUp * WordCreation.yScale, 1), pulseLength);
+				StartCoroutine (ScaleDown (clipLength * .5f, go));
+				Debug.Log ("Pulse on " + go.name);
+			}
+
+			if (size == "word") {
+				GameObject[] tar = GameObject.FindGameObjectsWithTag ("TargetLetter");
+
+				for (int i=0; i < tar.Length; i++) {
+					LeanTween.scale (tar[i], new Vector3 (scaleUp * WordCreation.xScale, scaleUp * WordCreation.yScale, 1), pulseLength);
+					StartCoroutine (ScaleDown (clipLength * .5f, tar[i]));
+				}
+			}
+
+		}
+		
+		IEnumerator ScaleDown(float delayTime, GameObject go)
+		{
+			yield return new WaitForSeconds (delayTime - .1f);
+			
+			LeanTween.scale (go,new Vector3(1f*WordCreation.xScale,1f*WordCreation.yScale,1),clipLength*.5f);
 		}
 
 		IEnumerator CongratsAnimation(float delayTime)

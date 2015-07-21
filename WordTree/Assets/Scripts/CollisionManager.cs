@@ -16,21 +16,19 @@ namespace WordTree
 		{
 
 			if (other.name == gameObject.name) {
+			
 
-
-				SpriteRenderer sprite = other.GetComponent<SpriteRenderer> ();
-				sprite.color = Color.grey;
 				Debug.Log ("Collision on " + other.name);
 
-				GestureManager gm = other.GetComponent<GestureManager>();
-				gm.DisableGestures(other.gameObject);
-				Debug.Log ("Disabled touch gestures for " + other.name);
+				gameObject.GetComponent<SpriteRenderer>().color = other.GetComponent<SpriteRenderer>().color;
+				Color color = gameObject.renderer.material.color;
+				color.a = 1.0f;
+				gameObject.renderer.material.color = color;
 
-				PulseBehavior pb = other.GetComponent<PulseBehavior>();
-				pb.StopPulsing (other.gameObject);
-				Debug.Log ("Stopped pulsing for " + other.name);
+				Debug.Log ("Destroyed draggable letter " + other.gameObject.name);
+				Destroy (other.gameObject);
 
-				other.transform.position = new Vector3 (gameObject.transform.position.x,gameObject.transform.position.y,-1);
+				DisableCollisions(gameObject);
 
 				if (CheckCompletedWord ()) {
 					GameObject SpellWordDirector = GameObject.Find("SpellWordDirector");
@@ -38,6 +36,7 @@ namespace WordTree
 					swd.SpellOutWord();
 
 					AddCompletedWord(GameDirector.currentWord);
+
 				}
 
 			}
@@ -48,20 +47,26 @@ namespace WordTree
 		bool CheckCompletedWord ()
 		{
 			GameObject[] gos = GameObject.FindGameObjectsWithTag ("MovableLetter");
-			foreach (GameObject go in gos) {
-				PanGesture pg = go.GetComponent<PanGesture> ();
-				if (pg.enabled == true)
-					return false;
+			Debug.Log ("Letters left: " + (gos.Length-1));
+
+			if (gos.Length == 1) {
+				Debug.Log ("Word Completed: " + GameDirector.currentWord);
+				return true;
 			}
 
-			Debug.Log ("Word Completed");
-			return true;
+			return false;
 
 		}
 
 		public static void AddCompletedWord(string word)
 		{
 			GameDirector.completedWords.Add (word);
+		}
+
+		void DisableCollisions(GameObject go)
+		{
+			Destroy (go.GetComponent<CollisionManager>());
+			Debug.Log ("Disabled Collisions for " + go.name);
 		}
 
 
