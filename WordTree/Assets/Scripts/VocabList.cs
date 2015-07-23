@@ -76,7 +76,7 @@ namespace WordTree
 			case "Zebra":
 				
 				WordCreation.CreateMovableAndTargetWords("ZEBRA",new string[] {"Z","E","B","R","A"});
-				CreateObject("Zebra",.9f);
+				CreateObject("Zebra",1f);
 				break;
 			
 			//SchoolSupplies Level
@@ -157,7 +157,7 @@ namespace WordTree
 			case "Doctor":
 				
 				WordCreation.CreateMovableAndTargetWords("DOCTOR",new string[] {"D","O","C","T","O","R"});
-				CreateObject("Doctor",.9f);
+				CreateObject("Doctor",1f);
 				break;
 				
 			case "Nurse":

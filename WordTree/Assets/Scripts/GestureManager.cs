@@ -68,6 +68,28 @@ namespace WordTree
 			}
 		}
 
+		public void EnableGestures (GameObject go)
+		{
+			TapGesture tg = go.GetComponent<TapGesture> ();
+			if (tg != null) {
+				tg.enabled = true;
+			}
+			PanGesture pg = go.GetComponent<PanGesture> ();
+			if (pg != null) {
+				pg.enabled = true;
+			}
+			PressGesture prg = go.GetComponent<PressGesture> ();
+			if (prg != null) {
+				prg.enabled = true;
+			}
+			ReleaseGesture rg = go.GetComponent<ReleaseGesture> ();
+			if (rg != null) {
+				rg.enabled = true;
+			}
+			
+			Debug.Log ("Enabled gestures for " + go.name);
+		}
+
 		public void DisableGestures (GameObject go)
 		{
 			TapGesture tg = go.GetComponent<TapGesture> ();
@@ -102,8 +124,8 @@ namespace WordTree
 			}
 
 			if (gesture.gameObject.tag == "LevelIcon") {
-				WordTreeDirector.CreateModeChoices();
 				GameDirector.currentLevel = gesture.gameObject.name;
+				WordTreeDirector.CreateModeChoices();
 			}
 
 			if (gesture.gameObject.name == "Learn")
@@ -112,7 +134,7 @@ namespace WordTree
 			if (gesture.gameObject.name == "Play")
 				Application.LoadLevel ("5. Spelling Game");
 			
-			if (gesture.gameObject.name == "Exit")
+			if (gesture.gameObject.name == "Icon")
 				Application.LoadLevel ("2. Word Tree");
 
 			if (gesture.gameObject.tag == "WordObject") {
@@ -120,14 +142,14 @@ namespace WordTree
 				GameDirector.currentWord = gesture.gameObject.name;
 			}
 
-			if (gesture.gameObject.name == "BackButton3")
+			if (gesture.gameObject.name == "HomeButton")
 				Application.LoadLevel ("2. Word Tree");
 
-			if (gesture.gameObject.name == "BackButton4")
+			if (gesture.gameObject.name == "BackButton")
 				Application.LoadLevel ("3. Choose Word");
 
 			if (gesture.gameObject.name == "RetryButton")
-				Application.LoadLevel ("4. Spell Word");
+				Application.LoadLevel (Application.loadedLevelName);
 
 
 
@@ -144,6 +166,10 @@ namespace WordTree
 			}
 
 			PlaySound(gesture.gameObject);
+
+			if (Application.loadedLevelName == "5. Spelling Game"){
+				CollisionManager.EnableCollisions(gesture.gameObject);
+			}
 		}
 		
 		private void releasedHandler (object sender, EventArgs e)

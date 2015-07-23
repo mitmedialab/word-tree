@@ -10,17 +10,42 @@ namespace WordTree
 
 		public static void CreateMovableWord(string word, string[] soundArray)
 		{
+			int y = 0;
+			int z = -1;
+			Vector3[] posn = new Vector3[word.Length];
+			Vector3[] shuffledPosn = new Vector3[word.Length];
+			 
+
 			string[] letterArray = new string[word.Length];
 			for (int i=0; i<word.Length; i++)
-				letterArray [i] = System.Char.ToString(word [i]);
+				letterArray [i] = System.Char.ToString (word [i]);
 			
 			CreateWord (letterArray, soundArray, "MovableLetter");
 
 			GameObject[] mov = GameObject.FindGameObjectsWithTag ("MovableLetter");
+			for (int i=0; i<mov.Length; i++)
+				posn [i] = mov [i].transform.position;
+			shuffledPosn = ShuffleArray (posn);
+
+			for (int i=0; i<mov.Length; i++)
+				mov [i].transform.position = shuffledPosn [i];
+
 			foreach (GameObject go in mov)
-				go.GetComponent<SpriteRenderer> ().color = Color.white;
+				go.transform.position = new Vector3 (go.transform.position.x, y, z);
+
 		}
 
+		static Vector3[] ShuffleArray(Vector3[] array)
+		{
+			for (int i = array.Length; i > 0; i--)
+			{
+				int j = Random.Range (0,i);
+				Vector3 temp = array[j];
+				array[j] = array[i - 1];
+				array[i - 1]  = temp;
+			}
+			return array;
+		}
 
 		public static void CreateMovableAndTargetWords(string word, string[] soundArray)
 		{

@@ -10,17 +10,70 @@ namespace WordTree
 
 			CreateSpellingGame ("Apple");
 
-			GameObject[] tar = GameObject.FindGameObjectsWithTag ("TargetBlank");
-			foreach (GameObject go in tar)
-				go.AddComponent<CollisionManager> ();
-		
+			GameObject[] gos = GameObject.FindGameObjectsWithTag ("Button");
+			foreach (GameObject go in gos)
+				go.AddComponent<GestureManager> ().AddAndSubscribeToGestures (go);
+
+
+			GameObject[] mov = GameObject.FindGameObjectsWithTag ("MovableLetter");
+			foreach (GameObject go in mov) {
+				go.GetComponent<PulseBehavior> ().StartPulsing (go);
+			}
+
 		}
+
+		public void LoadNextWord()
+		{
+			StartCoroutine (LoadNextWord(1.0f));
+		}
+
+		IEnumerator LoadNextWord(float delayTime)
+		{
+			yield return new WaitForSeconds (delayTime);
+
+			CreateSpellingGame ("Banana");
+		}
+
+
+		public void PulseWordOnce(float delayTime)
+		{
+
+			float clipLength = 1f;
+			float pulseLength = clipLength * .15f;
+			float scaleUp = 1.3f;
+
+			GameObject[] mov = GameObject.FindGameObjectsWithTag ("MovableLetter");
+
+			Debug.Log ("Pulsing word");
+			for (int i=0; i < mov.Length; i++) {
+				StartCoroutine(ScaleUp (delayTime,mov[i],scaleUp,pulseLength));
+				StartCoroutine (ScaleDown ((clipLength * .5f) + delayTime, mov[i]));
+			}
+			
+		}
+
+		IEnumerator ScaleUp(float delayTime,GameObject go,float scaleUp,float pulseLength)
+		{
+			yield return new WaitForSeconds (delayTime);
+
+			LeanTween.scale (go, new Vector3 (scaleUp * WordCreation.xScale, scaleUp * WordCreation.yScale, 1), pulseLength);
+		}
+
+		IEnumerator ScaleDown(float delayTime, GameObject go)
+		{
+			yield return new WaitForSeconds (delayTime - .1f);
+
+			float clipLength = 1f;
+
+			LeanTween.scale (go,new Vector3(1f*WordCreation.xScale,1f*WordCreation.yScale,1),clipLength *.5f);
+		}
+
 
 		static void CreateBlanks(string word)
 		{
-			float xScale = .5f;
+			float xScale = .4f;
 			float yScale = .5f;
-			int y = -2;
+			int y = -3;
 			int z = 0;
 			Vector3[] Position = new Vector3[word.Length];
 
@@ -95,6 +148,14 @@ namespace WordTree
 				ObjectProperties blank6 = ObjectProperties.CreateInstance (letterArray[5], "TargetBlank", Position[5], new Vector3 (xScale, yScale, 1), "Blank", null);
 				GameDirector.InstantiateObject (blank6);
 			}
+
+			GameObject[] blanks = GameObject.FindGameObjectsWithTag ("TargetBlank");
+			foreach (GameObject go in blanks) {
+				Color color = go.renderer.material.color;
+				color.a = .1f;
+				go.renderer.material.color = color;
+			}
+
 
 		}
 
@@ -175,7 +236,7 @@ namespace WordTree
 			case "Zebra":
 				
 				WordCreation.CreateMovableWord("ZEBRA",new string[] {"Z","E","B","R","A"});
-				VocabList.CreateObject("Zebra",.9f);
+				VocabList.CreateObject("Zebra",1f);
 				CreateBlanks(word);
 				break;
 				
@@ -269,7 +330,7 @@ namespace WordTree
 			case "Doctor":
 				
 				WordCreation.CreateMovableWord("DOCTOR",new string[] {"D","O","C","T","O","R"});
-				VocabList.CreateObject("Doctor",.9f);
+				VocabList.CreateObject("Doctor",1f);
 				CreateBlanks(word);
 				break;
 				

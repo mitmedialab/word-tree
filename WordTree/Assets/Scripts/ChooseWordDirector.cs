@@ -21,7 +21,7 @@ namespace WordTree
 				go.GetComponent<PulseBehavior> ().StartPulsing (go);
 
 				if (!IsWordCompleted(go.name)){
-					//SetColorAndTransparency (go,Color.grey,.8f);
+					SetColorAndTransparency (go,Color.grey,.8f);
 				}
 
 				if (IsWordCompleted(go.name)){

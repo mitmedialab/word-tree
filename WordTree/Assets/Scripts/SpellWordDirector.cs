@@ -23,13 +23,9 @@ namespace WordTree
 
 			word.audio.Play();
 
+			StartCoroutine (StartPulsing (.5f));
 			StartCoroutine(ExplodeWord(1));
 			StartCoroutine (EnableCollisions(2));
-
-			GameObject[] gos = GameObject.FindGameObjectsWithTag ("MovableLetter");
-			foreach (GameObject go in gos) {
-				go.GetComponent<PulseBehavior>().StartPulsing(go);
-			}
 
 		}
 
@@ -131,11 +127,13 @@ namespace WordTree
 
 			for (int i=0; i<gos.Length; i++) { 
 				LeanTween.move(gos[i],Position[i],1.0f).setEase (LeanTweenType.easeOutQuad);
+				LeanTween.rotateAround (gos[i], Vector3.forward, 360f, 1.0f);
+
 			}
 			Debug.Log ("Exploded draggable letters");
 		}
 
-		int[] ShuffleArray(int[] array)
+	    int[] ShuffleArray(int[] array)
 		{
 			for (int i = array.Length; i > 0; i--)
 			{
@@ -157,6 +155,15 @@ namespace WordTree
 			Debug.Log ("Enabled Collisions");
 		}
 
+		IEnumerator StartPulsing(float delayTime)
+		{
+			yield return new WaitForSeconds (delayTime);
+
+			GameObject[] gos = GameObject.FindGameObjectsWithTag ("MovableLetter");
+			foreach (GameObject go in gos) {
+				go.GetComponent<PulseBehavior> ().StartPulsing (go);
+			}
+		}
 
 		public void SpellOutWord()
 		{
@@ -236,10 +243,9 @@ namespace WordTree
 			
 		}
 
-		void PulseOnce(GameObject go, string size)
+		public void PulseOnce(GameObject go, string size, float scaleUp = 1.3f)
 		{
 			float pulseLength = clipLength * .15f;
-			float scaleUp = 1.3f;
 
 			if (size == "letter") {
 				LeanTween.scale (go, new Vector3 (scaleUp * WordCreation.xScale, scaleUp * WordCreation.yScale, 1), pulseLength);
@@ -253,6 +259,7 @@ namespace WordTree
 				for (int i=0; i < tar.Length; i++) {
 					LeanTween.scale (tar[i], new Vector3 (scaleUp * WordCreation.xScale, scaleUp * WordCreation.yScale, 1), pulseLength);
 					StartCoroutine (ScaleDown (clipLength * .5f, tar[i]));
+
 				}
 			}
 
@@ -269,10 +276,18 @@ namespace WordTree
 		{
 			yield return new WaitForSeconds (delayTime);
 
+			float time = 1f;
+
 			GameObject go = GameObject.FindGameObjectWithTag ("WordObject");
 
 			Debug.Log ("Spinning " + go.name + " around");
-			LeanTween.rotateAround (go, Vector3.forward, 360f, 1.5f);
+			LeanTween.rotateAround (go, Vector3.forward, 360f, time);
+			LeanTween.scale (go,new Vector3(go.transform.localScale.x*1.3f,go.transform.localScale.y*1.3f,1),time);
+			LeanTween.moveY (go, 1.5f, time);
+
+			GameObject[] tar = GameObject.FindGameObjectsWithTag ("TargetLetter");
+			foreach (GameObject letter in tar)
+				LeanTween.moveY (letter,-3f,time);
 
 			Debug.Log ("Playing clip for congrats");
 			AudioSource audio = go.AddComponent<AudioSource> ();
