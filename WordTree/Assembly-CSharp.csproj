@@ -46,17 +46,21 @@
 	</Reference>
   </ItemGroup>
   <ItemGroup>
-     <Compile Include="Assets\Scripts\ChooseWordDirector.cs" />
+     <Compile Include="Assets\Scripts\AudioManager.cs" />
+     <Compile Include="Assets\Scripts\BlankCreation.cs" />
+     <Compile Include="Assets\Scripts\ChooseObjectDirector.cs" />
      <Compile Include="Assets\Scripts\CollisionManager.cs" />
-     <Compile Include="Assets\Scripts\GameDirector.cs" />
      <Compile Include="Assets\Scripts\GestureManager.cs" />
+     <Compile Include="Assets\Scripts\LearnSpellingDirector.cs" />
      <Compile Include="Assets\Scripts\LevelCreation.cs" />
+     <Compile Include="Assets\Scripts\LevelProperties.cs" />
      <Compile Include="Assets\Scripts\ObjectProperties.cs" />
+     <Compile Include="Assets\Scripts\ProgressManager.cs" />
      <Compile Include="Assets\Scripts\PulseBehavior.cs" />
-     <Compile Include="Assets\Scripts\SpellWordDirector.cs" />
      <Compile Include="Assets\Scripts\SpellingGameDirector.cs" />
      <Compile Include="Assets\Scripts\VocabList.cs" />
      <Compile Include="Assets\Scripts\WordCreation.cs" />
+     <Compile Include="Assets\Scripts\WordProperties.cs" />
      <Compile Include="Assets\Scripts\WordTreeDirector.cs" />
  <Reference Include="UnityEngine.UI">
  <HintPath>C:/Program Files (x86)/Unity/Editor/Data/UnityExtensions/Unity/GUISystem/4.6.5/UnityEngine.UI.dll</HintPath>

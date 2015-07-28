@@ -5,15 +5,81 @@ namespace WordTree
 {
 	public class SpellingGameDirector : MonoBehaviour {
 
+		public static int wordIndex = 0;
 
 		void Start () {
-
-			CreateSpellingGame ("Apple");
 
 			GameObject[] gos = GameObject.FindGameObjectsWithTag ("Button");
 			foreach (GameObject go in gos)
 				go.AddComponent<GestureManager> ().AddAndSubscribeToGestures (go);
 
+			LoadSpellingGame (ProgressManager.currentLevel);
+
+		}
+
+
+		public void LoadNextWord(float delayTime)
+		{
+			StartCoroutine (loadNextWord(delayTime));
+		}
+
+		IEnumerator loadNextWord(float delayTime)
+		{
+			yield return new WaitForSeconds (delayTime);
+
+			wordIndex = wordIndex + 1;
+
+			Debug.Log ("Loading next word");
+			LevelProperties prop = LevelProperties.GetLevelProperties (ProgressManager.currentLevel);
+			string[] words = prop.Words ();
+			LoadGameWord (words[wordIndex]);
+
+			GameObject.Find ("SoundButton").GetComponent<GestureManager>().EnableGestures(GameObject.Find ("SoundButton"));
+			GameObject.Find ("HintButton").GetComponent<GestureManager>().EnableGestures(GameObject.Find ("HintButton"));
+
+
+		}
+
+		public void DestroyAll(float delayTime)
+		{
+			StartCoroutine (destroyAll (delayTime));
+		}
+
+		IEnumerator destroyAll(float delayTime)
+		{
+			yield return new WaitForSeconds (delayTime);
+
+			GameObject[] mov = GameObject.FindGameObjectsWithTag ("MovableLetter");
+			GameObject[] tar = GameObject.FindGameObjectsWithTag ("TargetBlank");
+			GameObject[] hint = GameObject.FindGameObjectsWithTag ("Hint");
+
+			foreach (GameObject go in mov)
+				Destroy (go);
+			foreach (GameObject go in tar)
+				Destroy (go);
+			foreach (GameObject go in hint)
+				Destroy (go);
+			Destroy (GameObject.FindGameObjectWithTag("WordObject"));
+		}
+
+		void LoadSpellingGame(string level)
+		{
+			LevelProperties prop = LevelProperties.GetLevelProperties (level);
+			string[] words = prop.Words ();
+			LoadGameWord (words [wordIndex]);
+
+		}
+
+
+		void LoadGameWord(string word)
+		{
+			WordProperties prop = WordProperties.GetWordProperties(word);
+			string[] phonemes = prop.Phonemes ();
+			float objScale = prop.ObjScale ();
+
+			WordCreation.CreateScrambledWord (word, phonemes);
+			BlankCreation.CreateBlanks(word, "Rectangle");
+			CreateObject (word, objScale);
 
 			GameObject[] mov = GameObject.FindGameObjectsWithTag ("MovableLetter");
 			foreach (GameObject go in mov) {
@@ -22,146 +88,18 @@ namespace WordTree
 
 		}
 
-		public void LoadNextWord()
+		void CreateObject(string word, float scale)
 		{
-			StartCoroutine (LoadNextWord(1.0f));
-		}
-
-		IEnumerator LoadNextWord(float delayTime)
-		{
-			yield return new WaitForSeconds (delayTime);
-
-			CreateSpellingGame ("Banana");
-		}
-
-
-		public void PulseWordOnce(float delayTime)
-		{
-
-			float clipLength = 1f;
-			float pulseLength = clipLength * .15f;
-			float scaleUp = 1.3f;
-
-			GameObject[] mov = GameObject.FindGameObjectsWithTag ("MovableLetter");
-
-			Debug.Log ("Pulsing word");
-			for (int i=0; i < mov.Length; i++) {
-				StartCoroutine(ScaleUp (delayTime,mov[i],scaleUp,pulseLength));
-				StartCoroutine (ScaleDown ((clipLength * .5f) + delayTime, mov[i]));
-			}
+			float y = 3;
 			
-		}
-
-		IEnumerator ScaleUp(float delayTime,GameObject go,float scaleUp,float pulseLength)
-		{
-			yield return new WaitForSeconds (delayTime);
-
-			LeanTween.scale (go, new Vector3 (scaleUp * WordCreation.xScale, scaleUp * WordCreation.yScale, 1), pulseLength);
-		}
-
-		IEnumerator ScaleDown(float delayTime, GameObject go)
-		{
-			yield return new WaitForSeconds (delayTime - .1f);
-
-			float clipLength = 1f;
-
-			LeanTween.scale (go,new Vector3(1f*WordCreation.xScale,1f*WordCreation.yScale,1),clipLength *.5f);
-		}
-
-
-		static void CreateBlanks(string word)
-		{
-			float xScale = .4f;
-			float yScale = .5f;
-			int y = -3;
-			int z = 0;
-			Vector3[] Position = new Vector3[word.Length];
-
-			string[] letterArray = new string[word.Length];
-			for (int i=0; i<word.Length; i++) {
-				char letter = System.Char.ToUpper (word [i]);
-				letterArray [i] = System.Char.ToString (letter);
-			}
-
-			
-			if (word.Length == 3) {
-				Position = new Vector3[3]{
-					new Vector3 (-2, y, z),
-					new Vector3 (0, y, z),
-					new Vector3 (2, y, z)
-				};
-			}
-			
-			if (word.Length == 4) {
-				Position = new Vector3[4] {
-					new Vector3 (-3, y, z),
-					new Vector3 (-1, y, z),
-					new Vector3 (1, y, z),
-					new Vector3 (3, y, z),
-				};
-			}
-			
-			if (word.Length == 5) {
-				Position = new Vector3[5] {
-					new Vector3 (-4, y, z),
-					new Vector3 (-2, y, z),
-					new Vector3 (0, y, z),
-					new Vector3 (2, y, z),
-					new Vector3 (4, y, z)
-				};
-			}
-			
-			if (word.Length == 6) {
-				Position = new Vector3[6] {
-					new Vector3 (-5, y, z),
-					new Vector3 (-3, y, z),
-					new Vector3 (-1, y, z),
-					new Vector3 (1, y, z),
-					new Vector3 (3, y, z),
-					new Vector3 (5, y, z)
-				};
-			}
-
-			ObjectProperties blank1 = ObjectProperties.CreateInstance (letterArray[0], "TargetBlank", Position[0], new Vector3 (xScale, yScale, 1), "Blank", null);
-			GameDirector.InstantiateObject (blank1);
-			
-			ObjectProperties blank2 = ObjectProperties.CreateInstance (letterArray[1], "TargetBlank", Position[1], new Vector3 (xScale, yScale, 1), "Blank", null);
-			GameDirector.InstantiateObject (blank2);
-			
-			ObjectProperties blank3 = ObjectProperties.CreateInstance (letterArray[2], "TargetBlank", Position[2], new Vector3 (xScale, yScale, 1), "Blank", null);
-			GameDirector.InstantiateObject (blank3);
-			
-			if (word.Length >= 4) {
-				
-				ObjectProperties blank4 = ObjectProperties.CreateInstance (letterArray[3], "TargetBlank", Position[3], new Vector3 (xScale, yScale, 1), "Blank", null);
-				GameDirector.InstantiateObject (blank4);
-			}
-			
-			if (word.Length >= 5) {
-				
-				ObjectProperties blank5 = ObjectProperties.CreateInstance (letterArray[4], "TargetBlank", Position[4], new Vector3 (xScale, yScale, 1), "Blank", null);
-				GameDirector.InstantiateObject (blank5);
-			}
-			
-			if (word.Length >= 6) {
-				
-				ObjectProperties blank6 = ObjectProperties.CreateInstance (letterArray[5], "TargetBlank", Position[5], new Vector3 (xScale, yScale, 1), "Blank", null);
-				GameDirector.InstantiateObject (blank6);
-			}
-
-			GameObject[] blanks = GameObject.FindGameObjectsWithTag ("TargetBlank");
-			foreach (GameObject go in blanks) {
-				Color color = go.renderer.material.color;
-				color.a = .1f;
-				go.renderer.material.color = color;
-			}
-
-
+			ObjectProperties Obj = ObjectProperties.CreateInstance (word, "WordObject", new Vector3 (0, y, 0), new Vector3 (scale, scale, 1), ProgressManager.currentLevel + "/" + word, "Words/"+word);
+			ObjectProperties.InstantiateObject (Obj);
 		}
 
 
 
 
+		/*
 		public static void CreateSpellingGame(string word)
 		{
 			switch(word)
@@ -495,5 +433,6 @@ namespace WordTree
 
 
 		}
+		*/
 	}
 }

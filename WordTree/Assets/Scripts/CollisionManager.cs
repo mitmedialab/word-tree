@@ -4,6 +4,8 @@ using TouchScript.Gestures;
 using TouchScript.Gestures.Simple;
 using TouchScript.Behaviors;
 using TouchScript.Hit;
+using System.Collections.Generic;
+using System.Linq;
 
 
 namespace WordTree
@@ -14,10 +16,7 @@ namespace WordTree
 		void OnTriggerEnter2D (Collider2D other)
 		{
 
-			if (Application.loadedLevelName == "4. Spell Word") {
-
-				GameObject SpellWordDirector = GameObject.Find ("SpellWordDirector");
-				SpellWordDirector swd = SpellWordDirector.GetComponent<SpellWordDirector> ();
+			if (Application.loadedLevelName == "4. Learn Spelling") {
 				
 				if (other.name == gameObject.name) {
 
@@ -34,13 +33,15 @@ namespace WordTree
 					Debug.Log ("Disabled collisions for " + gameObject.name);
 					Destroy (gameObject.GetComponent<CollisionManager>());
 
-					swd.PulseOnce(gameObject,"letter",1.05f);
-
 					if (CheckCompletedWord ()) {
 
-						swd.SpellOutWord ();
+						GameObject[] tar = GameObject.FindGameObjectsWithTag("TargetLetter");
+						GameObject audioManager = GameObject.Find ("AudioManager");
+						audioManager.GetComponent<AudioManager>().SpellOutWord(tar);
 
-						AddCompletedWord (GameDirector.currentWord);
+						LearnSpellingDirector.CongratsAnimation((tar.Length+1) * AudioManager.clipLength);
+
+						ProgressManager.AddCompletedWord (ProgressManager.currentWord);
 
 					}
 
@@ -49,28 +50,42 @@ namespace WordTree
 
 			if (Application.loadedLevelName == "5. Spelling Game") {
 
-				GameObject spellingGameDirector = GameObject.Find ("SpellingGameDirector");
-				SpellingGameDirector sgd = spellingGameDirector.GetComponent<SpellingGameDirector>();
-
 				Debug.Log ("Collision on " + other.name);
 
 				other.gameObject.GetComponent<GestureManager>().DisableGestures(other.gameObject);
 				other.gameObject.GetComponent<PulseBehavior>().StopPulsing (other.gameObject);
 				other.gameObject.transform.position = new Vector3(gameObject.transform.position.x,gameObject.transform.position.y,-1);
-				other.gameObject.transform.localScale = new Vector3 (WordCreation.xScale, WordCreation.yScale, 1);
 
 				Debug.Log ("Disabled collisions for Blank " + gameObject.name);
 				Destroy(gameObject.GetComponent<CollisionManager>());
 
 				if (CheckCompletedBlanks()){
 
-					ResetGravityEffect();
-
 					if (CheckCorrectSpelling()){
 
+						GameObject[] mov = GameObject.FindGameObjectsWithTag("MovableLetter");
+
+						GameObject.Find ("SoundButton").GetComponent<GestureManager>().DisableGestures(GameObject.Find ("SoundButton"));
+						GameObject.Find ("HintButton").GetComponent<GestureManager>().DisableGestures(GameObject.Find ("HintButton"));
+
 						MarkCorrectLetters(0f);
-						sgd.PulseWordOnce(1f);
-						ExplodeStarsAnimation(2f);
+
+						SpellOutWord();
+
+						CompleteWordAnimation((mov.Length+1) * AudioManager.clipLength);
+
+						GameObject spellingGameDirector = GameObject.Find ("SpellingGameDirector");
+						SpellingGameDirector sgd = spellingGameDirector.GetComponent<SpellingGameDirector>();
+						sgd.DestroyAll ((mov.Length+2) * AudioManager.clipLength);
+
+						if (!CheckCompletedGame())
+							sgd.LoadNextWord((mov.Length+3) * AudioManager.clipLength);
+						if (CheckCompletedGame()){
+							SpellingGameDirector.wordIndex = 0;
+							ProgressManager.AddCompletedLevel (ProgressManager.currentLevel);
+							ProgressManager.UnlockNextLevel (ProgressManager.currentLevel);
+						}
+
 
 					}
 
@@ -91,7 +106,19 @@ namespace WordTree
 
 		}
 
-
+		void SpellOutWord()
+		{
+			GameObject[] tar = GameObject.FindGameObjectsWithTag("TargetBlank");
+			GameObject[] mov = new GameObject[tar.Length];
+			for (int i=0; i<tar.Length; i++)
+			{
+				Vector2 posn = tar[i].transform.position;
+				Collider2D[] letters = Physics2D.OverlapCircleAll(posn,1.0f,1,-1,-1);
+				mov[i] = letters[0].gameObject;
+			}
+			GameObject audioManager = GameObject.Find ("AudioManager");
+			audioManager.GetComponent<AudioManager>().SpellOutWord(mov);
+		}
 
 
 		static GameObject[] UnoccupiedBlanks()
@@ -174,9 +201,7 @@ namespace WordTree
 					incorrectLetters[j++] = userSpelling[i];
 				}
 			}
-
-			foreach (GameObject go in incorrectLetters)
-				Debug.Log ("Incorrect Letter" + go.name);
+	
 			return incorrectLetters;
 		}
 
@@ -210,24 +235,23 @@ namespace WordTree
 			GameObject[] correctLetters = CorrectLetters ();
 			foreach (GameObject go in correctLetters) {
 				LeanTween.color (go,Color.yellow,.1f).setDelay (delayTime);
-				go.transform.localScale = new Vector3 (WordCreation.xScale, WordCreation.yScale, 1);
+				go.transform.localScale = new Vector3 (WordCreation.letterScale, WordCreation.letterScale, 1);
 			}
 
 		}
 
-		void ResetIncorrectLetters(float delayTime)
+		public void ResetIncorrectLetters(float delayTime)
 		{
 			GameObject[] gos = IncorrectLetters();
 			
 			foreach (GameObject go in gos){
 
-				go.transform.localScale = new Vector3 (WordCreation.xScale, WordCreation.yScale, 1);
+				go.transform.localScale = new Vector3 (WordCreation.letterScale, WordCreation.letterScale, 1);
 
-				Debug.Log ("Moving " + go.name);
+				Debug.Log ("Resetting incorrect letter " + go.name);
 				Vector3 posn = new Vector3(go.transform.position.x,0,-2);
 				LeanTween.move (go, posn, 1.0f).setEase (LeanTweenType.easeOutQuad).setDelay (delayTime);
 
-				Debug.Log ("Pulsing " + go.name);
 				go.GetComponent<PulseBehavior>().StartPulsing(go);
 
 				go.GetComponent<GestureManager>().EnableGestures(go);
@@ -239,56 +263,57 @@ namespace WordTree
 		void TryAgainAnimation()
 		{	
 			GameObject tryAgain = GameObject.Find ("TryAgain");
-			GameObject owl = GameObject.Find ("Owl");
 
-			Debug.Log ("Starting Try Again animation");
+			LeanTween.alpha (tryAgain, 1f, .1f);
+			LeanTween.alpha (tryAgain, 0f, .1f).setDelay (2.5f);
 
-			//Animation: Owl falls from top of screen
-			tryAgain.transform.position = new Vector3(0f,2f,-3);
-			owl.transform.position = new Vector3 (3f,3.3f,-3.01f);
 
-			tryAgain.GetComponent<Rigidbody2D> ().isKinematic = false;
-			owl.GetComponent<Rigidbody2D> ().isKinematic = false;
-
-			//Alternative animation: Owl fades in and fades out
-
-			/*
-			tryAgain.transform.position = new Vector3(0f,0f,-3);
-			owl.transform.position = new Vector3 (3f,1.3f,-3.01f);
-
-			LeanTween.alpha (tryAgain, 1f, .3f);
-			LeanTween.alpha (owl, 1f, .3f);
-
-			LeanTween.alpha (tryAgain, 0f, .3f).setDelay (2.5f);
-			LeanTween.alpha (owl, 0f, .3f).setDelay (2.5f);
-			*/
-		}
-
-		void ResetGravityEffect()
-		{
-			GameObject tryAgain = GameObject.Find ("TryAgain");
-			GameObject owl = GameObject.Find ("Owl");
-			
-			tryAgain.GetComponent<Rigidbody2D> ().isKinematic = true;
-			owl.GetComponent<Rigidbody2D> ().isKinematic = true;
 		}
 
 
-		void ExplodeStarsAnimation(float delayTime)
+		void CompleteWordAnimation(float delayTime)
 		{
 			GameObject[] mov = GameObject.FindGameObjectsWithTag ("MovableLetter");
 			GameObject[] tar = GameObject.FindGameObjectsWithTag ("TargetBlank");
-			foreach (GameObject go in mov)
-				LeanTween.alpha (go, 0f, .01f).setDelay(delayTime);
+
 			foreach (GameObject go in tar)
 				LeanTween.alpha (go, 0f, .01f).setDelay (delayTime);
+			foreach (GameObject go in mov) {
+				LeanTween.moveX (go, 0, AudioManager.clipLength).setDelay (delayTime);
+				LeanTween.scale (go, new Vector3 (0, 0, 1), AudioManager.clipLength).setDelay (delayTime);
+			}
+
 			
 			GameObject stars = GameObject.Find ("Stars");
 			LeanTween.moveZ (stars, -3, .01f).setDelay (delayTime);
-			LeanTween.scale (stars, new Vector3 (2.5f, 2.5f, 1), 1f).setDelay (delayTime);
-			LeanTween.alpha (stars, 0f, .3f).setDelay (delayTime+.7f);
+			LeanTween.scale (stars, new Vector3 (2.5f, 2.5f, 1), AudioManager.clipLength).setDelay (delayTime);
+			LeanTween.alpha (stars, 0f, .3f).setDelay (delayTime + AudioManager.clipLength - .3f);
+
+			LeanTween.moveZ (stars, 3, .01f).setDelay (delayTime + 2f);
+			LeanTween.scale (stars, new Vector3 (.2f, .2f, 1), .01f).setDelay (delayTime + 2f);
+			LeanTween.alpha (stars, 1f, .01f).setDelay (delayTime + 2f);
 			
 			
+		}
+
+		public static void ShowHint()
+		{
+			GameObject[] unoccupiedBlanks = UnoccupiedBlanks ();
+			int i = Random.Range (0, unoccupiedBlanks.Length);
+			string letterName = unoccupiedBlanks [i].name;
+
+			if (GameObject.Find ("Hint" + letterName + i) == null) {
+
+				ObjectProperties letter = ObjectProperties.CreateInstance ("Hint" + letterName + i, "Hint", unoccupiedBlanks [i].transform.position, new Vector3 (WordCreation.letterScale, WordCreation.letterScale, 1), "Letters/" + letterName, null);
+				ObjectProperties.InstantiateObject (letter);
+			}
+
+			GameObject hint = GameObject.Find("Hint"+letterName+i);
+			LeanTween.color (hint, Color.magenta, .5f).setDelay (.2f);
+			LeanTween.color (hint, Color.black, .5f).setDelay (1.7f);
+			LeanTween.alpha (hint, 0f, .01f).setDelay (2.2f);
+
+				                 
 		}
 
 
@@ -331,7 +356,7 @@ namespace WordTree
 			Debug.Log ("Letters left: " + (gos.Length-1));
 
 			if (gos.Length == 1) {
-				Debug.Log ("Word Completed: " + GameDirector.currentWord);
+				Debug.Log ("Word Completed: " + ProgressManager.currentWord);
 				return true;
 			}
 
@@ -339,9 +364,15 @@ namespace WordTree
 
 		}
 
-		public static void AddCompletedWord(string word)
+		bool CheckCompletedGame()
 		{
-			GameDirector.completedWords.Add (word);
+			LevelProperties prop = LevelProperties.GetLevelProperties (ProgressManager.currentLevel);
+			string[] words = prop.Words ();
+			if (SpellingGameDirector.wordIndex == words.Length - 1) {
+				Debug.Log ("Game Completed");
+				return true;
+			}
+			return false;
 		}
 
 

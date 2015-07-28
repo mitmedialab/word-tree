@@ -43,6 +43,74 @@ namespace WordTree
 			return prop;
 		}
 
+		public static void InstantiateObject (ObjectProperties prop)
+		{
+			GameObject go = new GameObject();
+			
+			go.name = prop.Name();
+			
+			Debug.Log ("Created new object " + go.name);
+			
+			go.tag = prop.Tag ();
+			
+			go.transform.position = prop.InitPosn ();
+			
+			go.transform.localScale = prop.Scale ();
+			
+			SpriteRenderer spriteRenderer = go.AddComponent<SpriteRenderer>();
+			Sprite sprite = Resources.Load<Sprite>("Graphics/" + prop.Sprite ());
+			if (sprite == null)
+				Debug.Log("ERROR: could not load sprite " + prop.Name ());
+			spriteRenderer.sprite = sprite;
+			
+			if (prop.AudioFile() != null)
+			{
+				AudioSource audioSource = go.AddComponent<AudioSource>();
+				AudioClip clip = Resources.Load("Audio/" + prop.AudioFile ()) as AudioClip;
+				if (clip == null)
+					Debug.Log ("ERROR: could not load audioclip " + prop.AudioFile ());
+				audioSource.clip = clip;
+				audioSource.playOnAwake = false;
+			}
+
+			if (go.tag != "TargetBlank") 
+			{
+				PolygonCollider2D pc2d = go.AddComponent<PolygonCollider2D> ();
+				pc2d.isTrigger = true;
+			}
+
+			if (go.tag == "TargetBlank")
+			{
+				CircleCollider2D cc2d = go.AddComponent<CircleCollider2D>();
+				cc2d.isTrigger = true;
+				cc2d.radius = .3f;
+			}
+			
+			if (go.tag == "MovableLetter")
+			{
+				Rigidbody2D rb2d = go.AddComponent<Rigidbody2D>();
+				rb2d.isKinematic = true;
+				rb2d.gravityScale = 0;
+			}
+			
+			
+			if (go.tag == "WordObject" || go.tag == "MovableLetter" || go.tag == "Button") 
+			{	
+				GestureManager gm = go.AddComponent<GestureManager> ();
+				gm.AddAndSubscribeToGestures (go); 
+				
+				go.AddComponent<PulseBehavior> ();
+			}
+
+			if (go.tag == "Hint") 
+			{
+				go.GetComponent<SpriteRenderer>().color = Color.black;
+			}
+			
+			
+			
+		}
+
 
 		public string Name()
 		{

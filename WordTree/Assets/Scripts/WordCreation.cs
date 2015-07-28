@@ -5,22 +5,18 @@ namespace WordTree
 {
 	public class WordCreation : MonoBehaviour {
 
-		public static float xScale;
-		public static float yScale;
+		public static float letterScale = .3f;
+		static float letterWidth = 2f;
+		static int y;
+		static int z;
 
-		public static void CreateMovableWord(string word, string[] soundArray)
+		public static void CreateScrambledWord(string word, string[] soundArray)
 		{
-			int y = 0;
-			int z = -1;
+
 			Vector3[] posn = new Vector3[word.Length];
 			Vector3[] shuffledPosn = new Vector3[word.Length];
-			 
-
-			string[] letterArray = new string[word.Length];
-			for (int i=0; i<word.Length; i++)
-				letterArray [i] = System.Char.ToString (word [i]);
 			
-			CreateWord (letterArray, soundArray, "MovableLetter");
+			CreateWord (word, soundArray, "MovableLetter","Game");
 
 			GameObject[] mov = GameObject.FindGameObjectsWithTag ("MovableLetter");
 			for (int i=0; i<mov.Length; i++)
@@ -30,8 +26,6 @@ namespace WordTree
 			for (int i=0; i<mov.Length; i++)
 				mov [i].transform.position = shuffledPosn [i];
 
-			foreach (GameObject go in mov)
-				go.transform.position = new Vector3 (go.transform.position.x, y, z);
 
 		}
 
@@ -49,12 +43,9 @@ namespace WordTree
 
 		public static void CreateMovableAndTargetWords(string word, string[] soundArray)
 		{
-			string[] letterArray = new string[word.Length];
-			for (int i=0; i<word.Length; i++)
-				letterArray [i] = System.Char.ToString(word [i]);
 
-			CreateWord (letterArray, soundArray, "MovableLetter");
-			CreateWord (letterArray, soundArray, "TargetLetter");
+			CreateWord (word, soundArray, "MovableLetter", "Learn");
+			CreateWord (word, soundArray, "TargetLetter", "Learn");
 
 			GameObject[] tar = GameObject.FindGameObjectsWithTag ("TargetLetter");
 			foreach (GameObject go in tar) {
@@ -72,88 +63,96 @@ namespace WordTree
 				sprite.color = colors[i];
 			}
 				
-			
-			
 
 		}
 
-		public static void CreateWord(string[] word, string[] sounds, string tag)
+		public static void CreateWord(string word, string[] sounds, string tag, string mode)
 		{
-			xScale = .3f;
-			yScale = .3f;
-			int y = -2;
-			int z = 0;
-			int numLetters = word.Length;
-			Vector3[] Position = new Vector3[numLetters];
+
+			Vector3[] position = new Vector3[word.Length];
+			string[] letters = new string[word.Length];
+
+			for (int i=0; i<word.Length; i++) {
+				char letter = System.Char.ToUpper (word [i]);
+				letters[i] = System.Char.ToString (letter);
+			}
+
+
+			if (mode == "Learn")
+				y = -1;
+			if (mode == "Game")
+				y = 0;
 
 			if (tag == "MovableLetter")
 				z = -2;
+			if (tag == "TargetLetter")
+				z = 0;
 
-			if (numLetters == 3) {
-				Position = new Vector3[3]{
-					new Vector3 (-2, y, z),
+			if (word.Length == 3) {
+				position = new Vector3[3]{
+					new Vector3 (-1f*letterWidth, y, z),
 					new Vector3 (0, y, z),
-					new Vector3 (2, y, z)
+					new Vector3 (1f*letterWidth, y, z)
 				};
 			}
 
-			if (numLetters == 4) {
-				Position = new Vector3[4] {
-					new Vector3 (-3, y, z),
-					new Vector3 (-1, y, z),
-					new Vector3 (1, y, z),
-					new Vector3 (3, y, z),
+			if (word.Length == 4) {
+				position = new Vector3[4] {
+					new Vector3 (-1.5f*letterWidth, y, z),
+					new Vector3 (-.5f*letterWidth, y, z),
+					new Vector3 (.5f*letterWidth, y, z),
+					new Vector3 (1.5f*letterWidth, y, z),
 				};
 			}
 
-			if (numLetters == 5) {
-				Position = new Vector3[5] {
-					new Vector3 (-4, y, z),
-					new Vector3 (-2, y, z),
+			if (word.Length == 5) {
+				position = new Vector3[5] {
+					new Vector3 (-2f*letterWidth, y, z),
+					new Vector3 (-1f*letterWidth, y, z),
 					new Vector3 (0, y, z),
-					new Vector3 (2, y, z),
-					new Vector3 (4, y, z)
+					new Vector3 (1f*letterWidth, y, z),
+					new Vector3 (2f*letterWidth, y, z)
 				};
 			}
 
-			if (numLetters == 6) {
-				Position = new Vector3[6] {
-					new Vector3 (-5, y, z),
-					new Vector3 (-3, y, z),
-					new Vector3 (-1, y, z),
-					new Vector3 (1, y, z),
-					new Vector3 (3, y, z),
-					new Vector3 (5, y, z)
+			if (word.Length == 6) {
+				position = new Vector3[6] {
+					new Vector3 (-2.5f*letterWidth, y, z),
+					new Vector3 (-1.5f*letterWidth, y, z),
+					new Vector3 (-.5f*letterWidth, y, z),
+					new Vector3 (.5f*letterWidth, y, z),
+					new Vector3 (1.5f*letterWidth, y, z),
+					new Vector3 (2.5f*letterWidth, y, z)
 				};
 			}
 		
 
 
-			ObjectProperties letter1 = ObjectProperties.CreateInstance (word[0], tag, Position[0], new Vector3 (xScale, yScale, 1), "Letters/"+word[0], sounds[0]);
-			GameDirector.InstantiateObject (letter1);
+			ObjectProperties letter1 = ObjectProperties.CreateInstance (letters[0], tag, position[0], new Vector3 (letterScale, letterScale, 1), "Letters/"+letters[0], sounds[0]);
+			ObjectProperties.InstantiateObject (letter1);
 		
-			ObjectProperties letter2 = ObjectProperties.CreateInstance (word[1], tag, Position[1], new Vector3 (xScale, yScale, 1), "Letters/"+word[1], sounds[1]);
-			GameDirector.InstantiateObject (letter2);
+			ObjectProperties letter2 = ObjectProperties.CreateInstance (letters[1], tag, position[1], new Vector3 (letterScale, letterScale, 1), "Letters/"+letters[1], sounds[1]);
+			ObjectProperties.InstantiateObject (letter2);
 
-			ObjectProperties letter3 = ObjectProperties.CreateInstance (word[2], tag, Position[2], new Vector3 (xScale, yScale, 1), "Letters/"+word[2], sounds[2]);
-			GameDirector.InstantiateObject (letter3);
+			ObjectProperties letter3 = ObjectProperties.CreateInstance (letters[2], tag, position[2], new Vector3 (letterScale, letterScale, 1), "Letters/"+letters[2], sounds[2]);
+			ObjectProperties.InstantiateObject (letter3);
 
-			if (numLetters >= 4) {
+			if (word.Length >= 4) {
 
-				ObjectProperties letter4 = ObjectProperties.CreateInstance (word[3], tag, Position[3], new Vector3 (xScale, yScale, 1), "Letters/"+word[3], sounds[3]);
-				GameDirector.InstantiateObject (letter4);
+				ObjectProperties letter4 = ObjectProperties.CreateInstance (letters[3], tag, position[3], new Vector3 (letterScale, letterScale, 1), "Letters/"+letters[3], sounds[3]);
+				ObjectProperties.InstantiateObject (letter4);
 			}
 
-			if (numLetters >= 5) {
+			if (word.Length >= 5) {
 
-				ObjectProperties letter5 = ObjectProperties.CreateInstance (word[4], tag, Position[4], new Vector3 (xScale, yScale, 1), "Letters/"+word[4], sounds[4]);
-				GameDirector.InstantiateObject (letter5);
+				ObjectProperties letter5 = ObjectProperties.CreateInstance (letters[4], tag, position[4], new Vector3 (letterScale, letterScale, 1), "Letters/"+letters[4], sounds[4]);
+				ObjectProperties.InstantiateObject (letter5);
 			}
 
-			if (numLetters >= 6) {
+			if (word.Length >= 6) {
 				
-				ObjectProperties letter6 = ObjectProperties.CreateInstance (word[5], tag, Position[5], new Vector3 (xScale, yScale, 1), "Letters/"+word[5], sounds[5]);
-				GameDirector.InstantiateObject (letter6);
+				ObjectProperties letter6 = ObjectProperties.CreateInstance (letters[5], tag, position[5], new Vector3 (letterScale, letterScale, 1), "Letters/"+letters[5], sounds[5]);
+				ObjectProperties.InstantiateObject (letter6);
 			}
 
 		

@@ -4,15 +4,12 @@ using System.Collections;
 
 namespace WordTree
 {
-	public class SpellWordDirector : MonoBehaviour {
-
-		float clipLength = .7f;
+	public class LearnSpellingDirector : MonoBehaviour {
 
 		void Start () {
 
-			StartCoroutine(LightOff(0));
 
-			VocabList.CreateSpellingLesson (GameDirector.currentWord);
+			LoadSpellingLesson (ProgressManager.currentWord);
 
 			GameObject[] buttons = GameObject.FindGameObjectsWithTag ("Button");
 			foreach (GameObject button in buttons)
@@ -28,7 +25,24 @@ namespace WordTree
 			StartCoroutine (EnableCollisions(2));
 
 		}
+		
+		void LoadSpellingLesson(string word)
+		{
+			WordProperties prop = WordProperties.GetWordProperties (word);
+			string[] phonemes = prop.Phonemes ();
+			float objScale = prop.ObjScale ();
+			
+			WordCreation.CreateMovableAndTargetWords (word, phonemes);
+			CreateObject (word, objScale);
+		}
 
+		void CreateObject(string word, float scale)
+		{
+			float y = 2;
+			
+			ObjectProperties Obj = ObjectProperties.CreateInstance (word, "WordObject", new Vector3 (0, y, 0), new Vector3 (scale, scale, 1), ProgressManager.currentLevel + "/" + word, "Words/"+word);
+			ObjectProperties.InstantiateObject (Obj);
+		}
 
 		IEnumerator ExplodeWord(float delayTime)
 		{
@@ -36,114 +50,77 @@ namespace WordTree
 
 			GameObject[] gos = GameObject.FindGameObjectsWithTag ("MovableLetter");
 
-			Vector3[] PositionTemplate = new Vector3[gos.Length];
-			Vector3[] Position = new Vector3[gos.Length];
-			int[] OrderTemplate = new int[gos.Length];
-			int[] Order = new int[gos.Length];
+			Vector3[] posn = new Vector3[gos.Length];
+			Vector3[] shuffledPosn = new Vector3[gos.Length];
+
+			int y1 = 3;
+			int y2 = 2;
 			int z = -2;
 
 			if (gos.Length == 3) {
 
-				PositionTemplate = new Vector3[3] {
+				posn = new Vector3[3] {
 					new Vector3 (-7, 0, z),
-					new Vector3 (6, 2, z),
-					new Vector3 (8, -3, z)
-				};
-
-				OrderTemplate = new int[3] {0,1,2};
-				Order = ShuffleArray(OrderTemplate);
-
-				Position = new Vector3[3]{
-				PositionTemplate[Order[0]],
-				PositionTemplate[Order[1]],
-				PositionTemplate[Order[2]]
+					new Vector3 (6, y2, z),
+					new Vector3 (8, -y1, z)
 				};
 			}
 
 			if (gos.Length == 4) {
 
-				PositionTemplate = new Vector3[4] {
-					new Vector3 (-8, -3, z),
-					new Vector3 (-6, 2, z),
-					new Vector3 (6, 2, z),
-					new Vector3 (8, -3, z)
-				};
-
-				OrderTemplate = new int[4] {0,1,2,3};
-				Order = ShuffleArray(OrderTemplate);
-
-				Position = new Vector3[4]{
-					PositionTemplate[Order[0]],
-					PositionTemplate[Order[1]],
-					PositionTemplate[Order[2]],
-					PositionTemplate[Order[3]]
+				posn = new Vector3[4] {
+					new Vector3 (-8, -y1, z),
+					new Vector3 (-6, y2, z),
+					new Vector3 (6, y2, z),
+					new Vector3 (8, -y1, z)
 				};
 			}
 			
 			if (gos.Length == 5) {
 
-				PositionTemplate = new Vector3[5] {
-					new Vector3 (-8, -2, z),
-					new Vector3 (-6, 2, z),
-					new Vector3 (5, 3, z),
+				posn = new Vector3[5] {
+					new Vector3 (-8, -y2, z),
+					new Vector3 (-6, y2, z),
+					new Vector3 (5, y1, z),
 					new Vector3 (9, 0, z),
-					new Vector3 (8, -3, z)
-				};
-
-				OrderTemplate = new int[5] {0,1,2,3,4};
-				Order = ShuffleArray(OrderTemplate);
-
-				Position = new Vector3[5]{
-					PositionTemplate[Order[0]],
-					PositionTemplate[Order[1]],
-					PositionTemplate[Order[2]],
-					PositionTemplate[Order[3]],
-					PositionTemplate[Order[4]]
+					new Vector3 (8, -y1, z)
 				};
 			}
 
 			if (gos.Length == 6) {
-				PositionTemplate = new Vector3[6] {
-					new Vector3 (-8, -3, z),
+
+				posn = new Vector3[6] {
+					new Vector3 (-8, -y1, z),
 					new Vector3 (-9, 0, z),
-					new Vector3 (-5, 3, z),
-					new Vector3 (5, 3, z),
+					new Vector3 (-5, y1, z),
+					new Vector3 (5, y1, z),
 					new Vector3 (9, 0, z),
-					new Vector3 (8, -3, z)
-				};
-
-				OrderTemplate = new int[6] {0,1,2,3,4,5};
-				Order = ShuffleArray(OrderTemplate);
-
-				Position = new Vector3[6] {
-					PositionTemplate[Order[0]],
-					PositionTemplate[Order[1]],
-					PositionTemplate[Order[2]],
-					PositionTemplate[Order[3]],
-					PositionTemplate[Order[4]],
-					PositionTemplate[Order[5]]
+					new Vector3 (8, -y1, z)
 				};
 			}
 
+			shuffledPosn = ShuffleArray (posn);
+
 			for (int i=0; i<gos.Length; i++) { 
-				LeanTween.move(gos[i],Position[i],1.0f).setEase (LeanTweenType.easeOutQuad);
+				LeanTween.move(gos[i],shuffledPosn[i],1.0f);
 				LeanTween.rotateAround (gos[i], Vector3.forward, 360f, 1.0f);
 
 			}
 			Debug.Log ("Exploded draggable letters");
 		}
 
-	    int[] ShuffleArray(int[] array)
+		Vector3[] ShuffleArray(Vector3[] array)
 		{
 			for (int i = array.Length; i > 0; i--)
 			{
 				int j = Random.Range (0,i);
-				int temp = array[j];
+				Vector3 temp = array[j];
 				array[j] = array[i - 1];
 				array[i - 1]  = temp;
 			}
 			return array;
 		}
+
 		
 		IEnumerator EnableCollisions(float delayTime)
 		{
@@ -165,6 +142,7 @@ namespace WordTree
 			}
 		}
 
+		/*
 		public void SpellOutWord()
 		{
 			GameObject[] tar = GameObject.FindGameObjectsWithTag ("TargetLetter");
@@ -217,10 +195,10 @@ namespace WordTree
 
 			Vector3 scale = new Vector3 (1, 1, 1);
 			if (size == "letter")
-				scale = new Vector3 (WordCreation.xScale * 17, WordCreation.yScale * 17, 1);
+				scale = new Vector3 (WordCreation.letterScale * 17, WordCreation.letterScale * 17, 1);
 			if (size == "word") {
 				GameObject[] tar = GameObject.FindGameObjectsWithTag("TargetLetter");
-				scale = new Vector3 (tar.Length * WordCreation.xScale * 12, WordCreation.yScale * 17, 1);
+				scale = new Vector3 (tar.Length * WordCreation.letterScale * 12, WordCreation.letterScale * 17, 1);
 			}
 
 			GameObject highlight = GameObject.FindGameObjectWithTag ("Light");
@@ -248,7 +226,7 @@ namespace WordTree
 			float pulseLength = clipLength * .15f;
 
 			if (size == "letter") {
-				LeanTween.scale (go, new Vector3 (scaleUp * WordCreation.xScale, scaleUp * WordCreation.yScale, 1), pulseLength);
+				LeanTween.scale (go, new Vector3 (scaleUp * WordCreation.letterScale, scaleUp * WordCreation.letterScale, 1), pulseLength);
 				StartCoroutine (ScaleDown (clipLength * .5f, go));
 				Debug.Log ("Pulse on " + go.name);
 			}
@@ -257,7 +235,7 @@ namespace WordTree
 				GameObject[] tar = GameObject.FindGameObjectsWithTag ("TargetLetter");
 
 				for (int i=0; i < tar.Length; i++) {
-					LeanTween.scale (tar[i], new Vector3 (scaleUp * WordCreation.xScale, scaleUp * WordCreation.yScale, 1), pulseLength);
+					LeanTween.scale (tar[i], new Vector3 (scaleUp * WordCreation.letterScale, scaleUp * WordCreation.letterScale, 1), pulseLength);
 					StartCoroutine (ScaleDown (clipLength * .5f, tar[i]));
 
 				}
@@ -269,30 +247,30 @@ namespace WordTree
 		{
 			yield return new WaitForSeconds (delayTime - .1f);
 			
-			LeanTween.scale (go,new Vector3(1f*WordCreation.xScale,1f*WordCreation.yScale,1),clipLength*.5f);
+			LeanTween.scale (go,new Vector3(1f*WordCreation.letterScale,1f*WordCreation.letterScale,1),clipLength*.5f);
 		}
+		*/
 
-		IEnumerator CongratsAnimation(float delayTime)
+		public static void CongratsAnimation(float delayTime)
 		{
-			yield return new WaitForSeconds (delayTime);
 
 			float time = 1f;
 
 			GameObject go = GameObject.FindGameObjectWithTag ("WordObject");
 
 			Debug.Log ("Spinning " + go.name + " around");
-			LeanTween.rotateAround (go, Vector3.forward, 360f, time);
-			LeanTween.scale (go,new Vector3(go.transform.localScale.x*1.3f,go.transform.localScale.y*1.3f,1),time);
-			LeanTween.moveY (go, 1.5f, time);
+			LeanTween.rotateAround (go, Vector3.forward, 360f, time).setDelay(delayTime);
+			LeanTween.scale (go,new Vector3(go.transform.localScale.x*1.3f,go.transform.localScale.y*1.3f,1),time).setDelay (delayTime);
+			LeanTween.moveY (go, 1.5f, time).setDelay (delayTime);
 
 			GameObject[] tar = GameObject.FindGameObjectsWithTag ("TargetLetter");
 			foreach (GameObject letter in tar)
-				LeanTween.moveY (letter,-3f,time);
+				LeanTween.moveY (letter,-3f,time).setDelay(delayTime);
 
 			Debug.Log ("Playing clip for congrats");
 			AudioSource audio = go.AddComponent<AudioSource> ();
 			audio.clip = Resources.Load ("Audio/CongratsSound") as AudioClip;
-			audio.Play ();
+			audio.PlayDelayed (delayTime);
 
 		}
 

@@ -42,32 +42,6 @@ namespace WordTree
 			}
 		}
 
-		public void UnsubscribeFromGestures (GameObject go)
-		{
-			TapGesture tg = go.GetComponent<TapGesture> ();
-			if (tg != null) {
-				tg.Tapped -= tappedHandler;
-				Debug.Log (go.name + " unsubscribed from tap events");
-			}
-			PanGesture pg = go.GetComponent<PanGesture> ();
-			if (pg != null) {
-				pg.Panned -= pannedHandler;
-				pg.PanCompleted -= panCompleteHandler;
-				pg.PanStarted -= panStartedHandler;
-				Debug.Log (go.name + " unsubscribed from pan events");
-			}
-			PressGesture prg = go.GetComponent<PressGesture> ();
-			if (prg != null) {
-				prg.Pressed -= pressedHandler;
-				Debug.Log (go.name + " unsubscribed from press events");
-			}
-			ReleaseGesture rg = go.GetComponent<ReleaseGesture> ();
-			if (rg != null) {
-				rg.Released -= releasedHandler;
-				Debug.Log (go.name + " unsubscribed from release events");
-			}
-		}
-
 		public void EnableGestures (GameObject go)
 		{
 			TapGesture tg = go.GetComponent<TapGesture> ();
@@ -117,39 +91,43 @@ namespace WordTree
 		{
 			TapGesture gesture = sender as TapGesture;
 			ITouchHit hit;
+			GameObject go = gesture.gameObject;
 
 			if (gesture.GetTargetHitResult (out hit)) { 
 				ITouchHit2D hit2d = (ITouchHit2D)hit; 
 				Debug.Log ("TAP on " + gesture.gameObject.name + " at " + hit2d.Point);
 			}
 
-			if (gesture.gameObject.tag == "LevelIcon") {
-				GameDirector.currentLevel = gesture.gameObject.name;
-				WordTreeDirector.CreateModeChoices();
+			if (go.tag == "LevelIcon") {
+				ProgressManager.currentLevel = go.name.Substring(0,go.name.Length-1);
 			}
 
-			if (gesture.gameObject.name == "Learn")
-				Application.LoadLevel ("3. Choose Word");
+			if (go.name.Substring(go.name.Length-1).Equals ("1"))
+				Application.LoadLevel ("3. Choose Object");
 
-			if (gesture.gameObject.name == "Play")
+			if (go.name.Substring(go.name.Length-1).Equals ("2"))
 				Application.LoadLevel ("5. Spelling Game");
-			
-			if (gesture.gameObject.name == "Icon")
-				Application.LoadLevel ("2. Word Tree");
 
-			if (gesture.gameObject.tag == "WordObject") {
-				Application.LoadLevel ("4. Spell Word");
-				GameDirector.currentWord = gesture.gameObject.name;
+			if (go.tag == "WordObject") {
+				Application.LoadLevel ("4. Learn Spelling");
+				ProgressManager.currentWord = gesture.gameObject.name;
 			}
 
-			if (gesture.gameObject.name == "HomeButton")
+			if (go.name == "HomeButton")
 				Application.LoadLevel ("2. Word Tree");
 
-			if (gesture.gameObject.name == "BackButton")
-				Application.LoadLevel ("3. Choose Word");
+			if (go.name == "BackButton")
+				Application.LoadLevel ("3. Choose Object");
 
-			if (gesture.gameObject.name == "RetryButton")
+			if (go.name == "RetryButton")
 				Application.LoadLevel (Application.loadedLevelName);
+
+			if (go.name == "SoundButton")
+				GameObject.FindGameObjectWithTag ("WordObject").audio.Play ();
+
+			if (go.name == "HintButton")
+				CollisionManager.ShowHint ();
+
 
 
 
@@ -167,8 +145,8 @@ namespace WordTree
 
 			PlaySound(gesture.gameObject);
 
-			if (Application.loadedLevelName == "5. Spelling Game"){
-				CollisionManager.EnableCollisions(gesture.gameObject);
+			if (Application.loadedLevelName == "5. Spelling Game") {
+					CollisionManager.EnableCollisions(gesture.gameObject);
 			}
 		}
 		
