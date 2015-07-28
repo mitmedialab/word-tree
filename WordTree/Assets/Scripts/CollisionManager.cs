@@ -59,9 +59,9 @@ namespace WordTree
 				Debug.Log ("Disabled collisions for Blank " + gameObject.name);
 				Destroy(gameObject.GetComponent<CollisionManager>());
 
-				if (CheckCompletedBlanks()){
+				if (CheckCompletedTargets("MovableLetter")){
 
-					if (CheckCorrectSpelling()){
+					if (CheckCorrectSpelling("TargetBlank")){
 
 						GameObject[] mov = GameObject.FindGameObjectsWithTag("MovableLetter");
 
@@ -70,17 +70,17 @@ namespace WordTree
 
 						MarkCorrectLetters(0f);
 
-						SpellOutWord();
+						SpellingGameDirector.SpellOutWord();
 
-						CompleteWordAnimation((mov.Length+1) * AudioManager.clipLength);
+						SpellingGameDirector.CompleteWordAnimation((mov.Length+1) * AudioManager.clipLength);
 
 						GameObject spellingGameDirector = GameObject.Find ("SpellingGameDirector");
 						SpellingGameDirector sgd = spellingGameDirector.GetComponent<SpellingGameDirector>();
 						sgd.DestroyAll ((mov.Length+2) * AudioManager.clipLength);
 
-						if (!CheckCompletedGame())
+						if (!CheckCompletedGame("Spelling Game"))
 							sgd.LoadNextWord((mov.Length+3) * AudioManager.clipLength);
-						if (CheckCompletedGame()){
+						if (CheckCompletedGame("Spelling Game")){
 							SpellingGameDirector.wordIndex = 0;
 							ProgressManager.AddCompletedLevel (ProgressManager.currentLevel);
 							ProgressManager.UnlockNextLevel (ProgressManager.currentLevel);
@@ -90,9 +90,9 @@ namespace WordTree
 					}
 
 
-					if (!CheckCorrectSpelling()){
+					if (!CheckCorrectSpelling("TargetBlank")){
 
-						TryAgainAnimation();
+						SpellingGameDirector.TryAgainAnimation();
 						MarkCorrectLetters(0f);
 						ResetIncorrectLetters(0f);
 
@@ -103,136 +103,159 @@ namespace WordTree
 
 			}
 
-
+			if (Application.loadedLevelName == "6. Sound Game") {
+				
+				Debug.Log ("Collision on " + other.name);
+				
+				other.gameObject.GetComponent<GestureManager> ().DisableGestures (other.gameObject);
+				other.gameObject.GetComponent<PulseBehavior> ().StopPulsing (other.gameObject);
+				other.gameObject.transform.position = new Vector3 (gameObject.transform.position.x, gameObject.transform.position.y, 1);
+				
+				Debug.Log ("Disabled collisions for Letter " + gameObject.name);
+				Destroy (gameObject.GetComponent<CollisionManager> ());
+				
+				if (CheckCompletedTargets ("MovableBlank")) {
+					
+					if (CheckCorrectSpelling ("TargetLetter")) {
+						
+						GameObject[] mov = GameObject.FindGameObjectsWithTag ("MovableBlank");
+						
+						GameObject.Find ("SoundButton").GetComponent<GestureManager> ().DisableGestures (GameObject.Find ("SoundButton"));
+						GameObject.Find ("HintButton").GetComponent<GestureManager> ().DisableGestures (GameObject.Find ("HintButton"));
+						
+						MarkCorrectLetters (0f);
+						
+						GameObject[] tar = GameObject.FindGameObjectsWithTag("TargetLetter");
+						GameObject audioManager = GameObject.Find ("AudioManager");
+						audioManager.GetComponent<AudioManager>().SpellOutWord(tar);
+						
+						//CompleteWordAnimation ((mov.Length + 1) * AudioManager.clipLength);
+						
+						GameObject soundGameDirector = GameObject.Find ("SoundGameDirector");
+						SoundGameDirector dir = soundGameDirector.GetComponent<SoundGameDirector> ();
+						dir.DestroyAll ((mov.Length + 2) * AudioManager.clipLength);
+						
+						if (!CheckCompletedGame ("Sound Game"))
+							dir.LoadNextWord ((mov.Length + 3) * AudioManager.clipLength);
+						if (CheckCompletedGame ("Sound Game")) {
+							SoundGameDirector.wordIndex = 0;
+							ProgressManager.AddCompletedLevel (ProgressManager.currentLevel);
+							ProgressManager.UnlockNextLevel (ProgressManager.currentLevel);
+						}
+						
+						
+					}
+					
+					
+					if (!CheckCorrectSpelling ("TargetLetter")) {
+						
+						//TryAgainAnimation ();
+						MarkCorrectSounds (0f);
+						ResetIncorrectSounds (0f);
+						
+					}
+					
+					
+				}
+			}
 		}
 
-		void SpellOutWord()
+
+
+		static List <GameObject> UnoccupiedTargets(string tag)
 		{
-			GameObject[] tar = GameObject.FindGameObjectsWithTag("TargetBlank");
-			GameObject[] mov = new GameObject[tar.Length];
+			GameObject[] tar = GameObject.FindGameObjectsWithTag (tag);
+			List<GameObject> unoccupiedTargets = new List<GameObject>();
+			int z = 0;
+
+			if (tag == "TargetBlank")
+				z = -1;
+			if (tag == "TargetLetter")
+				z = 1;
+
 			for (int i=0; i<tar.Length; i++)
 			{
 				Vector2 posn = tar[i].transform.position;
-				Collider2D[] letters = Physics2D.OverlapCircleAll(posn,1.0f,1,-1,-1);
-				mov[i] = letters[0].gameObject;
+				Collider2D[] mov = Physics2D.OverlapCircleAll(posn,1.0f,1,z,z);
+				if (mov.Length == 0)
+					unoccupiedTargets.Add (tar[i]);
+				
 			}
-			GameObject audioManager = GameObject.Find ("AudioManager");
-			audioManager.GetComponent<AudioManager>().SpellOutWord(mov);
+
+			return unoccupiedTargets;
 		}
 
 
-		static GameObject[] UnoccupiedBlanks()
+		static GameObject[] UserAnswer(string tag)
 		{
-			GameObject[] blanks = GameObject.FindGameObjectsWithTag ("TargetBlank");
-			int numUnoccupied = 0;
+			GameObject[] tar = GameObject.FindGameObjectsWithTag (tag);
+			GameObject[] userAnswer = new GameObject[tar.Length];
+			int z = 0;
 
-			for (int i=0; i<blanks.Length; i++)
+			if (tag == "TargetBlank")
+				z = -1;
+			if (tag == "TargetLetter")
+				z = 1;
+
+			for (int i=0; i<tar.Length; i++)
 			{
-				Vector2 posn = blanks[i].transform.position;
-				Collider2D[] letters = Physics2D.OverlapCircleAll(posn,1.0f,1,-1,-1);
-				if (letters.Length == 0)
-					numUnoccupied = numUnoccupied + 1;
-				
+				Vector2 posn = tar[i].transform.position;
+					Collider2D[] mov = Physics2D.OverlapCircleAll(posn,.5f,1,z,z);
+				if (mov.Length > 1)
+					Debug.LogError("Decrease OverlapCircleAll radius");
+				if (mov.Length != 0)
+					userAnswer[i] = mov[0].gameObject;
 			}
-			Debug.Log ("Unoccupied Blanks: " + numUnoccupied);
 
-			GameObject[] unoccupiedBlanks = new GameObject[numUnoccupied];
-			int j = 0;
-			for (int i=0; i<blanks.Length; i++)
+			return userAnswer;
+		}
+
+		static List<GameObject> CorrectObjects(string tag)
+		{
+			GameObject[] userAnswer = UserAnswer (tag);
+			GameObject[] tar = GameObject.FindGameObjectsWithTag (tag);
+			List<GameObject> correctObjects = new List<GameObject>();
+			
+			for (int i=0; i<tar.Length; i++) {
+				
+				if (userAnswer [i].name == tar [i].name) {
+					correctObjects.Add(userAnswer[i]);
+				}
+			}
+			return correctObjects;
+		}
+
+		static List<GameObject> IncorrectObjects(string tag)
+		{
+			GameObject[] userAnswer = UserAnswer (tag);
+			GameObject[] tar = GameObject.FindGameObjectsWithTag (tag);
+			List<GameObject> incorrectObjects = new List<GameObject>();
+
+			for (int i=0; i<tar.Length; i++) {
+				
+				if (userAnswer [i].name != tar [i].name) {
+					incorrectObjects.Add(userAnswer[i]);
+				}
+			}
+			return incorrectObjects;
+
+		}
+
+		public static void EnableCollisions(GameObject go, string tag)
+		{
+			List<GameObject> unoccupiedTargets = UnoccupiedTargets (tag);
+			foreach (GameObject target in unoccupiedTargets)
 			{
-				Vector2 posn = blanks[i].transform.position;
-				Collider2D[] letters = Physics2D.OverlapCircleAll(posn,1.0f,1,-1,-1);
-				if (letters.Length == 0)
-					unoccupiedBlanks[j++] = blanks[i];
-				
-			}
-
-			return unoccupiedBlanks;
-		}
-
-		public static void EnableCollisions(GameObject go)
-		{
-			GameObject[] unoccupiedBlanks = UnoccupiedBlanks ();
-			foreach (GameObject blank in unoccupiedBlanks)
-				{
-					if (blank.GetComponent<CollisionManager> () == null) {
-						blank.AddComponent<CollisionManager> ();
-						Debug.Log ("Enabled collisions for blank " + go.name);
-					}
-				}
-		}
-
-		GameObject[] UserSpelling()
-		{
-			GameObject[] blanks = GameObject.FindGameObjectsWithTag ("TargetBlank");
-			GameObject[] userSpelling = new GameObject[blanks.Length];
-			
-			for (int i=0; i<blanks.Length; i++)
-			{
-				Vector2 posn = blanks[i].transform.position;
-				Collider2D[] letter = Physics2D.OverlapCircleAll(posn,1.0f,1,-1,-1);
-				if (letter.Length != 0)
-					userSpelling[i] = letter[0].gameObject;
-				
-			}
-
-			return userSpelling;
-		}
-
-
-		GameObject[] IncorrectLetters()
-		{
-			GameObject[] userSpelling = UserSpelling ();
-			GameObject[] blanks = GameObject.FindGameObjectsWithTag ("TargetBlank");
-			int numIncorrect = 0;
-			
-			for (int i=0; i<blanks.Length; i++) {
-				
-				if (userSpelling [i].name != blanks [i].name) {
-					numIncorrect = numIncorrect + 1;
+				if (target.GetComponent<CollisionManager> () == null) {
+					target.AddComponent<CollisionManager> ();
+					Debug.Log ("Enabled collisions for target " + go.name);
 				}
 			}
-			
-			GameObject[] incorrectLetters = new GameObject[numIncorrect];
-			int j = 0;
-			for (int i=0; i<blanks.Length; i++) {
-				
-				if (userSpelling [i].name != blanks [i].name) {
-					incorrectLetters[j++] = userSpelling[i];
-				}
-			}
-	
-			return incorrectLetters;
-		}
-
-		GameObject[] CorrectLetters()
-		{
-			GameObject[] userSpelling = UserSpelling ();
-			GameObject[] blanks = GameObject.FindGameObjectsWithTag ("TargetBlank");
-			int numCorrect = 0;
-			
-			for (int i=0; i<blanks.Length; i++) {
-				
-				if (userSpelling [i].name == blanks [i].name) {
-					numCorrect = numCorrect + 1;
-				}
-			}
-			
-			GameObject[] correctLetters = new GameObject[numCorrect];
-			int j = 0;
-			for (int i=0; i<blanks.Length; i++) {
-				
-				if (userSpelling [i].name == blanks [i].name) {
-					correctLetters[j++] = userSpelling[i];
-				}
-			}
-
-			return correctLetters;
 		}
 
 		void MarkCorrectLetters(float delayTime)
 		{
-			GameObject[] correctLetters = CorrectLetters ();
+			List<GameObject> correctLetters = CorrectObjects ("TargetBlank");
 			foreach (GameObject go in correctLetters) {
 				LeanTween.color (go,Color.yellow,.1f).setDelay (delayTime);
 				go.transform.localScale = new Vector3 (WordCreation.letterScale, WordCreation.letterScale, 1);
@@ -240,17 +263,27 @@ namespace WordTree
 
 		}
 
+		void MarkCorrectSounds(float delayTime)
+		{
+			List<GameObject> correctSounds = CorrectObjects ("TargetLetter");
+			foreach (GameObject go in correctSounds) {
+				go.transform.localScale = new Vector3 (.8f, .8f, 1);
+			}
+			
+		}
+
+
 		public void ResetIncorrectLetters(float delayTime)
 		{
-			GameObject[] gos = IncorrectLetters();
-			
-			foreach (GameObject go in gos){
+			List<GameObject> incorrectLetters = IncorrectObjects("TargetBlank");
+		
+			foreach (GameObject go in incorrectLetters){
 
 				go.transform.localScale = new Vector3 (WordCreation.letterScale, WordCreation.letterScale, 1);
 
 				Debug.Log ("Resetting incorrect letter " + go.name);
 				Vector3 posn = new Vector3(go.transform.position.x,0,-2);
-				LeanTween.move (go, posn, 1.0f).setEase (LeanTweenType.easeOutQuad).setDelay (delayTime);
+				LeanTween.move (go, posn, 1.0f).setDelay (delayTime);
 
 				go.GetComponent<PulseBehavior>().StartPulsing(go);
 
@@ -260,51 +293,37 @@ namespace WordTree
 		
 		}
 
-		void TryAgainAnimation()
-		{	
-			GameObject tryAgain = GameObject.Find ("TryAgain");
-
-			LeanTween.alpha (tryAgain, 1f, .1f);
-			LeanTween.alpha (tryAgain, 0f, .1f).setDelay (2.5f);
-
-
-		}
-
-
-		void CompleteWordAnimation(float delayTime)
+		public void ResetIncorrectSounds (float delayTime)
 		{
-			GameObject[] mov = GameObject.FindGameObjectsWithTag ("MovableLetter");
-			GameObject[] tar = GameObject.FindGameObjectsWithTag ("TargetBlank");
-
-			foreach (GameObject go in tar)
-				LeanTween.alpha (go, 0f, .01f).setDelay (delayTime);
-			foreach (GameObject go in mov) {
-				LeanTween.moveX (go, 0, AudioManager.clipLength).setDelay (delayTime);
-				LeanTween.scale (go, new Vector3 (0, 0, 1), AudioManager.clipLength).setDelay (delayTime);
+			List<GameObject> incorrectSounds = IncorrectObjects("TargetLetter");
+			
+			foreach (GameObject go in incorrectSounds){
+				
+				go.transform.localScale = new Vector3 (.8f,.8f, 1);
+				
+				Debug.Log ("Resetting incorrect sound " + go.name);
+				Vector3 posn = new Vector3(go.transform.position.x,0,-2);
+				LeanTween.move (go, posn, 1.0f).setDelay (delayTime);
+				
+				go.GetComponent<PulseBehavior>().StartPulsing(go);
+				
+				go.GetComponent<GestureManager>().EnableGestures(go);
+				
 			}
-
-			
-			GameObject stars = GameObject.Find ("Stars");
-			LeanTween.moveZ (stars, -3, .01f).setDelay (delayTime);
-			LeanTween.scale (stars, new Vector3 (2.5f, 2.5f, 1), AudioManager.clipLength).setDelay (delayTime);
-			LeanTween.alpha (stars, 0f, .3f).setDelay (delayTime + AudioManager.clipLength - .3f);
-
-			LeanTween.moveZ (stars, 3, .01f).setDelay (delayTime + 2f);
-			LeanTween.scale (stars, new Vector3 (.2f, .2f, 1), .01f).setDelay (delayTime + 2f);
-			LeanTween.alpha (stars, 1f, .01f).setDelay (delayTime + 2f);
-			
 			
 		}
 
-		public static void ShowHint()
+
+
+		public static void ShowLetterHint()
 		{
-			GameObject[] unoccupiedBlanks = UnoccupiedBlanks ();
-			int i = Random.Range (0, unoccupiedBlanks.Length);
-			string letterName = unoccupiedBlanks [i].name;
+			List<GameObject> unoccupiedTargets = UnoccupiedTargets("TargetBlank");
+			int i = 0;
+			string letterName = unoccupiedTargets [i].name;
 
 			if (GameObject.Find ("Hint" + letterName + i) == null) {
 
-				ObjectProperties letter = ObjectProperties.CreateInstance ("Hint" + letterName + i, "Hint", unoccupiedBlanks [i].transform.position, new Vector3 (WordCreation.letterScale, WordCreation.letterScale, 1), "Letters/" + letterName, null);
+				ObjectProperties letter = ObjectProperties.CreateInstance ("Hint" + letterName + i, "Hint", unoccupiedTargets [i].transform.position, new Vector3 (WordCreation.letterScale, WordCreation.letterScale, 1), "Letters/" + letterName, null);
 				ObjectProperties.InstantiateObject (letter);
 			}
 
@@ -316,63 +335,80 @@ namespace WordTree
 				                 
 		}
 
-
-		bool CheckCorrectSpelling()
+		public static void ShowSoundHint()
 		{
-			GameObject[] userSpelling = UserSpelling ();
-			GameObject[] blanks = GameObject.FindGameObjectsWithTag ("TargetBlank");
 
-			if (userSpelling[0] != null)
+		}
+
+		bool CheckCompletedTargets(string tag)
+		{
+			GameObject[] mov = GameObject.FindGameObjectsWithTag (tag);
+			
+			foreach (GameObject go in mov){
+				if (go.GetComponent<PanGesture>().enabled == true)
+					return false;
+			}
+			
+			Debug.Log ("Word Completed");
+			return true;
+			
+		}
+
+
+		bool CheckCorrectSpelling(string tag)
+		{
+			GameObject[] userAnswer = UserAnswer (tag);
+			GameObject[] tar = GameObject.FindGameObjectsWithTag (tag);
+
+			if (userAnswer[0] != null)
 			{
-				for (int i=0; i<blanks.Length; i++) {
+				for (int i=0; i<tar.Length; i++) {
 
-					if (userSpelling [i].name != blanks [i].name) {
+					if (userAnswer [i].name != tar [i].name) {
 						Debug.Log ("Incorrect Spelling");
 						return false;
 					}
 				}
 			}
 
+
 			Debug.Log ("Correct spelling");
 			return true;
 		}
 
-		bool CheckCompletedBlanks()
+
+
+		bool CheckCompletedGame(string mode)
 		{
-			GameObject[] gos = GameObject.FindGameObjectsWithTag ("MovableLetter");
-			foreach (GameObject go in gos){
-				  if (go.GetComponent<PanGesture>().enabled == true)
-					return false;
+			LevelProperties prop = LevelProperties.GetLevelProperties (ProgressManager.currentLevel);
+			string[] words = prop.Words ();
+			if (mode == "Spelling Game") {
+				if (SpellingGameDirector.wordIndex == words.Length - 1) {
+					Debug.Log ("Game Completed");
+					return true;
+				}
 			}
-
-			Debug.Log ("Blanks Completed");
-			return true;
-
+			if (mode == "Sound Game") {
+				if (SoundGameDirector.wordIndex == words.Length - 1) {
+					Debug.Log ("Game Completed");
+					return true;
+				}
+			}
+			return false;
 		}
 
 		bool CheckCompletedWord ()
 		{
-			GameObject[] gos = GameObject.FindGameObjectsWithTag ("MovableLetter");
-			Debug.Log ("Letters left: " + (gos.Length-1));
-
-			if (gos.Length == 1) {
+			GameObject[] mov = GameObject.FindGameObjectsWithTag ("MovableLetter");
+			Debug.Log ("Letters left: " + (mov.Length-1));
+			
+			if (mov.Length == 1) {
 				Debug.Log ("Word Completed: " + ProgressManager.currentWord);
 				return true;
 			}
-
+			
 			return false;
-
-		}
-
-		bool CheckCompletedGame()
-		{
-			LevelProperties prop = LevelProperties.GetLevelProperties (ProgressManager.currentLevel);
-			string[] words = prop.Words ();
-			if (SpellingGameDirector.wordIndex == words.Length - 1) {
-				Debug.Log ("Game Completed");
-				return true;
-			}
-			return false;
+			
 		}
 
 

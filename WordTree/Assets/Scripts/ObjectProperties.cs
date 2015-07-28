@@ -73,20 +73,19 @@ namespace WordTree
 				audioSource.playOnAwake = false;
 			}
 
-			if (go.tag != "TargetBlank") 
+			if (go.tag != "TargetLetter" && go.tag != "TargetBlank") 
 			{
-				PolygonCollider2D pc2d = go.AddComponent<PolygonCollider2D> ();
-				pc2d.isTrigger = true;
+				go.AddComponent<PolygonCollider2D> ();
 			}
 
-			if (go.tag == "TargetBlank")
+			if (go.tag == "TargetLetter" || go.tag == "TargetBlank")
 			{
 				CircleCollider2D cc2d = go.AddComponent<CircleCollider2D>();
 				cc2d.isTrigger = true;
 				cc2d.radius = .3f;
 			}
 			
-			if (go.tag == "MovableLetter")
+			if (go.tag == "MovableLetter" || go.tag == "MovableBlank")
 			{
 				Rigidbody2D rb2d = go.AddComponent<Rigidbody2D>();
 				rb2d.isKinematic = true;
@@ -94,7 +93,7 @@ namespace WordTree
 			}
 			
 			
-			if (go.tag == "WordObject" || go.tag == "MovableLetter" || go.tag == "Button") 
+			if (go.tag == "WordObject" || go.tag == "MovableLetter" || go.tag == "MovableBlank" || go.tag == "Button") 
 			{	
 				GestureManager gm = go.AddComponent<GestureManager> ();
 				gm.AddAndSubscribeToGestures (go); 

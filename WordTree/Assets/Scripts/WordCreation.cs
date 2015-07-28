@@ -7,7 +7,7 @@ namespace WordTree
 
 		public static float letterScale = .3f;
 		static float letterWidth = 2f;
-		static int y;
+		static float y;
 		static int z;
 
 		public static void CreateScrambledWord(string word, string[] soundArray)
@@ -16,7 +16,7 @@ namespace WordTree
 			Vector3[] posn = new Vector3[word.Length];
 			Vector3[] shuffledPosn = new Vector3[word.Length];
 			
-			CreateWord (word, soundArray, "MovableLetter","Game");
+			CreateWord (word, soundArray, "MovableLetter","SpellingGame");
 
 			GameObject[] mov = GameObject.FindGameObjectsWithTag ("MovableLetter");
 			for (int i=0; i<mov.Length; i++)
@@ -80,8 +80,10 @@ namespace WordTree
 
 			if (mode == "Learn")
 				y = -1;
-			if (mode == "Game")
+			if (mode == "SpellingGame")
 				y = 0;
+			if (mode == "SoundGame")
+				y = -3.5f;
 
 			if (tag == "MovableLetter")
 				z = -2;
@@ -154,6 +156,7 @@ namespace WordTree
 				ObjectProperties letter6 = ObjectProperties.CreateInstance (letters[5], tag, position[5], new Vector3 (letterScale, letterScale, 1), "Letters/"+letters[5], sounds[5]);
 				ObjectProperties.InstantiateObject (letter6);
 			}
+
 
 		
 

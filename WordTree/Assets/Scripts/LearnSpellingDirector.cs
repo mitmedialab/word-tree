@@ -34,6 +34,7 @@ namespace WordTree
 			
 			WordCreation.CreateMovableAndTargetWords (word, phonemes);
 			CreateObject (word, objScale);
+
 		}
 
 		void CreateObject(string word, float scale)
@@ -142,114 +143,6 @@ namespace WordTree
 			}
 		}
 
-		/*
-		public void SpellOutWord()
-		{
-			GameObject[] tar = GameObject.FindGameObjectsWithTag ("TargetLetter");
-			
-			PlaySoundAndHighlightLetter (tar [0], 0);
-			PlaySoundAndHighlightLetter (tar [1], 1);
-			PlaySoundAndHighlightLetter (tar [2], 2);
-			if (tar.Length >= 4)
-				PlaySoundAndHighlightLetter (tar [3], 3);
-			if (tar.Length >= 5)
-				PlaySoundAndHighlightLetter (tar [4], 4);
-			if (tar.Length >= 6)
-				PlaySoundAndHighlightLetter (tar [5], 5);
-				
-			PlaySoundAndHighlightWord ();
-
-			StartCoroutine(CongratsAnimation((tar.Length+1f) * this.clipLength));
-				
-		}
-
-		void PlaySoundAndHighlightLetter(GameObject targetLetter, float index)
-		{
-
-			if (targetLetter.audio != null && targetLetter.audio.clip != null) {
-				Debug.Log ("Playing clip for " + targetLetter.name);
-				targetLetter.audio.PlayDelayed (index*this.clipLength);  
-			}
-
-			StartCoroutine(LightOnAndPulse (new Vector3(targetLetter.transform.position.x,targetLetter.transform.position.y,1),index*this.clipLength,"letter",targetLetter));
-			StartCoroutine (LightOff (((index+.5f) * this.clipLength)));
-		}
-
-		void PlaySoundAndHighlightWord()
-		{
-			GameObject[] tar = GameObject.FindGameObjectsWithTag ("TargetLetter");
-			GameObject go = GameObject.FindGameObjectWithTag ("WordObject");
-			if (go.audio != null && go.audio.clip != null) {
-				Debug.Log ("Playing clip for " + go.name);
-				go.audio.PlayDelayed ((tar.Length) * this.clipLength);
-			}
-
-			StartCoroutine (LightOnAndPulse (new Vector3(0,-2,1),(tar.Length)*this.clipLength,"word",null));
-			StartCoroutine (LightOff ((tar.Length+.5f) * this.clipLength));
-		}
-
-
-		IEnumerator LightOnAndPulse(Vector3 location, float delayTime, string size, GameObject go)
-		{
-			yield return new WaitForSeconds (delayTime);
-
-			Vector3 scale = new Vector3 (1, 1, 1);
-			if (size == "letter")
-				scale = new Vector3 (WordCreation.letterScale * 17, WordCreation.letterScale * 17, 1);
-			if (size == "word") {
-				GameObject[] tar = GameObject.FindGameObjectsWithTag("TargetLetter");
-				scale = new Vector3 (tar.Length * WordCreation.letterScale * 12, WordCreation.letterScale * 17, 1);
-			}
-
-			GameObject highlight = GameObject.FindGameObjectWithTag ("Light");
-			highlight.GetComponent<MeshRenderer> ().enabled = true;
-			highlight.transform.position = location;
-			highlight.transform.localScale = scale;
-			if (go != null)
-				Debug.Log ("Highlight on " + go.name);
-			 
-			PulseOnce (go, size);
-		}
-
-
-		IEnumerator LightOff(float delayTime)
-		{
-			yield return new WaitForSeconds (delayTime);
-
-			GameObject highlight = GameObject.FindGameObjectWithTag ("Light");
-			highlight.GetComponent<MeshRenderer> ().enabled = false;
-			
-		}
-
-		public void PulseOnce(GameObject go, string size, float scaleUp = 1.3f)
-		{
-			float pulseLength = clipLength * .15f;
-
-			if (size == "letter") {
-				LeanTween.scale (go, new Vector3 (scaleUp * WordCreation.letterScale, scaleUp * WordCreation.letterScale, 1), pulseLength);
-				StartCoroutine (ScaleDown (clipLength * .5f, go));
-				Debug.Log ("Pulse on " + go.name);
-			}
-
-			if (size == "word") {
-				GameObject[] tar = GameObject.FindGameObjectsWithTag ("TargetLetter");
-
-				for (int i=0; i < tar.Length; i++) {
-					LeanTween.scale (tar[i], new Vector3 (scaleUp * WordCreation.letterScale, scaleUp * WordCreation.letterScale, 1), pulseLength);
-					StartCoroutine (ScaleDown (clipLength * .5f, tar[i]));
-
-				}
-			}
-
-		}
-		
-		IEnumerator ScaleDown(float delayTime, GameObject go)
-		{
-			yield return new WaitForSeconds (delayTime - .1f);
-			
-			LeanTween.scale (go,new Vector3(1f*WordCreation.letterScale,1f*WordCreation.letterScale,1),clipLength*.5f);
-		}
-		*/
 
 		public static void CongratsAnimation(float delayTime)
 		{

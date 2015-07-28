@@ -20,7 +20,7 @@ namespace WordTree
 				Debug.Log (go.name + " subscribed to tap events");
 			}
 
-			if (go.tag == "MovableLetter") {
+			if (go.tag == "MovableLetter" || go.tag == "MovableBlank") {
 
 				PanGesture pg = go.AddComponent<PanGesture> ();
 				pg.CombineTouchesInterval = 0.2f;
@@ -108,6 +108,9 @@ namespace WordTree
 			if (go.name.Substring(go.name.Length-1).Equals ("2"))
 				Application.LoadLevel ("5. Spelling Game");
 
+			if (go.name.Substring(go.name.Length-1).Equals ("3"))
+				Application.LoadLevel ("6. Sound Game");
+
 			if (go.tag == "WordObject") {
 				Application.LoadLevel ("4. Learn Spelling");
 				ProgressManager.currentWord = gesture.gameObject.name;
@@ -125,8 +128,12 @@ namespace WordTree
 			if (go.name == "SoundButton")
 				GameObject.FindGameObjectWithTag ("WordObject").audio.Play ();
 
-			if (go.name == "HintButton")
-				CollisionManager.ShowHint ();
+			if (go.name == "HintButton") {
+				if (Application.loadedLevelName == "5. Spelling Game")
+					CollisionManager.ShowLetterHint ();
+				if (Application.loadedLevelName == "6. Sound Game")
+					CollisionManager.ShowSoundHint ();
+			}
 
 
 
@@ -146,7 +153,11 @@ namespace WordTree
 			PlaySound(gesture.gameObject);
 
 			if (Application.loadedLevelName == "5. Spelling Game") {
-					CollisionManager.EnableCollisions(gesture.gameObject);
+				CollisionManager.EnableCollisions(gesture.gameObject,"TargetBlank");
+			}
+
+			if (Application.loadedLevelName == "6. Sound Game") {
+				CollisionManager.EnableCollisions(gesture.gameObject,"TargetLetter");
 			}
 		}
 		

@@ -17,9 +17,9 @@ namespace WordTree
 		public static int numLevels = 1;
 		public static List<string> levelList = new List<string> ();
 
-		public static string SetLevelOrder(int levelNumber)
+		public static string SetLevelOrder(int index)
 		{
-			if (levelNumber == 1)
+			if (index == 1)
 				return "Fruits";
 			else
 				return null;
@@ -45,6 +45,9 @@ namespace WordTree
 			if (Application.loadedLevelName == "5. Spelling Game")
 				index = levelList.IndexOf (level + "2");
 
+			if (Application.loadedLevelName == "6. Sound Game")
+				index = levelList.IndexOf (level + "3");
+
 			AddUnlockedLevel (levelList[index+1]);
 
 		}
@@ -59,12 +62,14 @@ namespace WordTree
 
 		public static void AddCompletedLevel(string level)
 		{
-			if (Application.loadedLevelName == "3. Choose Object") {
+			if (Application.loadedLevelName == "3. Choose Object")
 				completedLevels.Add (level + "1");
-			}
 
 			if (Application.loadedLevelName == "5. Spelling Game")
 				completedLevels.Add (level + "2");
+
+			if (Application.loadedLevelName == "6. Sound Game")
+				completedLevels.Add (level + "3");
 
 		}
 

@@ -78,7 +78,7 @@ namespace WordTree
 			float objScale = prop.ObjScale ();
 
 			WordCreation.CreateScrambledWord (word, phonemes);
-			BlankCreation.CreateBlanks(word, "Rectangle");
+			BlankCreation.CreateBlanks(word, phonemes, "Rectangle", "TargetBlank", "SpellingGame");
 			CreateObject (word, objScale);
 
 			GameObject[] mov = GameObject.FindGameObjectsWithTag ("MovableLetter");
@@ -96,7 +96,54 @@ namespace WordTree
 			ObjectProperties.InstantiateObject (Obj);
 		}
 
+		public static void SpellOutWord()
+		{
+			GameObject[] tar = GameObject.FindGameObjectsWithTag("TargetBlank");
+			GameObject[] mov = new GameObject[tar.Length];
+			for (int i=0; i<tar.Length; i++)
+			{
+				Vector2 posn = tar[i].transform.position;
+				Collider2D[] letters = Physics2D.OverlapCircleAll(posn,1.0f,1,-1,-1);
+				mov[i] = letters[0].gameObject;
+			}
+			GameObject audioManager = GameObject.Find ("AudioManager");
+			audioManager.GetComponent<AudioManager>().SpellOutWord(mov);
+		}
 
+		public static void TryAgainAnimation()
+		{	
+			GameObject tryAgain = GameObject.Find ("TryAgain");
+			
+			LeanTween.alpha (tryAgain, 1f, .1f);
+			LeanTween.alpha (tryAgain, 0f, .1f).setDelay (2.5f);
+			
+			
+		}
+
+		public static void CompleteWordAnimation(float delayTime)
+		{
+			GameObject[] mov = GameObject.FindGameObjectsWithTag ("MovableLetter");
+			GameObject[] tar = GameObject.FindGameObjectsWithTag ("TargetBlank");
+			
+			foreach (GameObject go in tar)
+				LeanTween.alpha (go, 0f, .01f).setDelay (delayTime);
+			foreach (GameObject go in mov) {
+				LeanTween.moveX (go, 0, AudioManager.clipLength).setDelay (delayTime);
+				LeanTween.scale (go, new Vector3 (0, 0, 1), AudioManager.clipLength).setDelay (delayTime);
+			}
+			
+			
+			GameObject stars = GameObject.Find ("Stars");
+			LeanTween.moveZ (stars, -3, .01f).setDelay (delayTime);
+			LeanTween.scale (stars, new Vector3 (2.5f, 2.5f, 1), AudioManager.clipLength).setDelay (delayTime);
+			LeanTween.alpha (stars, 0f, .3f).setDelay (delayTime + AudioManager.clipLength - .3f);
+			
+			LeanTween.moveZ (stars, 3, .01f).setDelay (delayTime + 2f);
+			LeanTween.scale (stars, new Vector3 (.2f, .2f, 1), .01f).setDelay (delayTime + 2f);
+			LeanTween.alpha (stars, 1f, .01f).setDelay (delayTime + 2f);
+			
+			
+		}
 
 
 		/*

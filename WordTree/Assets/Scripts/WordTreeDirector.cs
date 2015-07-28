@@ -10,6 +10,8 @@ namespace WordTree
 
 			ProgressManager.InitiateLevelList ();
 			ProgressManager.UnlockNextLevel (null);
+			ProgressManager.AddUnlockedLevel ("Fruits2");
+			ProgressManager.AddUnlockedLevel ("Fruits3");
 
 			GameObject[] gos = GameObject.FindGameObjectsWithTag ("LevelIcon");
 			foreach (GameObject go in gos) {
