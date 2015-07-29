@@ -79,7 +79,7 @@ namespace WordTree
 
 
 			if (mode == "Learn")
-				y = -1;
+				y = -2;
 			if (mode == "SpellingGame")
 				y = 0;
 			if (mode == "SoundGame")

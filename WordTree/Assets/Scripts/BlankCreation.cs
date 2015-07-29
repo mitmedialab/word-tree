@@ -7,7 +7,7 @@ namespace WordTree{
 
 		static float xScale;
 		static float yScale;
-		static float blankWidth = 2f;
+		static float blankWidth = 2.2f;
 		static int y;
 		static int z;
 
@@ -28,7 +28,7 @@ namespace WordTree{
 				gos [i].transform.position = shuffledPosn [i];
 
 			GameObject[] blanks = GameObject.FindGameObjectsWithTag(tag);
-			Color[] colors = new Color[] {Color.red,Color.green,Color.blue,Color.cyan,Color.magenta,Color.yellow};
+			Color[] colors = new Color[] {Color.green,Color.yellow,Color.cyan,Color.blue,Color.white,Color.magenta};
 			for (int i=0; i<blanks.Length; i++) {
 				SpriteRenderer sprite = blanks[i].GetComponent<SpriteRenderer> ();
 				sprite.color = colors[i];
@@ -51,13 +51,13 @@ namespace WordTree{
 		public static void CreateBlanks(string word, string[] sounds, string shape, string tag, string mode)
 		{
 			if (shape == "Rectangle") {
-				xScale = .4f;
-				yScale = .5f;
+				xScale = .2f;
+				yScale = .3f;
 			}
 
-			if (shape == "Balloon") {
-				xScale = .8f;
-				yScale = .8f;
+			if (shape == "Circle") {
+				xScale = .4f;
+				yScale = .4f;
 			}
 
 

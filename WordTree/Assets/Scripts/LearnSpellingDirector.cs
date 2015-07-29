@@ -33,11 +33,11 @@ namespace WordTree
 			float objScale = prop.ObjScale ();
 			
 			WordCreation.CreateMovableAndTargetWords (word, phonemes);
-			CreateObject (word, objScale);
+			CreateWordImage (word, objScale);
 
 		}
 
-		void CreateObject(string word, float scale)
+		void CreateWordImage(string word, float scale)
 		{
 			float y = 2;
 			

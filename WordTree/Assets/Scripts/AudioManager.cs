@@ -55,8 +55,15 @@ namespace WordTree
 		{
 			yield return new WaitForSeconds (delayTime);
 
-			LeanTween.scale (go, new Vector3 (scaleUp * WordCreation.letterScale, scaleUp * WordCreation.letterScale, 1), pulseLength);
-			LeanTween.scale (go, new Vector3 (1f*WordCreation.letterScale,1f*WordCreation.letterScale,1), clipLength*.5f).setDelay (clipLength*.5f - .1f);
+			if (go.tag == "TargetLetter" || go.tag == "MovableLetter") {
+				LeanTween.scale (go, new Vector3 (scaleUp * WordCreation.letterScale, scaleUp * WordCreation.letterScale, 1), pulseLength);
+				LeanTween.scale (go, new Vector3 (1f * WordCreation.letterScale, 1f * WordCreation.letterScale, 1), clipLength * .5f).setDelay (clipLength * .5f - .1f);
+			}
+
+			if (go.tag == "TargetBlank") {
+				LeanTween.scale (go, new Vector3 (scaleUp * .2f, scaleUp * .3f, 1), pulseLength);
+				LeanTween.scale (go, new Vector3 (.2f, .3f, 1), clipLength * .5f).setDelay (clipLength * .5f - .1f);
+			}
 			Debug.Log ("Pulse on " + go.name);
 
 		}
@@ -65,9 +72,18 @@ namespace WordTree
 		{
 			yield return new WaitForSeconds (delayTime);
 
-			for (int i=0; i < gos.Length; i++) {
-				LeanTween.scale (gos[i], new Vector3 (scaleUp * WordCreation.letterScale, scaleUp * WordCreation.letterScale, 1), pulseLength);
-				LeanTween.scale (gos[i], new Vector3 (1f*WordCreation.letterScale,1f*WordCreation.letterScale,1), clipLength*.5f).setDelay (clipLength*.5f - .1f);
+			if (gos [0].tag == "TargetLetter" || gos [0].tag == "MovableLetter") {
+				for (int i=0; i < gos.Length; i++) {
+					LeanTween.scale (gos [i], new Vector3 (scaleUp * WordCreation.letterScale, scaleUp * WordCreation.letterScale, 1), pulseLength);
+					LeanTween.scale (gos [i], new Vector3 (1f * WordCreation.letterScale, 1f * WordCreation.letterScale, 1), clipLength * .5f).setDelay (clipLength * .5f - .1f);
+				}
+			}
+
+			if (gos [0].tag == "TargetBlank") {
+				for (int i=0; i < gos.Length; i++) {
+					LeanTween.scale (gos [i], new Vector3 (scaleUp * .2f, scaleUp * .3f, 1), pulseLength);
+					LeanTween.scale (gos [i], new Vector3 (.2f, .3f, 1), clipLength * .5f).setDelay (clipLength * .5f - .1f);
+				}
 			}
 			Debug.Log ("Pulse on word");
 			

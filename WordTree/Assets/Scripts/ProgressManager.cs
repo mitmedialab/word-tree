@@ -9,8 +9,12 @@ namespace WordTree
 
 		public static string currentWord = "";
 		public static string currentLevel = "";
+		public static int currentMode = 0;
 		
-		public static List<string> completedWords = new List<string>();
+		public static List<string> completedWordsLearn = new List<string>();
+		public static List<string> completedWordsSpell = new List<string>();
+		public static List<string> completedWordsSound = new List<string>();
+
 		public static List<string> completedLevels = new List<string>();
 		public static List<string> unlockedLevels = new List<string> ();
 
@@ -39,13 +43,13 @@ namespace WordTree
 		{
 			int index = -1;
 
-			if (Application.loadedLevelName == "3. Choose Object")
+			if (ProgressManager.currentMode == 1)
 				index = levelList.IndexOf (level + "1");
 
-			if (Application.loadedLevelName == "5. Spelling Game")
+			if (ProgressManager.currentMode == 2)
 				index = levelList.IndexOf (level + "2");
 
-			if (Application.loadedLevelName == "6. Sound Game")
+			if (ProgressManager.currentMode == 3)
 				index = levelList.IndexOf (level + "3");
 
 			AddUnlockedLevel (levelList[index+1]);
@@ -56,19 +60,26 @@ namespace WordTree
 
 		public static void AddCompletedWord(string word)
 		{
-			completedWords.Add (word);
+			if (Application.loadedLevelName == "4. Learn Spelling")
+				completedWordsLearn.Add (word);
+			
+			if (Application.loadedLevelName == "5. Spelling Game")
+				completedWordsSpell.Add (word);
+			
+			if (Application.loadedLevelName == "6. Sound Game")
+				completedWordsSound.Add (word);
 		}
 
 
 		public static void AddCompletedLevel(string level)
 		{
-			if (Application.loadedLevelName == "3. Choose Object")
+			if (ProgressManager.currentMode == 1)
 				completedLevels.Add (level + "1");
 
-			if (Application.loadedLevelName == "5. Spelling Game")
+			if (ProgressManager.currentMode == 2)
 				completedLevels.Add (level + "2");
 
-			if (Application.loadedLevelName == "6. Sound Game")
+			if (ProgressManager.currentMode == 3)
 				completedLevels.Add (level + "3");
 
 		}
@@ -81,8 +92,18 @@ namespace WordTree
 
 		public static bool IsWordCompleted(string word)
 		{
-			if (completedWords.Contains (word))
-				return true;
+			if (ProgressManager.currentMode == 1) {
+				if (completedWordsLearn.Contains (word))
+					return true;
+			}
+			if (ProgressManager.currentMode == 2) {
+				if (completedWordsSpell.Contains (word))
+					return true;
+			}
+			if (ProgressManager.currentMode == 3) {
+				if (completedWordsSound.Contains (word))
+					return true;
+			}
 			return false;
 			
 		}

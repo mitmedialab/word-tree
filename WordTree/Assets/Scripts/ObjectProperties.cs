@@ -82,7 +82,14 @@ namespace WordTree
 			{
 				CircleCollider2D cc2d = go.AddComponent<CircleCollider2D>();
 				cc2d.isTrigger = true;
-				cc2d.radius = .3f;
+				if (go.tag == "TargetLetter"){
+					if (ProgressManager.currentMode == 1)
+						cc2d.radius = .5f;
+					if (ProgressManager.currentMode == 3)
+						cc2d.radius = 3f;
+				}
+				if (go.tag == "TargetBlank")
+					cc2d.radius = .3f;
 			}
 			
 			if (go.tag == "MovableLetter" || go.tag == "MovableBlank")
@@ -91,22 +98,18 @@ namespace WordTree
 				rb2d.isKinematic = true;
 				rb2d.gravityScale = 0;
 			}
-			
-			
-			if (go.tag == "WordObject" || go.tag == "MovableLetter" || go.tag == "MovableBlank" || go.tag == "Button") 
-			{	
-				GestureManager gm = go.AddComponent<GestureManager> ();
-				gm.AddAndSubscribeToGestures (go); 
-				
-				go.AddComponent<PulseBehavior> ();
-			}
+	
+			GestureManager gm = go.AddComponent<GestureManager> ();
+			gm.AddAndSubscribeToGestures (go); 
+
+			go.AddComponent<PulseBehavior> ();
+
 
 			if (go.tag == "Hint") 
 			{
 				go.GetComponent<SpriteRenderer>().color = Color.black;
 			}
-			
-			
+				
 			
 		}
 

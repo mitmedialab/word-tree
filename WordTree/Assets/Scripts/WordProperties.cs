@@ -40,7 +40,7 @@ namespace WordTree
 			{
 
 			case "Apple":
-				return CreateInstance(new string[] {"A","P","P","L","E"}, 1f);
+				return CreateInstance(new string[] {"A","P","P","L","E"}, .7f);
 				
 			case "Banana":
 				
@@ -48,7 +48,7 @@ namespace WordTree
 				
 			case "Cherry":
 				
-				return CreateInstance(new string[] {"C","H","E","R","R","Y"}, 1f);
+				return CreateInstance(new string[] {"C","H","E","R","R","Y"}, .7f);
 				
 			case "Grape":
 				

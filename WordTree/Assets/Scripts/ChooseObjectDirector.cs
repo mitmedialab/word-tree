@@ -50,15 +50,25 @@ namespace WordTree
 
 		bool CheckCompletedLevel()
 		{
-			int completedWords = 0;
+			int numCompleted = 0;
 
 			GameObject[] gos = GameObject.FindGameObjectsWithTag ("WordObject");
 			foreach (GameObject go in gos) {
-				if (ProgressManager.completedWords.Contains (go.name))
-					completedWords = completedWords + 1;
+				if (ProgressManager.currentMode == 1){
+					if (ProgressManager.completedWordsLearn.Contains (go.name))
+						numCompleted = numCompleted + 1;
+				}
+				if (ProgressManager.currentMode == 2){
+					if (ProgressManager.completedWordsSpell.Contains (go.name))
+						numCompleted = numCompleted + 1;
+				}
+				if (ProgressManager.currentMode == 3){
+					if (ProgressManager.completedWordsSound.Contains (go.name))
+						numCompleted = numCompleted + 1;
+				}
 			}
 
-			if (completedWords == gos.Length) {
+			if (numCompleted == gos.Length) {
 				Debug.Log ("Level Completed: " + ProgressManager.currentLevel);
 				return true;
 			}

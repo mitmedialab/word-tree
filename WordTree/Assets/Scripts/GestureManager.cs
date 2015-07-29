@@ -40,6 +40,13 @@ namespace WordTree
 				go.AddComponent<Transformer2D>();
 
 			}
+
+			if (go.tag == "TargetLetter" || go.tag == "TargetBlank") {
+
+				PressGesture prg = go.AddComponent<PressGesture> ();
+				prg.Pressed += pressedHandler;
+				Debug.Log (go.name + " subscribed to press events");
+			}
 		}
 
 		public void EnableGestures (GameObject go)
@@ -100,19 +107,25 @@ namespace WordTree
 
 			if (go.tag == "LevelIcon") {
 				ProgressManager.currentLevel = go.name.Substring(0,go.name.Length-1);
+				Application.LoadLevel ("3. Choose Object");
 			}
 
 			if (go.name.Substring(go.name.Length-1).Equals ("1"))
-				Application.LoadLevel ("3. Choose Object");
+				ProgressManager.currentMode = 1;
 
 			if (go.name.Substring(go.name.Length-1).Equals ("2"))
-				Application.LoadLevel ("5. Spelling Game");
+				ProgressManager.currentMode = 2;
 
 			if (go.name.Substring(go.name.Length-1).Equals ("3"))
-				Application.LoadLevel ("6. Sound Game");
+				ProgressManager.currentMode = 3;
 
 			if (go.tag == "WordObject") {
-				Application.LoadLevel ("4. Learn Spelling");
+				if (ProgressManager.currentMode == 1)
+					Application.LoadLevel ("4. Learn Spelling");
+				if (ProgressManager.currentMode == 2)
+					Application.LoadLevel ("5. Spelling Game");
+				if (ProgressManager.currentMode == 3)
+					Application.LoadLevel ("6. Sound Game");
 				ProgressManager.currentWord = gesture.gameObject.name;
 			}
 
@@ -121,9 +134,6 @@ namespace WordTree
 
 			if (go.name == "BackButton")
 				Application.LoadLevel ("3. Choose Object");
-
-			if (go.name == "RetryButton")
-				Application.LoadLevel (Application.loadedLevelName);
 
 			if (go.name == "SoundButton")
 				GameObject.FindGameObjectWithTag ("WordObject").audio.Play ();
