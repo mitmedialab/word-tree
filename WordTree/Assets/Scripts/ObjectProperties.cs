@@ -84,7 +84,7 @@ namespace WordTree
 				cc2d.isTrigger = true;
 				if (go.tag == "TargetLetter"){
 					if (ProgressManager.currentMode == 1)
-						cc2d.radius = .5f;
+						cc2d.radius = .1f;
 					if (ProgressManager.currentMode == 3)
 						cc2d.radius = 3f;
 				}
@@ -108,6 +108,7 @@ namespace WordTree
 			if (go.tag == "Hint") 
 			{
 				go.GetComponent<SpriteRenderer>().color = Color.black;
+				go.transform.position = new Vector3(go.transform.position.x, go.transform.position.y, 3);
 			}
 				
 			

@@ -33,6 +33,9 @@ namespace WordTree
 					Debug.Log ("Disabled collisions for " + gameObject.name);
 					Destroy (gameObject.GetComponent<CollisionManager>());
 
+					LeanTween.scale (gameObject,new Vector3(WordCreation.letterScale*1.2f,WordCreation.letterScale*1.2f,1),.6f);
+					LeanTween.scale (gameObject,new Vector3(WordCreation.letterScale,WordCreation.letterScale,1),.5f).setDelay(.4f);
+
 					if (CheckCompletedWord ()) {
 
 						GameObject[] tar = GameObject.FindGameObjectsWithTag("TargetLetter");
@@ -55,6 +58,9 @@ namespace WordTree
 				other.gameObject.GetComponent<GestureManager>().DisableGestures(other.gameObject);
 				other.gameObject.GetComponent<PulseBehavior>().StopPulsing (other.gameObject);
 				other.gameObject.transform.position = new Vector3(gameObject.transform.position.x,gameObject.transform.position.y,-1);
+
+				LeanTween.scale (other.gameObject,new Vector3(WordCreation.letterScale*1.2f,WordCreation.letterScale*1.2f,1),.6f);
+				LeanTween.scale (other.gameObject,new Vector3(WordCreation.letterScale,WordCreation.letterScale,1),.5f).setDelay(.4f);
 
 				Debug.Log ("Disabled collisions for Blank " + gameObject.name);
 				Destroy(gameObject.GetComponent<CollisionManager>());
@@ -115,6 +121,10 @@ namespace WordTree
 				other.gameObject.GetComponent<GestureManager> ().DisableGestures (other.gameObject);
 				other.gameObject.GetComponent<PulseBehavior> ().StopPulsing (other.gameObject);
 				other.gameObject.transform.position = new Vector3 (gameObject.transform.position.x, gameObject.transform.position.y + 2f, 1);
+				other.gameObject.transform.localScale = new Vector3(.4f, .4f, 1);
+
+				LeanTween.scale (other.gameObject,new Vector3(.5f,.5f,1),.6f);
+				LeanTween.scale (other.gameObject,new Vector3(.4f,.4f,1),.5f).setDelay(.4f);
 				
 				Debug.Log ("Disabled collisions for Letter " + gameObject.name);
 				Destroy (gameObject.GetComponent<CollisionManager> ());
@@ -343,22 +353,49 @@ namespace WordTree
 			int i = 0;
 			string letterName = unoccupiedTargets [i].name;
 
-			if (GameObject.Find ("Hint" + letterName + i) == null) {
 
-				ObjectProperties letter = ObjectProperties.CreateInstance ("Hint" + letterName + i, "Hint", unoccupiedTargets [i].transform.position, new Vector3 (WordCreation.letterScale, WordCreation.letterScale, 1), "Letters/" + letterName, null);
+			if (GameObject.Find ("Hint" + letterName) == null) {
+
+				ObjectProperties letter = ObjectProperties.CreateInstance ("Hint" + letterName, "Hint", unoccupiedTargets [i].transform.position, new Vector3 (WordCreation.letterScale, WordCreation.letterScale, 1), "Letters/" + letterName, null);
 				ObjectProperties.InstantiateObject (letter);
 			}
 
-			GameObject hint = GameObject.Find("Hint"+letterName+i);
-			LeanTween.color (hint, Color.magenta, .5f).setDelay (.2f);
-			LeanTween.color (hint, Color.black, .5f).setDelay (1.7f);
-			LeanTween.alpha (hint, 0f, .01f).setDelay (2.2f);
+			GameObject hint = GameObject.Find("Hint"+letterName);
+			hint.transform.position = unoccupiedTargets [i].transform.position;
+			LeanTween.moveZ(hint, -3, .01f).setDelay (0f);
+			LeanTween.color (hint, Color.magenta, .5f).setDelay (0f);
+			LeanTween.color (hint, Color.black, .5f).setDelay (1.5f);
+			LeanTween.moveZ (hint, 3f, .01f).setDelay (2.0f);
 
 				                 
 		}
 
 		public static void ShowSoundHint()
 		{
+			GameObject[] mov = GameObject.FindGameObjectsWithTag("MovableBlank");
+			foreach (GameObject go in mov) {
+				if (go.GetComponent<PanGesture> ().enabled == true) {
+					Vector3 posn = go.transform.position;
+					LeanTween.rotateAround (go, Vector3.right, 180, 1f);
+					LeanTween.alpha (go, 0f, .5f).setDelay (.5f);
+
+					if (GameObject.Find ("Hint" + go.name) == null){
+						ObjectProperties letter = ObjectProperties.CreateInstance ("Hint" + go.name, "Hint", posn, new Vector3 (WordCreation.letterScale*.8f, WordCreation.letterScale*.8f, 1), "Letters/" + go.name, null);
+						ObjectProperties.InstantiateObject (letter);
+					}
+
+					GameObject hint = GameObject.Find ("Hint" + go.name);
+					hint.transform.position = new Vector3(go.transform.position.x, go.transform.position.y, 3);
+					LeanTween.moveZ (hint, -3, .01f).setDelay (1f);
+					LeanTween.color (hint, Color.magenta, .5f).setDelay(1f);
+					LeanTween.color (hint, Color.black, .5f).setDelay (2.5f);
+					LeanTween.moveZ (hint, 3, .01f).setDelay (3f);
+
+					LeanTween.alpha (go, 1f, .5f).setDelay (3f);
+					LeanTween.rotateAround (go, Vector3.left, 180, 1f).setDelay (3f);
+					break;
+				}
+			}
 
 		}
 

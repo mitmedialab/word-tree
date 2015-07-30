@@ -16,6 +16,7 @@ namespace WordTree{
 			
 			Vector3[] posn = new Vector3[word.Length];
 			Vector3[] shuffledPosn = new Vector3[word.Length];
+			Color[] shuffledColors = new Color[word.Length];
 			
 			CreateBlanks (word, sounds, shape, tag, mode);
 			
@@ -29,19 +30,32 @@ namespace WordTree{
 
 			GameObject[] blanks = GameObject.FindGameObjectsWithTag(tag);
 			Color[] colors = new Color[] {Color.green,Color.yellow,Color.cyan,Color.blue,Color.white,Color.magenta};
+			shuffledColors = ShuffleArrayColor (colors);
 			for (int i=0; i<blanks.Length; i++) {
 				SpriteRenderer sprite = blanks[i].GetComponent<SpriteRenderer> ();
-				sprite.color = colors[i];
+				sprite.color = shuffledColors[i];
 			}
 			
 		}
-		
+
 		static Vector3[] ShuffleArray(Vector3[] array)
 		{
 			for (int i = array.Length; i > 0; i--)
 			{
 				int j = Random.Range (0,i);
 				Vector3 temp = array[j];
+				array[j] = array[i - 1];
+				array[i - 1]  = temp;
+			}
+			return array;
+		}
+
+		static Color[] ShuffleArrayColor(Color[] array)
+		{
+			for (int i = array.Length; i > 0; i--)
+			{
+				int j = Random.Range (0,i);
+				Color temp = array[j];
 				array[j] = array[i - 1];
 				array[i - 1]  = temp;
 			}
