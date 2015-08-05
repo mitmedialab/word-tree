@@ -24,7 +24,29 @@ namespace WordTree
 		public static string SetLevelOrder(int index)
 		{
 			if (index == 1)
-				return "Fruits";
+				return "Animals";
+			if (index == 2)
+				return "Transportation";
+			if (index == 3)
+				return "Bathroom";
+			if (index == 4)
+				return "Kitchen";
+			if (index == 5)
+				return "Picnic";
+			if (index == 6)
+				return "Forest";
+			if (index == 7)
+				return "Bedroom";
+			if (index == 8)
+				return "School";
+			if (index == 9)
+				return "Playground";
+			if (index == 10)
+				return "Clothing";
+			if (index == 11)
+				return "Garden";
+			if (index == 12)
+				return "Camping";
 			else
 				return null;
 		}

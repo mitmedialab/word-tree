@@ -61,7 +61,7 @@ namespace WordTree
 			}
 
 			if (go.tag == "TargetBlank") {
-				LeanTween.scale (go, new Vector3 (scaleUp * .2f, scaleUp * .3f, 1), pulseLength);
+				LeanTween.scale (go, new Vector3 (1.1f * .2f, 1.1f * .3f, 1), pulseLength);
 				LeanTween.scale (go, new Vector3 (.2f, .3f, 1), clipLength * .5f).setDelay (clipLength * .5f - .1f);
 			}
 			Debug.Log ("Pulse on " + go.name);
@@ -81,7 +81,7 @@ namespace WordTree
 
 			if (gos [0].tag == "TargetBlank") {
 				for (int i=0; i < gos.Length; i++) {
-					LeanTween.scale (gos [i], new Vector3 (scaleUp * .2f, scaleUp * .3f, 1), pulseLength);
+					LeanTween.scale (gos [i], new Vector3 (1.1f * .2f, 1.1f * .3f, 1), pulseLength);
 					LeanTween.scale (gos [i], new Vector3 (.2f, .3f, 1), clipLength * .5f).setDelay (clipLength * .5f - .1f);
 				}
 			}

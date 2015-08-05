@@ -58,6 +58,7 @@ namespace WordTree
 				other.gameObject.GetComponent<GestureManager>().DisableGestures(other.gameObject);
 				other.gameObject.GetComponent<PulseBehavior>().StopPulsing (other.gameObject);
 				other.gameObject.transform.position = new Vector3(gameObject.transform.position.x,gameObject.transform.position.y,-1);
+				other.gameObject.GetComponent<SpriteRenderer>().color = Color.blue;
 
 				LeanTween.scale (other.gameObject,new Vector3(WordCreation.letterScale*1.2f,WordCreation.letterScale*1.2f,1),.6f);
 				LeanTween.scale (other.gameObject,new Vector3(WordCreation.letterScale,WordCreation.letterScale,1),.5f).setDelay(.4f);
@@ -312,6 +313,7 @@ namespace WordTree
 			foreach (GameObject go in incorrectLetters){
 
 				go.transform.localScale = new Vector3 (WordCreation.letterScale, WordCreation.letterScale, 1);
+				LeanTween.color (go,Color.white,.1f).setDelay (delayTime);
 
 				Debug.Log ("Resetting incorrect letter " + go.name);
 				Vector3 posn = new Vector3(go.transform.position.x,0,-2);
@@ -377,7 +379,7 @@ namespace WordTree
 				if (go.GetComponent<PanGesture> ().enabled == true) {
 					Vector3 posn = go.transform.position;
 					LeanTween.rotateAround (go, Vector3.right, 180, 1f);
-					LeanTween.alpha (go, 0f, .5f).setDelay (.5f);
+					LeanTween.alpha (go, .2f, .5f).setDelay (.5f);
 
 					if (GameObject.Find ("Hint" + go.name) == null){
 						ObjectProperties letter = ObjectProperties.CreateInstance ("Hint" + go.name, "Hint", posn, new Vector3 (WordCreation.letterScale*.8f, WordCreation.letterScale*.8f, 1), "Letters/" + go.name, null);
