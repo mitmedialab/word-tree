@@ -7,7 +7,7 @@ namespace WordTree{
 
 		static float xScale;
 		static float yScale;
-		static float blankWidth = 2.2f;
+		static float blankWidth = 2.5f;
 		static int y;
 		static int z;
 
@@ -29,7 +29,7 @@ namespace WordTree{
 				gos [i].transform.position = shuffledPosn [i];
 
 			GameObject[] blanks = GameObject.FindGameObjectsWithTag(tag);
-			Color[] colors = new Color[] {Color.green,Color.yellow,Color.cyan,Color.blue,Color.white,Color.magenta};
+			Color[] colors = new Color[] {Color.green,Color.yellow,Color.cyan,Color.blue,Color.magenta};
 			shuffledColors = ShuffleArrayColor (colors);
 			for (int i=0; i<blanks.Length; i++) {
 				SpriteRenderer sprite = blanks[i].GetComponent<SpriteRenderer> ();
@@ -65,13 +65,13 @@ namespace WordTree{
 		public static void CreateBlanks(string word, string[] sounds, string shape, string tag, string mode)
 		{
 			if (shape == "Rectangle") {
-				xScale = .2f;
-				yScale = .3f;
+				xScale = .7f;
+				yScale = 1.5f;
 			}
 
 			if (shape == "Circle") {
-				xScale = .4f;
-				yScale = .4f;
+				xScale = .3f;
+				yScale = .3f;
 			}
 
 
@@ -121,46 +121,12 @@ namespace WordTree{
 					new Vector3 (2f * blankWidth, y, z)
 				};
 			}
-			
-			if (word.Length == 6) {
-				position = new Vector3[6] {
-					new Vector3 (-2.5f * blankWidth, y, z),
-					new Vector3 (-1.5f * blankWidth, y, z),
-					new Vector3 (-.5f * blankWidth, y, z),
-					new Vector3 (.5f * blankWidth, y, z),
-					new Vector3 (1.5f * blankWidth, y, z),
-					new Vector3 (2.5f * blankWidth, y, z)
-				};
-				
-				
+
+			for (int i=0; i<word.Length; i++) {
+				ObjectProperties blank = ObjectProperties.CreateInstance (letterArray [i], tag, position [i], new Vector3 (xScale, yScale, 1), shape, sounds [i]);
+				ObjectProperties.InstantiateObject (blank);
 			}
-			
-			ObjectProperties blank1 = ObjectProperties.CreateInstance (letterArray [0], tag, position [0], new Vector3 (xScale, yScale, 1), shape, sounds[0]);
-			ObjectProperties.InstantiateObject (blank1);
-			
-			ObjectProperties blank2 = ObjectProperties.CreateInstance (letterArray [1], tag, position [1], new Vector3 (xScale, yScale, 1), shape, sounds[1]);
-			ObjectProperties.InstantiateObject (blank2);
-			
-			ObjectProperties blank3 = ObjectProperties.CreateInstance (letterArray [2], tag, position [2], new Vector3 (xScale, yScale, 1), shape, sounds[2]);
-			ObjectProperties.InstantiateObject (blank3);
-			
-			if (word.Length >= 4) {
-				
-				ObjectProperties blank4 = ObjectProperties.CreateInstance (letterArray [3], tag, position [3], new Vector3 (xScale, yScale, 1), shape, sounds[3]);
-				ObjectProperties.InstantiateObject (blank4);
-			}
-			
-			if (word.Length >= 5) {
-				
-				ObjectProperties blank5 = ObjectProperties.CreateInstance (letterArray [4], tag, position [4], new Vector3 (xScale, yScale, 1), shape, sounds[4]);
-				ObjectProperties.InstantiateObject (blank5);
-			}
-			
-			if (word.Length >= 6) {
-				
-				ObjectProperties blank6 = ObjectProperties.CreateInstance (letterArray [5], tag, position [5], new Vector3 (xScale, yScale, 1), shape, sounds[5]);
-				ObjectProperties.InstantiateObject (blank6);
-			}
+
 
 
 		}

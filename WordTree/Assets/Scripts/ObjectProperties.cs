@@ -73,7 +73,7 @@ namespace WordTree
 				audioSource.playOnAwake = false;
 			}
 
-			if (go.tag != "TargetLetter" && go.tag != "TargetBlank") 
+			if (go.tag != "TargetLetter" && go.tag != "TargetBlank" && go.tag != "Jar") 
 			{
 				go.AddComponent<PolygonCollider2D> ();
 			}
@@ -90,6 +90,11 @@ namespace WordTree
 				}
 				if (go.tag == "TargetBlank")
 					cc2d.radius = .3f;
+			}
+
+			if (go.tag == "Jar") {
+				CircleCollider2D cc2d = go.AddComponent<CircleCollider2D> ();
+				cc2d.radius = .5f;
 			}
 			
 			if (go.tag == "MovableLetter" || go.tag == "MovableBlank")

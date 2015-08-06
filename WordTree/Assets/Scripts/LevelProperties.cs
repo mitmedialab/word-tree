@@ -50,15 +50,15 @@ namespace WordTree
 
 			case "Transportation":
 				
-				return CreateInstance (new string[] {"Car","Bus","Cab","Van","Jet"},new Vector3(0,0,2),3f);
+				return CreateInstance (new string[] {"Bus","Jet","Cab","Van","Car"},new Vector3(0,0,2),3f);
 
 			case "Bathroom":
 				
-				return CreateInstance (new string[] {"Tub","Lid","Gel","Can","Mop"},new Vector3(0,0,2),3f);
+				return CreateInstance (new string[] {"Lid","Tub","Gel","Can","Mop"},new Vector3(0,0,2),3f);
 
 			case "Kitchen":
 				
-				return CreateInstance (new string[] {"Cup","Jar","Jug","Pan","Oven"},new Vector3(0,0,2),3f);
+				return CreateInstance (new string[] {"Cup","Oven","Pan","Jug","Jar"},new Vector3(0,0,2),3f);
 
 			case "Picnic":
 				
@@ -70,19 +70,19 @@ namespace WordTree
 
 			case "Bedroom":
 				
-				return CreateInstance (new string[] {"Bed","Rug","Fan","Mat","Crib"},new Vector3(0,0,2),3f);
+				return CreateInstance (new string[] {"Rug","Bed","Crib","Mat","Fan"},new Vector3(0,0,2),3f);
 
 			case "School":
 				
-				return CreateInstance (new string[] {"Pen","Pin","Mug","Pad","Desk"},new Vector3(0,0,2),3f);
+				return CreateInstance (new string[] {"Pen","Mug","Pin","Pad","Desk"},new Vector3(0,0,2),3f);
 
 			case "Playground":
 				
-				return CreateInstance (new string[] {"Sun","Net","Top","Box","Yoyo"},new Vector3(0,0,2),3f);
+				return CreateInstance (new string[] {"Net","Sun","Top","Box","Yoyo"},new Vector3(0,0,2),3f);
 
 			case "Clothing":
 				
-				return CreateInstance (new string[] {"Hat","Cap","Wig","Tux","Vest"},new Vector3(0,0,2),3f);
+				return CreateInstance (new string[] {"Cap","Wig","Hat","Tux","Vest"},new Vector3(0,0,2),3f);
 
 			case "Garden":
 				
@@ -90,7 +90,7 @@ namespace WordTree
 
 			case "Camping":
 				
-				return CreateInstance (new string[] {"Bat","Map","Fox","Tent","Star"},new Vector3(0,0,2),3f);
+				return CreateInstance (new string[] {"Bat","Star","Tent","Fox","Map"},new Vector3(0,0,2),3f);
 
 			default:
 

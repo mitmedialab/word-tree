@@ -61,8 +61,11 @@ namespace WordTree
 			}
 
 			if (go.tag == "TargetBlank") {
-				LeanTween.scale (go, new Vector3 (1.1f * .2f, 1.1f * .3f, 1), pulseLength);
-				LeanTween.scale (go, new Vector3 (.2f, .3f, 1), clipLength * .5f).setDelay (clipLength * .5f - .1f);
+				float xScale = .7f;
+				float yScale = 1.5f;
+
+				LeanTween.scale (go, new Vector3 (1.15f * xScale, 1.15f * yScale, 1), pulseLength);
+				LeanTween.scale (go, new Vector3 (xScale, yScale, 1), clipLength * .5f).setDelay (clipLength * .5f - .1f);
 			}
 			Debug.Log ("Pulse on " + go.name);
 
@@ -80,9 +83,12 @@ namespace WordTree
 			}
 
 			if (gos [0].tag == "TargetBlank") {
+				float xScale = .7f;
+				float yScale = 1.5f;
+
 				for (int i=0; i < gos.Length; i++) {
-					LeanTween.scale (gos [i], new Vector3 (1.1f * .2f, 1.1f * .3f, 1), pulseLength);
-					LeanTween.scale (gos [i], new Vector3 (.2f, .3f, 1), clipLength * .5f).setDelay (clipLength * .5f - .1f);
+					LeanTween.scale (gos [i], new Vector3 (1.15f * xScale, 1.15f * yScale, 1), pulseLength);
+					LeanTween.scale (gos [i], new Vector3 (xScale, yScale, 1), clipLength * .5f).setDelay (clipLength * .5f - .1f);
 				}
 			}
 			Debug.Log ("Pulse on word");

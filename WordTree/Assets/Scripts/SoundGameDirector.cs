@@ -138,8 +138,8 @@ namespace WordTree
 		{
 			GameObject[] gos = GameObject.FindGameObjectsWithTag ("TargetLetter");
 			foreach (GameObject go in gos) {
-				Vector3 letterPosn = go.transform.position;
-				ObjectProperties jar = ObjectProperties.CreateInstance ("Jar", "Jar", letterPosn, new Vector3 (1f, .8f, 1), "Jar", null);
+				Vector3 letterPosn = new Vector3(go.transform.position.x, go.transform.position.y, 1.5f);
+				ObjectProperties jar = ObjectProperties.CreateInstance ("Jar", "Jar", letterPosn, new Vector3 (.45f, .45f, 1), "Jar", null);
 				ObjectProperties.InstantiateObject (jar);
 			}
 		}
@@ -159,16 +159,21 @@ namespace WordTree
 		}
 
 		public static void CelebratoryAnimation(float delayTime)
-		{
+		{	
 			
-			GameObject confetti = GameObject.Find ("Confetti");
-			LeanTween.moveZ (confetti, -3, .01f).setDelay (delayTime);
-			LeanTween.scale (confetti, new Vector3 (6f, 6f, 1), AudioManager.clipLength).setDelay (delayTime);
-			LeanTween.alpha (confetti, 0f, .3f).setDelay (delayTime + AudioManager.clipLength - .3f);
+			float time = 1f;
 			
-			LeanTween.moveZ (confetti, 3, .01f).setDelay (delayTime + 2f);
-			LeanTween.scale (confetti, new Vector3 (.2f, .2f, 1), .01f).setDelay (delayTime + 2f);
-			LeanTween.alpha (confetti, 1f, .01f).setDelay (delayTime + 2f);
+			GameObject go = GameObject.FindGameObjectWithTag ("WordObject");
+			
+			Debug.Log ("Spinning " + go.name + " around");
+			LeanTween.rotateAround (go, Vector3.forward, 360f, time).setDelay(delayTime);
+			LeanTween.scale (go,new Vector3(go.transform.localScale.x*1.3f,go.transform.localScale.y*1.3f,1),time).setDelay (delayTime);
+			LeanTween.moveY (go, 2.5f, time).setDelay (delayTime);
+			
+			Debug.Log ("Playing clip for congrats");
+			AudioSource audio = go.AddComponent<AudioSource> ();
+			audio.clip = Resources.Load ("Audio/CongratsSound") as AudioClip;
+			audio.PlayDelayed (delayTime);
 			
 			
 		}

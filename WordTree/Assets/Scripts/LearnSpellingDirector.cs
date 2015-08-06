@@ -88,17 +88,6 @@ namespace WordTree
 				};
 			}
 
-			if (gos.Length == 6) {
-
-				posn = new Vector3[6] {
-					new Vector3 (-8, -y1, z),
-					new Vector3 (-9, 0, z),
-					new Vector3 (-5, y1, z),
-					new Vector3 (5, y1, z),
-					new Vector3 (9, 0, z),
-					new Vector3 (8, -y1, z)
-				};
-			}
 
 			shuffledPosn = ShuffleArray (posn);
 

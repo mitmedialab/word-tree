@@ -6,7 +6,7 @@ namespace WordTree
 	public class WordCreation : MonoBehaviour {
 
 		public static float letterScale = .3f;
-		static float letterWidth = 2f;
+		static float letterWidth = 2.4f;
 		static float y;
 		static int z;
 
@@ -14,17 +14,30 @@ namespace WordTree
 		{
 
 			Vector3[] posn = new Vector3[word.Length];
-			Vector3[] shuffledPosn = new Vector3[word.Length];
+			int[,] order = new int[4, word.Length];
 			
 			CreateWord (word, soundArray, "MovableLetter","SpellingGame");
 
+			if (word.Length == 3){
+				order = new int[,] {{2,3,1}, {3,1,2}, {3,2,1}, {2,1,3}};
+			}
+
+			if (word.Length == 4){
+				order = new int[,] {{2,1,4,3}, {3,4,1,2}, {4,1,3,2}, {1,3,4,2}};
+			}
+
+			if (word.Length == 5){
+				order = new int[,] {{2,1,5,3,4}, {3,5,2,4,1}, {4,1,2,5,3}, {5,4,1,3,2}};
+			}
+
 			GameObject[] mov = GameObject.FindGameObjectsWithTag ("MovableLetter");
 			for (int i=0; i<mov.Length; i++)
-				posn [i] = mov [i].transform.position;
-			shuffledPosn = ShuffleArray (posn);
+				posn [i] = mov[i].transform.position;
 
-			for (int i=0; i<mov.Length; i++)
-				mov [i].transform.position = shuffledPosn [i];
+			int index = Random.Range (0,4);
+			for (int i = 0; i<mov.Length; i++) {
+				mov [i].transform.position = posn [order[index, i]-1];
+			}
 
 
 		}
@@ -57,7 +70,7 @@ namespace WordTree
 			}
 
 			GameObject[] mov = GameObject.FindGameObjectsWithTag ("MovableLetter");
-			Color[] colors = new Color[] {Color.cyan,Color.green,Color.blue,Color.grey,Color.magenta,Color.yellow};
+			Color[] colors = new Color[] {Color.cyan,Color.blue,Color.magenta,Color.grey,Color.yellow};
 			for (int i=0; i<mov.Length; i++) {
 				SpriteRenderer sprite = mov[i].GetComponent<SpriteRenderer> ();
 				sprite.color = colors[i];
@@ -117,44 +130,10 @@ namespace WordTree
 				};
 			}
 
-			if (word.Length == 6) {
-				position = new Vector3[6] {
-					new Vector3 (-2.5f*letterWidth, y, z),
-					new Vector3 (-1.5f*letterWidth, y, z),
-					new Vector3 (-.5f*letterWidth, y, z),
-					new Vector3 (.5f*letterWidth, y, z),
-					new Vector3 (1.5f*letterWidth, y, z),
-					new Vector3 (2.5f*letterWidth, y, z)
-				};
-			}
-		
 
-
-			ObjectProperties letter1 = ObjectProperties.CreateInstance (letters[0], tag, position[0], new Vector3 (letterScale, letterScale, 1), "Letters/"+letters[0], sounds[0]);
-			ObjectProperties.InstantiateObject (letter1);
-		
-			ObjectProperties letter2 = ObjectProperties.CreateInstance (letters[1], tag, position[1], new Vector3 (letterScale, letterScale, 1), "Letters/"+letters[1], sounds[1]);
-			ObjectProperties.InstantiateObject (letter2);
-
-			ObjectProperties letter3 = ObjectProperties.CreateInstance (letters[2], tag, position[2], new Vector3 (letterScale, letterScale, 1), "Letters/"+letters[2], sounds[2]);
-			ObjectProperties.InstantiateObject (letter3);
-
-			if (word.Length >= 4) {
-
-				ObjectProperties letter4 = ObjectProperties.CreateInstance (letters[3], tag, position[3], new Vector3 (letterScale, letterScale, 1), "Letters/"+letters[3], sounds[3]);
-				ObjectProperties.InstantiateObject (letter4);
-			}
-
-			if (word.Length >= 5) {
-
-				ObjectProperties letter5 = ObjectProperties.CreateInstance (letters[4], tag, position[4], new Vector3 (letterScale, letterScale, 1), "Letters/"+letters[4], sounds[4]);
-				ObjectProperties.InstantiateObject (letter5);
-			}
-
-			if (word.Length >= 6) {
-				
-				ObjectProperties letter6 = ObjectProperties.CreateInstance (letters[5], tag, position[5], new Vector3 (letterScale, letterScale, 1), "Letters/"+letters[5], sounds[5]);
-				ObjectProperties.InstantiateObject (letter6);
+			for (int i=0; i<word.Length; i++) {
+				ObjectProperties letter = ObjectProperties.CreateInstance (letters [i], tag, position [i], new Vector3 (letterScale, letterScale, 1), "Letters/" + letters [i], sounds [i]);
+				ObjectProperties.InstantiateObject (letter);
 			}
 
 

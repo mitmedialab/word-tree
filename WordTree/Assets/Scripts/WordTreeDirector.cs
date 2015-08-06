@@ -10,8 +10,7 @@ namespace WordTree
 
 			ProgressManager.InitiateLevelList ();
 			ProgressManager.UnlockNextLevel (null);
-			ProgressManager.AddUnlockedLevel ("Animals2");
-			ProgressManager.AddUnlockedLevel ("Animals3");
+
 			ProgressManager.AddUnlockedLevel ("Transportation1");
 			ProgressManager.AddUnlockedLevel ("Bathroom1");
 			ProgressManager.AddUnlockedLevel ("Kitchen1");
@@ -23,6 +22,32 @@ namespace WordTree
 			ProgressManager.AddUnlockedLevel ("Clothing1");
 			ProgressManager.AddUnlockedLevel ("Garden1");
 			ProgressManager.AddUnlockedLevel ("Camping1");
+
+			ProgressManager.AddUnlockedLevel ("Animals2");
+			ProgressManager.AddUnlockedLevel ("Transportation2");
+			ProgressManager.AddUnlockedLevel ("Bathroom2");
+			ProgressManager.AddUnlockedLevel ("Kitchen2");
+			ProgressManager.AddUnlockedLevel ("Picnic2");
+			ProgressManager.AddUnlockedLevel ("Forest2");
+			ProgressManager.AddUnlockedLevel ("Bedroom2");
+			ProgressManager.AddUnlockedLevel ("School2");
+			ProgressManager.AddUnlockedLevel ("Playground2");
+			ProgressManager.AddUnlockedLevel ("Clothing2");
+			ProgressManager.AddUnlockedLevel ("Garden2");
+			ProgressManager.AddUnlockedLevel ("Camping2");
+
+			ProgressManager.AddUnlockedLevel ("Animals3");
+			ProgressManager.AddUnlockedLevel ("Transportation3");
+			ProgressManager.AddUnlockedLevel ("Bathroom3");
+			ProgressManager.AddUnlockedLevel ("Kitchen3");
+			ProgressManager.AddUnlockedLevel ("Picnic3");
+			ProgressManager.AddUnlockedLevel ("Forest3");
+			ProgressManager.AddUnlockedLevel ("Bedroom3");
+			ProgressManager.AddUnlockedLevel ("School3");
+			ProgressManager.AddUnlockedLevel ("Playground3");
+			ProgressManager.AddUnlockedLevel ("Clothing3");
+			ProgressManager.AddUnlockedLevel ("Garden3");
+			ProgressManager.AddUnlockedLevel ("Camping3");
 
 
 			GameObject[] gos = GameObject.FindGameObjectsWithTag ("LevelIcon");

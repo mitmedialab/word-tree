@@ -149,17 +149,24 @@ namespace WordTree
 
 		public static void CelebratoryAnimation(float delayTime)
 		{	
-			GameObject stars = GameObject.Find ("Stars");
-			LeanTween.moveZ (stars, -3, .01f).setDelay (delayTime);
-			LeanTween.scale (stars, new Vector3 (3f, 3f, 1), AudioManager.clipLength).setDelay (delayTime);
-			LeanTween.alpha (stars, 0f, .3f).setDelay (delayTime + AudioManager.clipLength - .3f);
-			
-			LeanTween.moveZ (stars, 3, .01f).setDelay (delayTime + 2f);
-			LeanTween.scale (stars, new Vector3 (.2f, .2f, 1), .01f).setDelay (delayTime + 2f);
-			LeanTween.alpha (stars, 1f, .01f).setDelay (delayTime + 2f);
+
+			float time = 1f;
+
+			GameObject go = GameObject.FindGameObjectWithTag ("WordObject");
+
+			Debug.Log ("Spinning " + go.name + " around");
+			LeanTween.rotateAround (go, Vector3.forward, 360f, time).setDelay(delayTime);
+			LeanTween.scale (go,new Vector3(go.transform.localScale.x*1.3f,go.transform.localScale.y*1.3f,1),time).setDelay (delayTime);
+			LeanTween.moveY (go, 2f, time).setDelay (delayTime);
+
+			Debug.Log ("Playing clip for congrats");
+			AudioSource audio = go.AddComponent<AudioSource> ();
+			audio.clip = Resources.Load ("Audio/CongratsSound") as AudioClip;
+			audio.PlayDelayed (delayTime);
 			
 			
 		}
+
 
 	}
 }

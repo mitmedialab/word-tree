@@ -60,8 +60,8 @@ namespace WordTree
 				other.gameObject.transform.position = new Vector3(gameObject.transform.position.x,gameObject.transform.position.y,-1);
 				other.gameObject.GetComponent<SpriteRenderer>().color = Color.blue;
 
-				LeanTween.scale (other.gameObject,new Vector3(WordCreation.letterScale*1.2f,WordCreation.letterScale*1.2f,1),.6f);
-				LeanTween.scale (other.gameObject,new Vector3(WordCreation.letterScale,WordCreation.letterScale,1),.5f).setDelay(.4f);
+				LeanTween.scale (other.gameObject,new Vector3(WordCreation.letterScale*1.2f,WordCreation.letterScale*1.2f,1),.3f);
+				LeanTween.scale (other.gameObject,new Vector3(WordCreation.letterScale,WordCreation.letterScale,1),.3f).setDelay(.2f);
 
 				Debug.Log ("Disabled collisions for Blank " + gameObject.name);
 				Destroy(gameObject.GetComponent<CollisionManager>());
@@ -121,11 +121,16 @@ namespace WordTree
 				
 				other.gameObject.GetComponent<GestureManager> ().DisableGestures (other.gameObject);
 				other.gameObject.GetComponent<PulseBehavior> ().StopPulsing (other.gameObject);
-				other.gameObject.transform.position = new Vector3 (gameObject.transform.position.x, gameObject.transform.position.y + 2f, 1);
-				other.gameObject.transform.localScale = new Vector3(.4f, .4f, 1);
+				other.gameObject.transform.position = new Vector3 (gameObject.transform.position.x, gameObject.transform.position.y + 2.2f, 1);
 
-				LeanTween.scale (other.gameObject,new Vector3(.5f,.5f,1),.6f);
-				LeanTween.scale (other.gameObject,new Vector3(.4f,.4f,1),.5f).setDelay(.4f);
+				LeanTween.scale (other.gameObject,new Vector3(.4f,.4f,1),.3f);
+				LeanTween.scale (other.gameObject,new Vector3(.3f,.3f,1),.3f).setDelay(.2f);
+
+				Color color = other.gameObject.GetComponent<SpriteRenderer>().color;
+				Vector2 posn = gameObject.transform.position;
+				Collider2D[] jar = Physics2D.OverlapCircleAll(posn,.1f,1,1.5f,1.5f);
+				LeanTween.color(jar[0].gameObject,color,.01f);
+
 				
 				Debug.Log ("Disabled collisions for Letter " + gameObject.name);
 				Destroy (gameObject.GetComponent<CollisionManager> ());
@@ -300,7 +305,7 @@ namespace WordTree
 		{
 			List<GameObject> correctSounds = CorrectObjects ("TargetLetter");
 			foreach (GameObject go in correctSounds) {
-				go.transform.localScale = new Vector3 (.4f, .4f, 1);
+				go.transform.localScale = new Vector3 (.3f, .3f, 1);
 			}
 			
 		}
@@ -333,7 +338,7 @@ namespace WordTree
 			
 			foreach (GameObject go in incorrectSounds){
 				
-				go.transform.localScale = new Vector3 (.4f,.4f, 1);
+				go.transform.localScale = new Vector3 (.3f,.3f, 1);
 				
 				Debug.Log ("Resetting incorrect sound " + go.name);
 				Vector3 posn = new Vector3(go.transform.position.x,0,-2);
@@ -342,6 +347,10 @@ namespace WordTree
 				go.GetComponent<PulseBehavior>().StartPulsing(go,delayTime);
 				
 				go.GetComponent<GestureManager>().EnableGestures(go);
+
+				Vector2 position = go.transform.position;
+				Collider2D[] jar = Physics2D.OverlapCircleAll(position,2f,1,1.5f,1.5f);
+				LeanTween.color (jar[0].gameObject,Color.white,.01f).setDelay (delayTime);
 				
 			}
 			
@@ -365,9 +374,9 @@ namespace WordTree
 			GameObject hint = GameObject.Find("Hint"+letterName);
 			hint.transform.position = unoccupiedTargets [i].transform.position;
 			LeanTween.moveZ(hint, -3, .01f).setDelay (0f);
-			LeanTween.color (hint, Color.magenta, .5f).setDelay (0f);
-			LeanTween.color (hint, Color.black, .5f).setDelay (1.5f);
-			LeanTween.moveZ (hint, 3f, .01f).setDelay (2.0f);
+			LeanTween.color (hint, Color.magenta, 1f).setDelay (0f);
+			LeanTween.color (hint, Color.black, 1f).setDelay (1f);
+			LeanTween.moveZ (hint, 3f, .01f).setDelay (2f);
 
 				                 
 		}
@@ -379,18 +388,21 @@ namespace WordTree
 				if (go.GetComponent<PanGesture> ().enabled == true) {
 					Vector3 posn = go.transform.position;
 					LeanTween.rotateAround (go, Vector3.right, 180, 1f);
-					LeanTween.alpha (go, .2f, .5f).setDelay (.5f);
+					LeanTween.alpha (go, 0f, .5f).setDelay (.5f);
 
 					if (GameObject.Find ("Hint" + go.name) == null){
-						ObjectProperties letter = ObjectProperties.CreateInstance ("Hint" + go.name, "Hint", posn, new Vector3 (WordCreation.letterScale*.8f, WordCreation.letterScale*.8f, 1), "Letters/" + go.name, null);
+						ObjectProperties letter = ObjectProperties.CreateInstance ("Hint" + go.name, "Hint", posn, new Vector3 (WordCreation.letterScale*.9f, WordCreation.letterScale*.9f, 1), "Letters/" + go.name, null);
 						ObjectProperties.InstantiateObject (letter);
 					}
 
 					GameObject hint = GameObject.Find ("Hint" + go.name);
 					hint.transform.position = new Vector3(go.transform.position.x, go.transform.position.y, 3);
+					LeanTween.alpha (hint, 0f, .01f);
 					LeanTween.moveZ (hint, -3, .01f).setDelay (1f);
-					LeanTween.color (hint, Color.magenta, .5f).setDelay(1f);
-					LeanTween.color (hint, Color.black, .5f).setDelay (2.5f);
+					LeanTween.alpha (hint, 1f, .01f).setDelay (1f); 
+					LeanTween.color (hint, Color.green, 1f).setDelay(1f);
+					LeanTween.color (hint, Color.black, 1f).setDelay (2f);
+					LeanTween.alpha (hint, 0f, .01f).setDelay (3f);
 					LeanTween.moveZ (hint, 3, .01f).setDelay (3f);
 
 					LeanTween.alpha (go, 1f, .5f).setDelay (3f);
