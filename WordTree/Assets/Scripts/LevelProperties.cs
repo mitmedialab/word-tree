@@ -46,51 +46,51 @@ namespace WordTree
 
 			case "Animals":
 			
-				return CreateInstance (new string[] {"Cat","Dog","Rat","Pig","Hen"},new Vector3(0,0,2),3f);
+				return CreateInstance (new string[] {"Cat","Dog","Rat","Pig","Hen"},new Vector3(0,-1,2),4f);
 
 			case "Transportation":
 				
-				return CreateInstance (new string[] {"Bus","Jet","Cab","Van","Car"},new Vector3(0,0,2),3f);
+				return CreateInstance (new string[] {"Bus","Jet","Cab","Van","Car"},new Vector3(0,-1,2),5f);
 
 			case "Bathroom":
 				
-				return CreateInstance (new string[] {"Lid","Tub","Gel","Can","Mop"},new Vector3(0,0,2),3f);
+				return CreateInstance (new string[] {"Mop","Gel","Can","Tub","Lid"},new Vector3(0,4,2),4f);
 
 			case "Kitchen":
 				
-				return CreateInstance (new string[] {"Cup","Oven","Pan","Jug","Jar"},new Vector3(0,0,2),3f);
+				return CreateInstance (new string[] {"Jug","Oven","Jar","Pan","Cup"},new Vector3(0,-2.5f,2),4f);
 
 			case "Picnic":
 				
-				return CreateInstance (new string[] {"Bun","Ham","Jam","Bag","Taco"},new Vector3(0,0,2),3f);
+				return CreateInstance (new string[] {"Bun","Ham","Jam","Bag","Taco"},new Vector3(0,4,2),4f);
 
-			case "Forest":
+			case "Pond":
 				
-				return CreateInstance (new string[] {"Log","Mud","Web","Bug","Fly"},new Vector3(0,0,2),3f);
+				return CreateInstance (new string[] {"Log","Fly","Mud","Bug","Web"},new Vector3(0,4,2),4f);
 
 			case "Bedroom":
 				
-				return CreateInstance (new string[] {"Rug","Bed","Crib","Mat","Fan"},new Vector3(0,0,2),3f);
+				return CreateInstance (new string[] {"Rug","Fan","Mat","Crib","Bed"},new Vector3(0,5,2),4f);
 
 			case "School":
 				
-				return CreateInstance (new string[] {"Pen","Mug","Pin","Pad","Desk"},new Vector3(0,0,2),3f);
+				return CreateInstance (new string[] {"Pen","Pad","Pin","Mug","Desk"},new Vector3(0,-1,2),4f);
 
 			case "Playground":
 				
-				return CreateInstance (new string[] {"Net","Sun","Top","Box","Yoyo"},new Vector3(0,0,2),3f);
+				return CreateInstance (new string[] {"Net","Sun","Top","Box","Yoyo"},new Vector3(0,1,2),4f);
 
 			case "Clothing":
 				
-				return CreateInstance (new string[] {"Cap","Wig","Hat","Tux","Vest"},new Vector3(0,0,2),3f);
+				return CreateInstance (new string[] {"Cap","Hat","Wig","Tux","Vest"},new Vector3(0,4,2),4f);
 
 			case "Garden":
 				
-				return CreateInstance (new string[] {"Pot","Nut","Ant","Kiwi","Plum"},new Vector3(0,0,2),3f);
+				return CreateInstance (new string[] {"Nut","Pot","Ant","Kiwi","Plum"},new Vector3(0,0,2),4f);
 
 			case "Camping":
 				
-				return CreateInstance (new string[] {"Bat","Star","Tent","Fox","Map"},new Vector3(0,0,2),3f);
+				return CreateInstance (new string[] {"Bat","Star","Map","Fox","Tent"},new Vector3(0,4,2),4f);
 
 			default:
 

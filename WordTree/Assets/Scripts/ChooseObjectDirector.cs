@@ -21,12 +21,12 @@ namespace WordTree
 				go.GetComponent<PulseBehavior> ().StartPulsing (go);
 
 				if (!ProgressManager.IsWordCompleted(go.name)){
-					SetColorAndTransparency (go,Color.grey,.9f);
+					SetColorAndTransparency (go,Color.grey,1f);
 				}
 
 				if (ProgressManager.IsWordCompleted(go.name)){
 					Debug.Log ("Word Completed: " + go.name);
-					SetColorAndTransparency(go,Color.white,1.0f);
+					SetColorAndTransparency(go,Color.white,1f);
 				}
 			}
 

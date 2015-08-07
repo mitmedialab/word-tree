@@ -5,12 +5,9 @@ namespace WordTree
 {
 	public class SpellingGameDirector : MonoBehaviour {
 
-		//public static int wordIndex = 0;
-
 		void Start () {
 
 			LoadSpellingGameWord (ProgressManager.currentWord);
-			//LoadSpellingGame (ProgressManager.currentLevel);
 
 			GameObject[] buttons = GameObject.FindGameObjectsWithTag ("Button");
 			foreach (GameObject button in buttons)
@@ -29,77 +26,6 @@ namespace WordTree
 			}
 
 		}
-
-		/*
-		public void LoadNextWord(float delayTime)
-		{
-			StartCoroutine (loadNextWord(delayTime));
-		}
-
-		IEnumerator loadNextWord(float delayTime)
-		{
-			yield return new WaitForSeconds (delayTime);
-
-			wordIndex = wordIndex + 1;
-
-			Debug.Log ("Loading next word");
-			LevelProperties prop = LevelProperties.GetLevelProperties (ProgressManager.currentLevel);
-			string[] words = prop.Words ();
-			LoadGameWord (words[wordIndex]);
-
-			GameObject.Find ("SoundButton").GetComponent<GestureManager>().EnableGestures(GameObject.Find ("SoundButton"));
-			GameObject.Find ("HintButton").GetComponent<GestureManager>().EnableGestures(GameObject.Find ("HintButton"));
-
-
-		}
-
-		public void DestroyAll(float delayTime)
-		{
-			StartCoroutine (destroyAll (delayTime));
-		}
-
-		IEnumerator destroyAll(float delayTime)
-		{
-			yield return new WaitForSeconds (delayTime);
-
-			GameObject[] mov = GameObject.FindGameObjectsWithTag ("MovableLetter");
-			GameObject[] tar = GameObject.FindGameObjectsWithTag ("TargetBlank");
-			GameObject[] hint = GameObject.FindGameObjectsWithTag ("Hint");
-
-			foreach (GameObject go in mov)
-				Destroy (go);
-			foreach (GameObject go in tar)
-				Destroy (go);
-			foreach (GameObject go in hint)
-				Destroy (go);
-			Destroy (GameObject.FindGameObjectWithTag("WordObject"));
-		}
-
-		void LoadSpellingGame(string level)
-		{
-			LevelProperties prop = LevelProperties.GetLevelProperties (level);
-			string[] words = prop.Words ();
-			LoadGameWord (words [wordIndex]);
-
-		}
-
-		void LoadGameWord(string word)
-		{
-			WordProperties prop = WordProperties.GetWordProperties(word);
-			string[] phonemes = prop.Phonemes ();
-			float objScale = prop.ObjScale ();
-
-			WordCreation.CreateScrambledWord (word, phonemes);
-			BlankCreation.CreateBlanks(word, phonemes, "Rectangle", "TargetBlank", "SpellingGame");
-			CreateWordImage (word, objScale);
-
-			GameObject[] mov = GameObject.FindGameObjectsWithTag ("MovableLetter");
-			foreach (GameObject go in mov) {
-				go.GetComponent<PulseBehavior> ().StartPulsing (go);
-			}
-
-		}
-		*/
 
 		void LoadSpellingGameWord(string word)
 		{

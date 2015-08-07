@@ -18,8 +18,6 @@ namespace WordTree
 		public void StopPulsing (GameObject go)
 		{
 			LeanTween.cancel (go);
-			if (go.tag == "MovableLetter")
-				go.transform.localScale = new Vector3 (WordCreation.letterScale, WordCreation.letterScale, 1);
 		}
 
 	}

@@ -149,7 +149,7 @@ namespace WordTree
 				
 				return CreateInstance(new string[] {"T","A","C","O"}, .6f);
 			
-		    //Forest
+		    //Pond
 				
 			case "Bug":
 				

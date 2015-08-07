@@ -60,7 +60,7 @@ namespace WordTree
 				other.gameObject.transform.position = new Vector3(gameObject.transform.position.x,gameObject.transform.position.y,-1);
 				other.gameObject.GetComponent<SpriteRenderer>().color = Color.blue;
 
-				LeanTween.scale (other.gameObject,new Vector3(WordCreation.letterScale*1.2f,WordCreation.letterScale*1.2f,1),.3f);
+				LeanTween.scale (other.gameObject,new Vector3(WordCreation.letterScale*1.25f,WordCreation.letterScale*1.25f,1),.3f);
 				LeanTween.scale (other.gameObject,new Vector3(WordCreation.letterScale,WordCreation.letterScale,1),.3f).setDelay(.2f);
 
 				Debug.Log ("Disabled collisions for Blank " + gameObject.name);
@@ -83,21 +83,6 @@ namespace WordTree
 
 						ProgressManager.AddCompletedWord (ProgressManager.currentWord);
 
-						/*
-						GameObject spellingGameDirector = GameObject.Find ("SpellingGameDirector");
-						SpellingGameDirector sgd = spellingGameDirector.GetComponent<SpellingGameDirector>();
-						sgd.DestroyAll ((mov.Length+2) * AudioManager.clipLength);
-
-						if (!CheckCompletedGame("Spelling Game"))
-							sgd.LoadNextWord((mov.Length+3) * AudioManager.clipLength);
-						if (CheckCompletedGame("Spelling Game")){
-							SpellingGameDirector.wordIndex = 0;
-							ProgressManager.AddCompletedLevel (ProgressManager.currentLevel);
-							ProgressManager.UnlockNextLevel (ProgressManager.currentLevel);
-						}
-						*/
-
-
 					}
 
 
@@ -106,7 +91,8 @@ namespace WordTree
 						SpellingGameDirector.TryAgainAnimation();
 						MarkCorrectLetters(1f);
 						ResetIncorrectLetters(1f);
-						GameObject.FindGameObjectWithTag("WordObject").audio.PlayDelayed (1);
+						GameObject.FindGameObjectWithTag("WordObject").audio.PlayDelayed (1f);
+						FlashHintButton (2f);
 
 					}
 
@@ -153,21 +139,6 @@ namespace WordTree
 						SoundGameDirector.CelebratoryAnimation ((mov.Length + 1) * AudioManager.clipLength);
 
 						ProgressManager.AddCompletedWord (ProgressManager.currentWord);
-
-						/*
-						GameObject soundGameDirector = GameObject.Find ("SoundGameDirector");
-						SoundGameDirector sgd = soundGameDirector.GetComponent<SoundGameDirector> ();
-						sgd.DestroyAll ((mov.Length + 2) * AudioManager.clipLength);
-						
-						if (!CheckCompletedGame ("Sound Game"))
-							sgd.LoadNextWord ((mov.Length + 3) * AudioManager.clipLength);
-						if (CheckCompletedGame ("Sound Game")) {
-							SoundGameDirector.wordIndex = 0;
-							ProgressManager.AddCompletedLevel (ProgressManager.currentLevel);
-							ProgressManager.UnlockNextLevel (ProgressManager.currentLevel);
-						}
-						*/
-						
 						
 					}
 					
@@ -177,7 +148,8 @@ namespace WordTree
 						SoundGameDirector.TryAgainAnimation ();
 						MarkCorrectSounds (1f);
 						ResetIncorrectSounds (1f);
-						GameObject.FindGameObjectWithTag("WordObject").audio.PlayDelayed (1);
+						GameObject.FindGameObjectWithTag("WordObject").audio.PlayDelayed (1f);
+						FlashHintButton (2f);
 						
 					}
 					
@@ -227,7 +199,7 @@ namespace WordTree
 
 			if (tag == "TargetBlank") {
 				z = -1;
-				radius = .5f;
+				radius = .7f;
 			}
 
 			if (tag == "TargetLetter") {
@@ -413,6 +385,20 @@ namespace WordTree
 
 		}
 
+		void FlashHintButton(float delayTime)
+		{
+			float time = .3f;
+
+			GameObject light = GameObject.Find("Highlight");
+			LeanTween.moveZ (light, 1, .01f).setDelay (delayTime);
+			LeanTween.moveZ (light, 3, .01f).setDelay (delayTime + 1 * time);
+			LeanTween.moveZ (light, 1, .01f).setDelay (delayTime + 2 * time);
+			LeanTween.moveZ (light, 3, .01f).setDelay (delayTime + 3 * time);
+			LeanTween.moveZ (light, 1, .01f).setDelay (delayTime + 4 * time);
+			LeanTween.moveZ (light, 3, .01f).setDelay (delayTime + 5 * time);
+
+		}
+
 		bool CheckCompletedTargets(string tag)
 		{
 			GameObject[] mov = GameObject.FindGameObjectsWithTag (tag);
@@ -449,27 +435,6 @@ namespace WordTree
 			return true;
 		}
 
-
-		/*
-		bool CheckCompletedGame(string mode)
-		{
-			LevelProperties prop = LevelProperties.GetLevelProperties (ProgressManager.currentLevel);
-			string[] words = prop.Words ();
-			if (mode == "Spelling Game") {
-				if (SpellingGameDirector.wordIndex == words.Length - 1) {
-					Debug.Log ("Game Completed");
-					return true;
-				}
-			}
-			if (mode == "Sound Game") {
-				if (SoundGameDirector.wordIndex == words.Length - 1) {
-					Debug.Log ("Game Completed");
-					return true;
-				}
-			}
-			return false;
-		}
-		*/
 
 		bool CheckCompletedWord ()
 		{

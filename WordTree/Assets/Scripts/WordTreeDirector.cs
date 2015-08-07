@@ -15,7 +15,7 @@ namespace WordTree
 			ProgressManager.AddUnlockedLevel ("Bathroom1");
 			ProgressManager.AddUnlockedLevel ("Kitchen1");
 			ProgressManager.AddUnlockedLevel ("Picnic1");
-			ProgressManager.AddUnlockedLevel ("Forest1");
+			ProgressManager.AddUnlockedLevel ("Pond1");
 			ProgressManager.AddUnlockedLevel ("Bedroom1");
 			ProgressManager.AddUnlockedLevel ("School1");
 			ProgressManager.AddUnlockedLevel ("Playground1");
@@ -28,7 +28,7 @@ namespace WordTree
 			ProgressManager.AddUnlockedLevel ("Bathroom2");
 			ProgressManager.AddUnlockedLevel ("Kitchen2");
 			ProgressManager.AddUnlockedLevel ("Picnic2");
-			ProgressManager.AddUnlockedLevel ("Forest2");
+			ProgressManager.AddUnlockedLevel ("Pond2");
 			ProgressManager.AddUnlockedLevel ("Bedroom2");
 			ProgressManager.AddUnlockedLevel ("School2");
 			ProgressManager.AddUnlockedLevel ("Playground2");
@@ -41,7 +41,7 @@ namespace WordTree
 			ProgressManager.AddUnlockedLevel ("Bathroom3");
 			ProgressManager.AddUnlockedLevel ("Kitchen3");
 			ProgressManager.AddUnlockedLevel ("Picnic3");
-			ProgressManager.AddUnlockedLevel ("Forest3");
+			ProgressManager.AddUnlockedLevel ("Pond3");
 			ProgressManager.AddUnlockedLevel ("Bedroom3");
 			ProgressManager.AddUnlockedLevel ("School3");
 			ProgressManager.AddUnlockedLevel ("Playground3");
