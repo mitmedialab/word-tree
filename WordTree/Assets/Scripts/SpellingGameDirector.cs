@@ -13,9 +13,6 @@ namespace WordTree
 			foreach (GameObject button in buttons)
 				button.AddComponent<GestureManager> ().AddAndSubscribeToGestures (button);
 
-			GameObject word = GameObject.FindGameObjectWithTag ("WordObject");
-			word.GetComponent<GestureManager> ().DisableGestures (word);
-
 			GameObject[] tar = GameObject.FindGameObjectsWithTag("TargetBlank");
 			GameObject audioManager = GameObject.Find ("AudioManager");
 			audioManager.GetComponent<AudioManager>().SpellOutWord(tar);
@@ -43,7 +40,7 @@ namespace WordTree
 		{
 			float y = 3;
 			
-			ObjectProperties Obj = ObjectProperties.CreateInstance (word, "WordObject", new Vector3 (0, y, 0), new Vector3 (scale, scale, 1), ProgressManager.currentLevel + "/" + word, "Words/"+word);
+			ObjectProperties Obj = ObjectProperties.CreateInstance (word, "WordObject", new Vector3 (0, y, 0), new Vector3 (scale, scale, 1), ProgressManager.currentLevel + "/" + word, word);
 			ObjectProperties.InstantiateObject (Obj);
 		}
 

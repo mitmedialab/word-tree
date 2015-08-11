@@ -10,6 +10,15 @@ namespace WordTree
 
 			LoadLevel (ProgressManager.currentLevel);
 
+			GameObject kid = GameObject.FindGameObjectWithTag ("Kid");
+			kid.GetComponent<SpriteRenderer> ().sprite = Resources.Load<Sprite> ("Graphics/" + ProgressManager.chosenKid);
+			GrowKid ();
+
+			GameObject dir = GameObject.Find ("ChooseObjectDirector");
+			dir.AddComponent<AudioSource> ().clip = Resources.Load ("Audio/" + ProgressManager.currentLevel) as AudioClip;
+			if (dir.audio.clip != null)
+				dir.audio.Play ();
+
 			GameObject button = GameObject.FindGameObjectWithTag ("Button");
 			button.AddComponent<GestureManager> ().AddAndSubscribeToGestures (button);
 
@@ -21,7 +30,7 @@ namespace WordTree
 				go.GetComponent<PulseBehavior> ().StartPulsing (go);
 
 				if (!ProgressManager.IsWordCompleted(go.name)){
-					SetColorAndTransparency (go,Color.grey,1f);
+					SetColorAndTransparency (go,Color.grey,.9f);
 				}
 
 				if (ProgressManager.IsWordCompleted(go.name)){
@@ -36,6 +45,13 @@ namespace WordTree
 			}
 
 
+		}
+
+		void GrowKid()
+		{
+			float scale = .5f;
+			GameObject kid = GameObject.FindGameObjectWithTag ("Kid");
+			LeanTween.scale (kid, new Vector3 (scale, scale, 1f), 1f);
 		}
 
 		void SetColorAndTransparency(GameObject go, Color color, float transparency)

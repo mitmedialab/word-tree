@@ -9,46 +9,52 @@ namespace WordTree
 		void Start () {
 
 			ProgressManager.InitiateLevelList ();
-			ProgressManager.UnlockNextLevel (null);
+			ProgressManager.unlockedLevels.Add(ProgressManager.levelList[0]);
+			ProgressManager.unlockedLevels.Add (ProgressManager.levelList[3]);
 
-			ProgressManager.AddUnlockedLevel ("Transportation1");
-			ProgressManager.AddUnlockedLevel ("Bathroom1");
-			ProgressManager.AddUnlockedLevel ("Kitchen1");
-			ProgressManager.AddUnlockedLevel ("Picnic1");
-			ProgressManager.AddUnlockedLevel ("Pond1");
-			ProgressManager.AddUnlockedLevel ("Bedroom1");
-			ProgressManager.AddUnlockedLevel ("School1");
-			ProgressManager.AddUnlockedLevel ("Playground1");
-			ProgressManager.AddUnlockedLevel ("Clothing1");
-			ProgressManager.AddUnlockedLevel ("Garden1");
-			ProgressManager.AddUnlockedLevel ("Camping1");
+			ProgressManager.unlockedLevels.Add ("Animals1");
+			ProgressManager.unlockedLevels.Add ("Transportation1");
+			ProgressManager.unlockedLevels.Add ("Bathroom1");
+			ProgressManager.unlockedLevels.Add ("Kitchen1");
+			ProgressManager.unlockedLevels.Add ("Picnic1");
+			ProgressManager.unlockedLevels.Add ("Pond1");
+			ProgressManager.unlockedLevels.Add ("Bedroom1");
+			ProgressManager.unlockedLevels.Add ("School1");
+			ProgressManager.unlockedLevels.Add ("Playground1");
+			ProgressManager.unlockedLevels.Add ("Clothing1");
+			ProgressManager.unlockedLevels.Add ("Garden1");
+			ProgressManager.unlockedLevels.Add ("Camping1");
 
-			ProgressManager.AddUnlockedLevel ("Animals2");
-			ProgressManager.AddUnlockedLevel ("Transportation2");
-			ProgressManager.AddUnlockedLevel ("Bathroom2");
-			ProgressManager.AddUnlockedLevel ("Kitchen2");
-			ProgressManager.AddUnlockedLevel ("Picnic2");
-			ProgressManager.AddUnlockedLevel ("Pond2");
-			ProgressManager.AddUnlockedLevel ("Bedroom2");
-			ProgressManager.AddUnlockedLevel ("School2");
-			ProgressManager.AddUnlockedLevel ("Playground2");
-			ProgressManager.AddUnlockedLevel ("Clothing2");
-			ProgressManager.AddUnlockedLevel ("Garden2");
-			ProgressManager.AddUnlockedLevel ("Camping2");
+			ProgressManager.unlockedLevels.Add ("Animals2");
+			ProgressManager.unlockedLevels.Add ("Transportation2");
+			ProgressManager.unlockedLevels.Add ("Bathroom2");
+			ProgressManager.unlockedLevels.Add ("Kitchen2");
+			ProgressManager.unlockedLevels.Add ("Picnic2");
+			ProgressManager.unlockedLevels.Add ("Pond2");
+			ProgressManager.unlockedLevels.Add ("Bedroom2");
+			ProgressManager.unlockedLevels.Add ("School2");
+			ProgressManager.unlockedLevels.Add ("Playground2");
+			ProgressManager.unlockedLevels.Add ("Clothing2");
+			ProgressManager.unlockedLevels.Add ("Garden2");
+			ProgressManager.unlockedLevels.Add ("Camping2");
 
-			ProgressManager.AddUnlockedLevel ("Animals3");
-			ProgressManager.AddUnlockedLevel ("Transportation3");
-			ProgressManager.AddUnlockedLevel ("Bathroom3");
-			ProgressManager.AddUnlockedLevel ("Kitchen3");
-			ProgressManager.AddUnlockedLevel ("Picnic3");
-			ProgressManager.AddUnlockedLevel ("Pond3");
-			ProgressManager.AddUnlockedLevel ("Bedroom3");
-			ProgressManager.AddUnlockedLevel ("School3");
-			ProgressManager.AddUnlockedLevel ("Playground3");
-			ProgressManager.AddUnlockedLevel ("Clothing3");
-			ProgressManager.AddUnlockedLevel ("Garden3");
-			ProgressManager.AddUnlockedLevel ("Camping3");
+			ProgressManager.unlockedLevels.Add ("Animals3");
+			ProgressManager.unlockedLevels.Add ("Transportation3");
+			ProgressManager.unlockedLevels.Add ("Bathroom3");
+			ProgressManager.unlockedLevels.Add ("Kitchen3");
+			ProgressManager.unlockedLevels.Add ("Picnic3");
+			ProgressManager.unlockedLevels.Add ("Pond3");
+			ProgressManager.unlockedLevels.Add ("Bedroom3");
+			ProgressManager.unlockedLevels.Add ("School3");
+			ProgressManager.unlockedLevels.Add ("Playground3");
+			ProgressManager.unlockedLevels.Add ("Clothing3");
+			ProgressManager.unlockedLevels.Add ("Garden3");
+			ProgressManager.unlockedLevels.Add ("Camping3");
 
+
+			GameObject kid = GameObject.FindGameObjectWithTag ("Kid");
+			kid.GetComponent<SpriteRenderer> ().sprite = Resources.Load<Sprite> ("Graphics/" + ProgressManager.chosenKid);
+			GrowKid ();
 
 			GameObject[] gos = GameObject.FindGameObjectsWithTag ("LevelIcon");
 			foreach (GameObject go in gos) {
@@ -76,6 +82,13 @@ namespace WordTree
 
 			}
 		
+		}
+
+		void GrowKid()
+		{
+			float scale = .5f;
+			GameObject kid = GameObject.FindGameObjectWithTag ("Kid");
+			LeanTween.scale (kid, new Vector3 (scale, scale, 1f), 1f);
 		}
 
 

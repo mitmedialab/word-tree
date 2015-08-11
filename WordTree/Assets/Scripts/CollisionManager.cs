@@ -345,6 +345,7 @@ namespace WordTree
 
 			GameObject hint = GameObject.Find("Hint"+letterName);
 			hint.transform.position = unoccupiedTargets [i].transform.position;
+			unoccupiedTargets [i].audio.Play ();
 			LeanTween.moveZ(hint, -3, .01f).setDelay (0f);
 			LeanTween.color (hint, Color.magenta, 1f).setDelay (0f);
 			LeanTween.color (hint, Color.black, 1f).setDelay (1f);
@@ -369,6 +370,7 @@ namespace WordTree
 
 					GameObject hint = GameObject.Find ("Hint" + go.name);
 					hint.transform.position = new Vector3(go.transform.position.x, go.transform.position.y, 3);
+					go.audio.PlayDelayed (1f);
 					LeanTween.alpha (hint, 0f, .01f);
 					LeanTween.moveZ (hint, -3, .01f).setDelay (1f);
 					LeanTween.alpha (hint, 1f, .01f).setDelay (1f); 

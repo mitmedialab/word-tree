@@ -5,7 +5,7 @@ namespace WordTree
 {
 	public class AudioManager : MonoBehaviour {
 
-		static public float clipLength = .7f;
+		static public float clipLength = .9f;
 		public float pulseLength = .1f;
 		public float scaleUp = 1.3f;
 

@@ -16,8 +16,6 @@ namespace WordTree
 				button.AddComponent<GestureManager> ().AddAndSubscribeToGestures (button);
 
 			GameObject word = GameObject.FindGameObjectWithTag ("WordObject");
-			word.GetComponent<GestureManager> ().DisableGestures (word);
-
 			word.audio.Play();
 
 			StartCoroutine (StartPulsing (.5f));
@@ -41,7 +39,7 @@ namespace WordTree
 		{
 			float y = 2;
 			
-			ObjectProperties Obj = ObjectProperties.CreateInstance (word, "WordObject", new Vector3 (0, y, 0), new Vector3 (scale, scale, 1), ProgressManager.currentLevel + "/" + word, "Words/"+word);
+			ObjectProperties Obj = ObjectProperties.CreateInstance (word, "WordObject", new Vector3 (0, y, 0), new Vector3 (scale, scale, 1), ProgressManager.currentLevel + "/" + word, word);
 			ObjectProperties.InstantiateObject (Obj);
 		}
 

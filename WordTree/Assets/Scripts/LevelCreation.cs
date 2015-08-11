@@ -27,7 +27,7 @@ namespace WordTree
 			for (int i=0; i<objects.Length; i++) {
 				scale[i] = WordProperties.GetWordProperties(objects[i]).ObjScale();
 
-				ObjectProperties obj = ObjectProperties.CreateInstance (objects [i], "WordObject", position [i], new Vector3 (scale [i], scale [i], 1), level + "/" + objects [i], "Words/" + objects [i]);
+				ObjectProperties obj = ObjectProperties.CreateInstance (objects [i], "WordObject", position [i], new Vector3 (scale [i], scale [i], 1), level + "/" + objects [i], objects [i]);
 				ObjectProperties.InstantiateObject (obj);
 			}
 

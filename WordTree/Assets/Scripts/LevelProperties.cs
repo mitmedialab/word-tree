@@ -58,7 +58,7 @@ namespace WordTree
 
 			case "Kitchen":
 				
-				return CreateInstance (new string[] {"Jug","Oven","Jar","Pan","Cup"},new Vector3(0,-2.5f,2),4f);
+				return CreateInstance (new string[] {"Jug","Rag","Jar","Pan","Cup"},new Vector3(0,-2.5f,2),4f);
 
 			case "Picnic":
 				

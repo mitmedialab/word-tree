@@ -7,6 +7,8 @@ namespace WordTree
 {
 	public class ProgressManager : MonoBehaviour {
 
+		public static string chosenKid = "";
+
 		public static string currentWord = "";
 		public static string currentLevel = "";
 		public static int currentMode = 0;
@@ -18,7 +20,7 @@ namespace WordTree
 		public static List<string> completedLevels = new List<string>();
 		public static List<string> unlockedLevels = new List<string> ();
 
-		public static int numLevels = 1;
+		public static int numLevels = 12;
 		public static List<string> levelList = new List<string> ();
 
 		public static string SetLevelOrder(int index)
@@ -108,7 +110,13 @@ namespace WordTree
 
 		public static void AddUnlockedLevel(string level)
 		{
-			unlockedLevels.Add (level);
+			if (unlockedLevels.Contains (level)) {
+				int index = levelList.IndexOf (level);
+				unlockedLevels.Add (levelList [index + 3]);
+			}
+
+			else 
+				unlockedLevels.Add (level);
 		}
 
 

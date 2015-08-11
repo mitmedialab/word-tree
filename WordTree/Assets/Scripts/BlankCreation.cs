@@ -13,27 +13,39 @@ namespace WordTree{
 
 		public static void CreateScrambledBlanks(string word, string[] sounds, string shape, string tag, string mode)
 		{
-			
-			Vector3[] posn = new Vector3[word.Length];
-			Vector3[] shuffledPosn = new Vector3[word.Length];
+
 			Color[] shuffledColors = new Color[word.Length];
+			Vector3[] posn = new Vector3[word.Length];
+			int[,] order = new int[4, word.Length];
 			
 			CreateBlanks (word, sounds, shape, tag, mode);
+
+			if (word.Length == 3){
+				order = new int[,] {{2,3,1}, {3,1,2}, {3,2,1}, {2,1,3}};
+			}
 			
-			GameObject[] gos = GameObject.FindGameObjectsWithTag (tag);
-			for (int i=0; i<gos.Length; i++)
-				posn [i] = gos [i].transform.position;
-			shuffledPosn = ShuffleArray (posn);
+			if (word.Length == 4){
+				order = new int[,] {{2,1,4,3}, {3,4,1,2}, {4,1,3,2}, {1,3,4,2}};
+			}
 			
-			for (int i=0; i<gos.Length; i++)
-				gos [i].transform.position = shuffledPosn [i];
+			if (word.Length == 5){
+				order = new int[,] {{2,1,5,3,4}, {3,5,2,4,1}, {4,1,2,5,3}, {5,4,1,3,2}};
+			}
 
 			GameObject[] blanks = GameObject.FindGameObjectsWithTag(tag);
+
 			Color[] colors = new Color[] {Color.green,Color.yellow,Color.cyan,Color.blue,Color.magenta};
 			shuffledColors = ShuffleArrayColor (colors);
 			for (int i=0; i<blanks.Length; i++) {
 				SpriteRenderer sprite = blanks[i].GetComponent<SpriteRenderer> ();
 				sprite.color = shuffledColors[i];
+			}
+
+			for (int i=0; i<blanks.Length; i++)
+				posn [i] = blanks[i].transform.position;
+			int index = Random.Range (0,4);
+			for (int i = 0; i<blanks.Length; i++) {
+				blanks [i].transform.position = posn [order[index, i]-1];
 			}
 			
 		}

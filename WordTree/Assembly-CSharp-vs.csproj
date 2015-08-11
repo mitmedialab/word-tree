@@ -51,6 +51,7 @@
      <Compile Include="Assets\Scripts\ChooseObjectDirector.cs" />
      <Compile Include="Assets\Scripts\CollisionManager.cs" />
      <Compile Include="Assets\Scripts\GestureManager.cs" />
+     <Compile Include="Assets\Scripts\IntroDirector.cs" />
      <Compile Include="Assets\Scripts\LearnSpellingDirector.cs" />
      <Compile Include="Assets\Scripts\LevelCreation.cs" />
      <Compile Include="Assets\Scripts\LevelProperties.cs" />
