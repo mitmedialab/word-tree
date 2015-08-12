@@ -40,7 +40,7 @@ namespace WordTree
 		{
 			float y = 3;
 			
-			ObjectProperties Obj = ObjectProperties.CreateInstance (word, "WordObject", new Vector3 (0, y, 0), new Vector3 (scale, scale, 1), ProgressManager.currentLevel + "/" + word, word);
+			ObjectProperties Obj = ObjectProperties.CreateInstance (word, "WordObject", new Vector3 (0, y, 0), new Vector3 (scale, scale, 1), ProgressManager.currentLevel + "/" + word, "Words/" + word);
 			ObjectProperties.InstantiateObject (Obj);
 		}
 
@@ -67,26 +67,33 @@ namespace WordTree
 
 			LeanTween.scale (tryAgain, new Vector3 (2f,2f, 1), .7f);
 			LeanTween.scale (tryAgain, new Vector3 (.5f,.5f,1), .5f).setDelay (.5f);
+
+			tryAgain.AddComponent<AudioSource> ().clip = Resources.Load ("Audio/IncorrectSound") as AudioClip;
+			if (tryAgain.audio.clip != null)
+				tryAgain.audio.Play ();
 			
 		}
 
 		public static void CelebratoryAnimation(float delayTime)
 		{	
 
-			float time = 1f;
+			float time = .3f;
 
 			GameObject go = GameObject.FindGameObjectWithTag ("WordObject");
 
-			Debug.Log ("Spinning " + go.name + " around");
-			LeanTween.rotateAround (go, Vector3.forward, 360f, time).setDelay(delayTime);
-			LeanTween.scale (go,new Vector3(go.transform.localScale.x*1.3f,go.transform.localScale.y*1.3f,1),time).setDelay (delayTime);
-			LeanTween.moveY (go, 2f, time).setDelay (delayTime);
+			Debug.Log ("Pulsing " + go.name);
+			float objScale = WordProperties.GetWordProperties (go.name).ObjScale ();
+			LeanTween.scale (go, new Vector3 (objScale * 1.5f, objScale * 1.5f, 1f), time).setDelay (delayTime);
+			LeanTween.scale (go, new Vector3 (objScale * .7f, objScale * .7f, 1), time).setDelay (delayTime + time);
+			LeanTween.scale (go, new Vector3 (objScale * 1.5f, objScale * 1.5f, 1f), time).setDelay (delayTime + 2*time);
+			LeanTween.scale (go, new Vector3 (objScale * .7f, objScale * .7f, 1), time).setDelay (delayTime + 3*time);
+			LeanTween.scale (go, new Vector3 (objScale * 1f, objScale * 1f, 1), time).setDelay (delayTime + 4 * time);
 
 			Debug.Log ("Playing clip for congrats");
 			AudioSource audio = go.AddComponent<AudioSource> ();
 			audio.clip = Resources.Load ("Audio/CongratsSound") as AudioClip;
 			audio.PlayDelayed (delayTime);
-			
+
 			
 		}
 

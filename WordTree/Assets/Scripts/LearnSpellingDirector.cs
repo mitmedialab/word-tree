@@ -39,7 +39,7 @@ namespace WordTree
 		{
 			float y = 2;
 			
-			ObjectProperties Obj = ObjectProperties.CreateInstance (word, "WordObject", new Vector3 (0, y, 0), new Vector3 (scale, scale, 1), ProgressManager.currentLevel + "/" + word, word);
+			ObjectProperties Obj = ObjectProperties.CreateInstance (word, "WordObject", new Vector3 (0, y, 0), new Vector3 (scale, scale, 1), ProgressManager.currentLevel + "/" + word, "Words/" + word);
 			ObjectProperties.InstantiateObject (Obj);
 		}
 
@@ -131,14 +131,14 @@ namespace WordTree
 		}
 
 
-		public static void CongratsAnimation(float delayTime)
+		public static void CelebratoryAnimation(float delayTime)
 		{
 
 			float time = 1f;
 
 			GameObject go = GameObject.FindGameObjectWithTag ("WordObject");
 
-			Debug.Log ("Spinning " + go.name + " around");
+			Debug.Log ("Spinning " + go.name);
 			LeanTween.rotateAround (go, Vector3.forward, 360f, time).setDelay(delayTime);
 			LeanTween.scale (go,new Vector3(go.transform.localScale.x*1.3f,go.transform.localScale.y*1.3f,1),time).setDelay (delayTime);
 			LeanTween.moveY (go, 1.5f, time).setDelay (delayTime);

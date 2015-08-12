@@ -6,7 +6,7 @@ namespace WordTree
 	public class AudioManager : MonoBehaviour {
 
 		static public float clipLength = .9f;
-		public float pulseLength = .1f;
+		public float pulseLength = .15f;
 		public float scaleUp = 1.3f;
 
 
@@ -56,16 +56,16 @@ namespace WordTree
 			yield return new WaitForSeconds (delayTime);
 
 			if (go.tag == "TargetLetter" || go.tag == "MovableLetter") {
-				LeanTween.scale (go, new Vector3 (scaleUp * WordCreation.letterScale, scaleUp * WordCreation.letterScale, 1), pulseLength);
-				LeanTween.scale (go, new Vector3 (1f * WordCreation.letterScale, 1f * WordCreation.letterScale, 1), clipLength * .5f).setDelay (clipLength * .5f - .1f);
+				LeanTween.scale (go, new Vector3 (scaleUp * WordCreation.letterScale, scaleUp * WordCreation.letterScale, 1), pulseLength).setDelay (.2f);
+				LeanTween.scale (go, new Vector3 (1f * WordCreation.letterScale, 1f * WordCreation.letterScale, 1), clipLength * .5f).setDelay (clipLength * .5f);
 			}
 
 			if (go.tag == "TargetBlank") {
 				float xScale = .7f;
 				float yScale = 1.5f;
 
-				LeanTween.scale (go, new Vector3 (1.15f * xScale, 1.15f * yScale, 1), pulseLength);
-				LeanTween.scale (go, new Vector3 (xScale, yScale, 1), clipLength * .5f).setDelay (clipLength * .5f - .1f);
+				LeanTween.scale (go, new Vector3 (1.15f * xScale, 1.15f * yScale, 1), pulseLength).setDelay (.2f);
+				LeanTween.scale (go, new Vector3 (xScale, yScale, 1), clipLength * .5f).setDelay (clipLength * .5f);
 			}
 			Debug.Log ("Pulse on " + go.name);
 
@@ -77,8 +77,8 @@ namespace WordTree
 
 			if (gos [0].tag == "TargetLetter" || gos [0].tag == "MovableLetter") {
 				for (int i=0; i < gos.Length; i++) {
-					LeanTween.scale (gos [i], new Vector3 (scaleUp * WordCreation.letterScale, scaleUp * WordCreation.letterScale, 1), pulseLength);
-					LeanTween.scale (gos [i], new Vector3 (1f * WordCreation.letterScale, 1f * WordCreation.letterScale, 1), clipLength * .5f).setDelay (clipLength * .5f - .1f);
+					LeanTween.scale (gos [i], new Vector3 (scaleUp * WordCreation.letterScale, scaleUp * WordCreation.letterScale, 1), pulseLength).setDelay(.2f);
+					LeanTween.scale (gos [i], new Vector3 (1f * WordCreation.letterScale, 1f * WordCreation.letterScale, 1), clipLength * .5f).setDelay (clipLength * .5f);
 				}
 			}
 
@@ -87,8 +87,8 @@ namespace WordTree
 				float yScale = 1.5f;
 
 				for (int i=0; i < gos.Length; i++) {
-					LeanTween.scale (gos [i], new Vector3 (1.15f * xScale, 1.15f * yScale, 1), pulseLength);
-					LeanTween.scale (gos [i], new Vector3 (xScale, yScale, 1), clipLength * .5f).setDelay (clipLength * .5f - .1f);
+					LeanTween.scale (gos [i], new Vector3 (1.15f * xScale, 1.15f * yScale, 1), pulseLength).setDelay (.2f);
+					LeanTween.scale (gos [i], new Vector3 (xScale, yScale, 1), clipLength * .5f).setDelay (clipLength * .5f);
 				}
 			}
 			Debug.Log ("Pulse on word");

@@ -132,7 +132,7 @@ namespace WordTree
 
 
 			for (int i=0; i<word.Length; i++) {
-				ObjectProperties letter = ObjectProperties.CreateInstance (letters [i], tag, position [i], new Vector3 (letterScale, letterScale, 1), "Letters/" + letters [i], sounds [i]);
+				ObjectProperties letter = ObjectProperties.CreateInstance (letters [i], tag, position [i], new Vector3 (letterScale, letterScale, 1), "Letters/" + letters [i], "Phonemes/" + sounds [i]);
 				ObjectProperties.InstantiateObject (letter);
 			}
 

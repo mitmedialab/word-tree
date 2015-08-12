@@ -14,10 +14,18 @@ namespace WordTree
 			kid.GetComponent<SpriteRenderer> ().sprite = Resources.Load<Sprite> ("Graphics/" + ProgressManager.chosenKid);
 			GrowKid ();
 
+			kid.AddComponent<AudioSource> ().clip = Resources.Load ("Audio/KidSpeaking/" + ProgressManager.currentLevel) as AudioClip;
+			if (kid.audio.clip != null) {
+				kid.audio.priority = 255;
+				kid.audio.Play ();
+			}
+
 			GameObject dir = GameObject.Find ("ChooseObjectDirector");
-			dir.AddComponent<AudioSource> ().clip = Resources.Load ("Audio/" + ProgressManager.currentLevel) as AudioClip;
-			if (dir.audio.clip != null)
+			dir.AddComponent<AudioSource> ().clip = Resources.Load ("Audio/BackgroundMusic/" + ProgressManager.currentLevel) as AudioClip;
+			if (dir.audio.clip != null) {
+				dir.audio.volume = .7f;
 				dir.audio.Play ();
+			}
 
 			GameObject button = GameObject.FindGameObjectWithTag ("Button");
 			button.AddComponent<GestureManager> ().AddAndSubscribeToGestures (button);
@@ -45,6 +53,14 @@ namespace WordTree
 			}
 
 
+		}
+
+		void Update(){
+			
+			GameObject dir = GameObject.Find ("ChooseObjectDirector");
+			if (!dir.audio.isPlaying)
+				dir.audio.Play ();
+			
 		}
 
 		void GrowKid()

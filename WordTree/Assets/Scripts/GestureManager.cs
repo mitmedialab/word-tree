@@ -13,7 +13,7 @@ namespace WordTree
 
 		public void AddAndSubscribeToGestures (GameObject go)
 		{
-			if (go.tag == "LevelIcon" || go.tag == "WordObject" || go.tag == "Button" || go.tag == "Kid") {
+			if (go.tag == "LevelIcon" || go.tag == "WordObject" || go.tag == "Button" || go.tag == "Kid" || go.name == "Lock") {
 
 				TapGesture tg = go.AddComponent<TapGesture> ();
 				tg.Tapped += tappedHandler;
@@ -108,7 +108,7 @@ namespace WordTree
 			if (go.tag == "Kid") {
 				go.GetComponent<PulseBehavior>().StopPulsing(go);
 				BounceKid(go);
-				go.AddComponent<AudioSource>().clip = Resources.Load ("Audio/Intro") as AudioClip;
+				go.AddComponent<AudioSource>().clip = Resources.Load ("Audio/KidSpeaking/Intro") as AudioClip;
 				if (go.audio.clip != null)
 					go.audio.Play ();
 
@@ -163,6 +163,12 @@ namespace WordTree
 				if (Application.loadedLevelName == "6. Sound Game")
 					CollisionManager.ShowSoundHint ();
 			}
+
+			if (go.name == "Lock") {
+				ProgressManager.UnlockAllLevels ();
+				go.GetComponent<SpriteRenderer> ().sprite = Resources.Load<Sprite> ("Graphics/LockOpen");
+			}
+				
 
 
 
@@ -247,9 +253,11 @@ namespace WordTree
 			LeanTween.move (kid, posn, 1f);
 			LeanTween.alpha (kid, 0f, .1f).setDelay (.9f);
 
-			kid.AddComponent<AudioSource> ().clip = Resources.Load ("Audio/TumbleSound") as AudioClip;
-			if (kid.audio.clip != null)
-				kid.audio.Play ();
+			if (Application.loadedLevelName == "2. Word Tree") {
+				kid.AddComponent<AudioSource> ().clip = Resources.Load ("Audio/TumbleSound") as AudioClip;
+				if (kid.audio.clip != null)
+					kid.audio.Play ();
+			}
 		}
 
 		void BounceKid(GameObject kid)

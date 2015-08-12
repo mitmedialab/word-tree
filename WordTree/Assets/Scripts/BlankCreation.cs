@@ -135,7 +135,7 @@ namespace WordTree{
 			}
 
 			for (int i=0; i<word.Length; i++) {
-				ObjectProperties blank = ObjectProperties.CreateInstance (letterArray [i], tag, position [i], new Vector3 (xScale, yScale, 1), shape, sounds [i]);
+				ObjectProperties blank = ObjectProperties.CreateInstance (letterArray [i], tag, position [i], new Vector3 (xScale, yScale, 1), shape, "Phonemes/" + sounds [i]);
 				ObjectProperties.InstantiateObject (blank);
 			}
 

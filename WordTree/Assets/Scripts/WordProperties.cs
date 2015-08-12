@@ -113,7 +113,7 @@ namespace WordTree
 				
 			case "Jar":
 				
-				return CreateInstance(new string[] {"J","O-short","R"}, .5f);
+				return CreateInstance(new string[] {"J","O-short","R-end"}, .5f);
 
 			case "Jug":
 				

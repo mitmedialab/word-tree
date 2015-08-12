@@ -42,7 +42,7 @@ namespace WordTree
 						GameObject audioManager = GameObject.Find ("AudioManager");
 						audioManager.GetComponent<AudioManager>().SpellOutWord(tar);
 
-						LearnSpellingDirector.CongratsAnimation((tar.Length+1) * AudioManager.clipLength);
+						LearnSpellingDirector.CelebratoryAnimation((tar.Length+1.5f) * AudioManager.clipLength);
 
 						ProgressManager.AddCompletedWord (ProgressManager.currentWord);
 
