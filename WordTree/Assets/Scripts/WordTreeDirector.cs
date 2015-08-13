@@ -22,6 +22,15 @@ namespace WordTree
 			if (dir.audio.clip != null)
 				dir.audio.Play ();
 
+			GameObject home = GameObject.Find ("HomeButton");
+			home.AddComponent<GestureManager> ().AddAndSubscribeToGestures (home);
+
+			GameObject Lock = GameObject.Find (ProgressManager.lockStatus);
+			if (ProgressManager.lockStatus == "")
+				Lock = GameObject.Find ("LockClosed");
+			Lock.AddComponent<GestureManager> ().AddAndSubscribeToGestures (Lock);
+			LeanTween.moveZ (Lock, -2f, .01f);
+
 
 			GameObject[] gos = GameObject.FindGameObjectsWithTag ("LevelIcon");
 			foreach (GameObject go in gos) {
@@ -48,6 +57,9 @@ namespace WordTree
 
 
 			}
+
+			if (ProgressManager.lockStatus == "LockOpen")
+				ProgressManager.UnlockAllLevels ();
 		
 		}
 
@@ -60,11 +72,18 @@ namespace WordTree
 		}
 
 
+
 		void GrowKid()
 		{
 			float scale = .5f;
 			GameObject kid = GameObject.FindGameObjectWithTag ("Kid");
 			LeanTween.scale (kid, new Vector3 (scale, scale, 1f), 1f);
+			LeanTween.rotateAround (kid, Vector3.forward, 360f, 1f);
+
+			if (ProgressManager.currentLevel != "") {
+				kid.transform.position = GameObject.Find (ProgressManager.currentLevel + ProgressManager.currentMode).transform.position;
+				LeanTween.move (kid, new Vector3 (-7.5f, -3.5f, -2), 1f);
+			}
 		}
 
 

@@ -11,7 +11,7 @@ namespace WordTree
 			float[] scale = new float[objects.Length];
 
 			if (objects.Length == 5) {
-				float x1 = 8;
+				float x1 = 6;
 				float x2 = 3;
 				float y1 = 2.5f;
 

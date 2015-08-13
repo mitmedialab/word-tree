@@ -59,30 +59,30 @@ namespace WordTree
 			if (gos.Length == 3) {
 
 				posn = new Vector3[3] {
-					new Vector3 (-7, 0, z),
-					new Vector3 (6, y2, z),
-					new Vector3 (8, -y1, z)
+					new Vector3 (-6, 0, z),
+					new Vector3 (5, y2, z),
+					new Vector3 (7, -y1, z)
 				};
 			}
 
 			if (gos.Length == 4) {
 
 				posn = new Vector3[4] {
-					new Vector3 (-8, -y1, z),
-					new Vector3 (-6, y2, z),
-					new Vector3 (6, y2, z),
-					new Vector3 (8, -y1, z)
+					new Vector3 (-7, -y1, z),
+					new Vector3 (-5, y2, z),
+					new Vector3 (5, y2, z),
+					new Vector3 (7, -y1, z)
 				};
 			}
 			
 			if (gos.Length == 5) {
 
 				posn = new Vector3[5] {
-					new Vector3 (-8, -y2, z),
-					new Vector3 (-6, y2, z),
-					new Vector3 (5, y1, z),
-					new Vector3 (9, 0, z),
-					new Vector3 (8, -y1, z)
+					new Vector3 (-7, -y2, z),
+					new Vector3 (-5, y2, z),
+					new Vector3 (4, y1, z),
+					new Vector3 (8, 0, z),
+					new Vector3 (7, -y1, z)
 				};
 			}
 

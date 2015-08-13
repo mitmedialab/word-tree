@@ -13,7 +13,7 @@ namespace WordTree
 
 		public void AddAndSubscribeToGestures (GameObject go)
 		{
-			if (go.tag == "LevelIcon" || go.tag == "WordObject" || go.tag == "Button" || go.tag == "Kid" || go.name == "Lock") {
+			if (go.tag == "LevelIcon" || go.tag == "WordObject" || go.tag == "Button" || go.tag == "Kid" || go.tag == "Lock") {
 
 				TapGesture tg = go.AddComponent<TapGesture> ();
 				tg.Tapped += tappedHandler;
@@ -117,7 +117,7 @@ namespace WordTree
 			}
 
 			if (go.tag == "LevelIcon") {
-				ShrinkKid(go.transform.position);
+				ShrinkKid(new Vector3(go.transform.position.x, go.transform.position.y, -2));
 
 				ProgressManager.currentLevel = go.name.Substring(0,go.name.Length-1);
 				StartCoroutine(LoadLevel ("3. Choose Object",1f));
@@ -145,7 +145,10 @@ namespace WordTree
 			if (go.tag == "WordObject" && Application.loadedLevelName != "3. Choose Object")
 				go.audio.Play ();
 
-			if (go.name == "HomeButton") {
+			if (go.name == "HomeButton")
+				Application.LoadLevel ("1. Intro");
+
+			if (go.name == "TreeButton") {
 				ShrinkKid(go.transform.position);
 
 				StartCoroutine(LoadLevel ("2. Word Tree",1f));
@@ -164,9 +167,34 @@ namespace WordTree
 					CollisionManager.ShowSoundHint ();
 			}
 
-			if (go.name == "Lock") {
+			if (go.name == "LockClosed") {
 				ProgressManager.UnlockAllLevels ();
-				go.GetComponent<SpriteRenderer> ().sprite = Resources.Load<Sprite> ("Graphics/LockOpen");
+				ProgressManager.lockStatus = "LockOpen";
+
+				LeanTween.moveZ (go, 3f, .01f);
+				go.GetComponent<GestureManager>().DisableGestures(go);
+
+				GameObject lockOpen = GameObject.Find ("LockOpen");
+				LeanTween.moveZ (lockOpen,-2f,.01f);
+				lockOpen.AddComponent<GestureManager>().AddAndSubscribeToGestures(lockOpen);
+
+			}
+
+			if (go.name == "LockOpen") {
+				ProgressManager.RelockLevels ();
+				ProgressManager.lockStatus = "LockClosed";
+
+				LeanTween.moveZ (go, 3f, .01f);
+				go.GetComponent<GestureManager>().DisableGestures(go);
+				
+				GameObject lockClosed = GameObject.Find ("LockClosed");
+				LeanTween.moveZ (lockClosed,-2f,.01f);
+				lockClosed.AddComponent<GestureManager>().AddAndSubscribeToGestures(lockClosed);
+			}
+
+			if (go.tag == "Button") {
+				LeanTween.color (go, Color.grey, .01f);
+				LeanTween.color (go, Color.white, .01f).setDelay (.2f);
 			}
 				
 

@@ -19,8 +19,7 @@ namespace WordTree
 			if (dir.audio.clip != null)
 				dir.audio.Play ();
 
-			GameObject Lock = GameObject.Find ("Lock");
-			Lock.AddComponent<GestureManager> ().AddAndSubscribeToGestures (Lock);
+			ProgressManager.lockStatus = "";
 	
 		}
 

@@ -8,6 +8,7 @@ namespace WordTree
 	public class ProgressManager : MonoBehaviour {
 
 		public static string chosenKid = "";
+		public static string lockStatus = "";
 
 		public static string currentWord = "";
 		public static string currentLevel = "";
@@ -156,44 +157,33 @@ namespace WordTree
 
 		public static void UnlockAllLevels()
 		{
-			ProgressManager.unlockedLevels.Add ("Animals1");
-			ProgressManager.unlockedLevels.Add ("Transportation1");
-			ProgressManager.unlockedLevels.Add ("Bathroom1");
-			ProgressManager.unlockedLevels.Add ("Kitchen1");
-			ProgressManager.unlockedLevels.Add ("Picnic1");
-			ProgressManager.unlockedLevels.Add ("Pond1");
-			ProgressManager.unlockedLevels.Add ("Bedroom1");
-			ProgressManager.unlockedLevels.Add ("School1");
-			ProgressManager.unlockedLevels.Add ("Playground1");
-			ProgressManager.unlockedLevels.Add ("Clothing1");
-			ProgressManager.unlockedLevels.Add ("Garden1");
-			ProgressManager.unlockedLevels.Add ("Camping1");
-			
-			ProgressManager.unlockedLevels.Add ("Animals2");
-			ProgressManager.unlockedLevels.Add ("Transportation2");
-			ProgressManager.unlockedLevels.Add ("Bathroom2");
-			ProgressManager.unlockedLevels.Add ("Kitchen2");
-			ProgressManager.unlockedLevels.Add ("Picnic2");
-			ProgressManager.unlockedLevels.Add ("Pond2");
-			ProgressManager.unlockedLevels.Add ("Bedroom2");
-			ProgressManager.unlockedLevels.Add ("School2");
-			ProgressManager.unlockedLevels.Add ("Playground2");
-			ProgressManager.unlockedLevels.Add ("Clothing2");
-			ProgressManager.unlockedLevels.Add ("Garden2");
-			ProgressManager.unlockedLevels.Add ("Camping2");
-			
-			ProgressManager.unlockedLevels.Add ("Animals3");
-			ProgressManager.unlockedLevels.Add ("Transportation3");
-			ProgressManager.unlockedLevels.Add ("Bathroom3");
-			ProgressManager.unlockedLevels.Add ("Kitchen3");
-			ProgressManager.unlockedLevels.Add ("Picnic3");
-			ProgressManager.unlockedLevels.Add ("Pond3");
-			ProgressManager.unlockedLevels.Add ("Bedroom3");
-			ProgressManager.unlockedLevels.Add ("School3");
-			ProgressManager.unlockedLevels.Add ("Playground3");
-			ProgressManager.unlockedLevels.Add ("Clothing3");
-			ProgressManager.unlockedLevels.Add ("Garden3");
-			ProgressManager.unlockedLevels.Add ("Camping3");
+			GameObject[] gos = GameObject.FindGameObjectsWithTag ("LevelIcon");
+			foreach (GameObject go in gos) {
+				Color color = go.renderer.material.color;
+				color.a = 1f;
+				go.renderer.material.color = color;
+				go.GetComponent<SpriteRenderer>().color = Color.grey;
+				
+				go.AddComponent<GestureManager>().AddAndSubscribeToGestures(go);
+				if (!ProgressManager.IsLevelUnlocked(go.name))
+					go.AddComponent<PulseBehavior> ().StartPulsing (go);
+			}
+		}
+
+		public static void RelockLevels()
+		{
+			GameObject[] gos = GameObject.FindGameObjectsWithTag ("LevelIcon");
+			foreach (GameObject go in gos) {
+				
+				if (!ProgressManager.IsLevelUnlocked (go.name)) {
+					Color color = go.renderer.material.color;
+					color.a = 0f;
+					go.renderer.material.color = color;
+					go.GetComponent<PulseBehavior>().StopPulsing(go);
+					go.transform.localScale = new Vector3(.5f, .5f, 1);
+					go.GetComponent<GestureManager>().DisableGestures(go);
+				}
+			}
 		}
 
 

@@ -79,7 +79,7 @@ namespace WordTree
 
 						SpellingGameDirector.SpellOutWord();
 
-						SpellingGameDirector.CelebratoryAnimation((mov.Length+1) * AudioManager.clipLength);
+						SpellingGameDirector.CelebratoryAnimation((mov.Length+1.5f) * AudioManager.clipLength);
 
 						ProgressManager.AddCompletedWord (ProgressManager.currentWord);
 
@@ -136,7 +136,7 @@ namespace WordTree
 						GameObject audioManager = GameObject.Find ("AudioManager");
 						audioManager.GetComponent<AudioManager>().SpellOutWord(tar);
 						
-						SoundGameDirector.CelebratoryAnimation ((mov.Length + 1) * AudioManager.clipLength);
+						SoundGameDirector.CelebratoryAnimation ((mov.Length + 1.5f) * AudioManager.clipLength);
 
 						ProgressManager.AddCompletedWord (ProgressManager.currentWord);
 						
