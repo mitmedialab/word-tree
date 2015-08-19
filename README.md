@@ -4,7 +4,10 @@ A Unity app designed to help childrne learn English letter-sound correspondence,
 ## Build and Run
 This tablet app was built and tested with Unity 4.6.2 and MonoDevelop 4.0.1.
 
-## Configuration
+## Image and Sound Credits
+Images were found at ...
+
+The speech used in this app was recorded by Jacqueline Kory Westlund. Other sounds were used from ... 
 
 ## Submodules
 You don't need to pull in these submodules for the main project to run (the necessary scripts or dlls have been copied into the Assets/Plugins folder), but if you want their source, extra examples, prefabs, etc, then you can.
@@ -20,4 +23,8 @@ Note that the MainCamera in the Unity scene needs a CameraLayer2D component atta
 [LeanTween] (https://github.com/dentedpixel/LeanTween/ "LeanTween git") is a library for animating sprites ([docs here] (http://dentedpixel.com/LeanTweenDocumentation/classes/LeanTween.html "LeanTween docs")).
 
 If you pull in the submodule, you can get the examples, prefabs, etc. The necessary .cs file is in the word-tree Assets/Plugins folder already.
+
+## TODO
+- Auto-save the game after each level; keep track of which levels have been unlocked
+- Remove the big red X and the 'slap' sound that occur when you get words wrong; make it more friendly!
  
