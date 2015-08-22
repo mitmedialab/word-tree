@@ -51,7 +51,7 @@
  <HintPath>C:/Program Files (x86)/Unity/Editor/Data/UnityExtensions/Unity/GUISystem/4.6.5/UnityEngine.UI.dll</HintPath>
  </Reference>
  <Reference Include="TouchScript">
- <HintPath>C:/Users/Stacy/Documents/UROP - PRG Media Lab/word-tree/WordTree/Assets/Plugins/TouchScript.dll</HintPath>
+ <HintPath>C:/Users/Stacy/Documents/UROP/word-tree/WordTree/Assets/Plugins/TouchScript.dll</HintPath>
  </Reference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
