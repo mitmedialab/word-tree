@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-//Manage audio events for sound-blending
+//Manages audio events for sound-blending
 namespace WordTree
 {
 	public class AudioManager : MonoBehaviour {
