@@ -113,7 +113,7 @@ namespace WordTree
 		}
 
 		//Check if level has been completed, i.e. if all words have been completed
-		//Return true if level completed, otherwise returns false
+		//Return true if level completed, otherwise return false
 		bool CheckCompletedLevel()
 		{
 			int numCompleted = 0; //counter for number of words completed in the scene
@@ -152,6 +152,7 @@ namespace WordTree
 		}
 
 		//Initialize background object
+		//Takes in the file name for background image, desired position of image, and scale of image.
 		void CreateBackGround(string name, Vector3 posn, float scale)
 		{
 			//Find background object

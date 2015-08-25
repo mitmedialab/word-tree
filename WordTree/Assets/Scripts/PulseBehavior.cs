@@ -13,7 +13,7 @@ namespace WordTree
 		public void StartPulsing (GameObject go, float delayTime = 0)
 		{
 			float scaleUpBy = 1.2f; // how much to scale up object by
-			float time = Random.Range (.8f,1.0f); // time to complete one pulse, randomized
+			float time = Random.Range (.8f,1.0f); // time to complete one pulse, randomized so each object is pulsing at different rate (looks better)
 			
 			LeanTween.scale(go, new Vector3(go.transform.localScale.x * scaleUpBy, go.transform.localScale.y * scaleUpBy, 
 			                                go.transform.localScale.z * scaleUpBy), time)

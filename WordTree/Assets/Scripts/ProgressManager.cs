@@ -3,7 +3,10 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 
-// Tracks info about how far the user has progressed through the word tree
+// Keeps track of how far the user has progressed through the word tree
+// i.e. what levels and words have been completed
+
+//TODO: auto-save game after each level
  
 
 namespace WordTree
@@ -24,8 +27,8 @@ namespace WordTree
 		public static List<string> completedLevels = new List<string>(); // list of completed levels
 		public static List<string> unlockedLevels = new List<string> (); // list of levels "unlocked" by user
 
-		public static int numLevels = 12; // total number of levels
-		public static List<string> levelList = new List<string> (); // list of all levels
+		public static int numLevels = 12; // total number of levels (and each level has three modes - types of games to play for that set of words)
+		public static List<string> levelList = new List<string> (); // list of all levels (36 currently, because 3 modes per level/category)
 
 		// set order that levels will be unlocked
 		public static string SetLevelOrder(int index)
@@ -58,7 +61,8 @@ namespace WordTree
 				return null;
 		}
 
-		// set up list of levels
+		// set up the list of levels
+		// adds on each level one by one, in the order they should be unlocked
 		public static void InitiateLevelList()
 		{
 			for (int i=1; i<=numLevels; i++) {
@@ -75,9 +79,10 @@ namespace WordTree
 		// unlock next level - new level icon appears on word tree
 		public static void UnlockNextLevel(string level)
 		{
-			int index = -1;
+			int index = -1; // index of the level in levelList
 
 			// find level just completed by user in levelList
+			// add on the appropriate number (1,2, or 3) to level name to distinguish which mode
 			if (ProgressManager.currentMode == 1)
 				index = levelList.IndexOf (level + "1");
 			if (ProgressManager.currentMode == 2)
@@ -94,15 +99,15 @@ namespace WordTree
 		// update completed word list
 		public static void AddCompletedWord(string word)
 		{ 
-			// add to completedWordsLearn list if scene is Learn Spelling
+			// add word to completedWordsLearn list if scene is Learn Spelling
 			if (Application.loadedLevelName == "4. Learn Spelling")
 				completedWordsLearn.Add (word);
 
-			// add to completedWordsSpell list if scene is Spelling Game
+			// add word to completedWordsSpell list if scene is Spelling Game
 			if (Application.loadedLevelName == "5. Spelling Game")
 				completedWordsSpell.Add (word);
 
-			// add to completedWordsSound list if scene is Sound Game
+			// add word to completedWordsSound list if scene is Sound Game
 			if (Application.loadedLevelName == "6. Sound Game")
 				completedWordsSound.Add (word);
 		}

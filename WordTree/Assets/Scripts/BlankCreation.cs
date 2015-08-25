@@ -2,8 +2,8 @@
 using System.Collections;
 
 //Handles instantiating blanks - creates blank object for each letter in word.
-//Two types of games that need to create blanks:
-// 1. Spelling Game - user drags letters to target rectangle blanks (make user spell the word)
+//Two types of games where we need to create blanks:
+// 1. Spelling Game - user drags letters to target rectangle blanks (make user spell the word themselves)
 // 2. Sound Game - user drags movable circle blanks (representing phonemes) to letters (make user match the phoneme to the correct letter)
 //Currently works for words with 3-5 letters.
 
@@ -11,25 +11,27 @@ namespace WordTree{
 
 	public class BlankCreation : MonoBehaviour {
 
-		static float xScale; // horizontal scale of blank
-		static float yScale; // vertical scale of blank
+		static float xScale; // horizontal default scale of blank
+		static float yScale; // vertical default scale of blank
 		static float blankWidth = 2.5f; //distance between each blank, i.e. how spread out the blanks are
 		static int y; // y position of blank
 		static int z; // z position of blank
 
 		//Create blanks that are scrambled randomly
+		//so we can test the user on matching sound blanks to letters
 		public static void CreateScrambledBlanks(string word, string[] sounds, string shape, string tag, string mode)
 		{
 
 			Color[] shuffledColors = new Color[word.Length]; //contains possible colors to be assigned to blanks
-			Vector3[] posn = new Vector3[word.Length]; //contains the position for each blank
+			Vector3[] posn = new Vector3[word.Length]; //contains the initial position for each blank
 			int[,] order = new int[4, word.Length]; //contains pre-specified ways to rearrange the order of blanks
 
-			//Instantiate blanks
+			//Instantiate blanks - normal order
 			CreateBlanks (word, sounds, shape, tag, mode);
 
-			//Set 4 different shuffling templates for each possible word length
+			// Preset 4 different shuffling templates for each possible word length
 			// i.e. different ways to shuffle the letters in the word
+			// to make sure that blanks are indeed shuffled well
 			if (word.Length == 3){
 				order = new int[,] {{2,3,1}, {3,1,2}, {3,2,1}, {2,1,3}};
 			}
@@ -46,22 +48,21 @@ namespace WordTree{
 			//Set possible colors
 			Color[] colors = new Color[] {Color.green,Color.yellow,Color.cyan,Color.blue,Color.magenta};
 
-			//Shuffle colors and assign to blanks
-			//i.e. change blanks to random colors
+			//Change blanks to random colors
 			shuffledColors = ShuffleArrayColor (colors);
 			for (int i=0; i<blanks.Length; i++) {
 				SpriteRenderer sprite = blanks[i].GetComponent<SpriteRenderer> ();
 				sprite.color = shuffledColors[i];
 			}
 
-			//Get position of each blank
+			//Get initial position of each blank
 			for (int i=0; i<blanks.Length; i++)
 				posn [i] = blanks[i].transform.position;
 
-			//int index: for determining which shuffling template to use (4 to choose from currently)
+			//int index: randomly pick a preset shuffling template (4 to choose from currently)
 			int index = Random.Range (0,4);
-			//Shuffle blank positions
-			//i.e. swap around positions of blanks
+			//Shuffle blanks positions
+			//i.e. move blanks to new positions
 			for (int i = 0; i<blanks.Length; i++) {
 				blanks [i].transform.position = posn [order[index, i]-1];
 			}
@@ -98,7 +99,7 @@ namespace WordTree{
 		// tag of object (MovableBlank or TargetBlank), and type of game (SpellingGame or SoundGame).
 		public static void CreateBlanks(string word, string[] sounds, string shape, string tag, string mode)
 		{
-			//Set scale, according to blank shape
+			//Set default scale, according to blank shape
 			if (shape == "Rectangle") {
 				xScale = .7f;
 				yScale = 1.5f;
@@ -116,9 +117,9 @@ namespace WordTree{
 
 			//Set z position
 			if (tag == "MovableBlank")
-				z = -2;
+				z = -2; // if draggable, set in front
 			if (tag == "TargetBlank")
-				z = 0; 
+				z = 0;  // if static, set in back
 
 
 			//Want the word in the format of an array of uppercase letters instead of a string
