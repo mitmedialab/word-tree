@@ -1,29 +1,36 @@
 ﻿using UnityEngine;
 using System.Collections;
 
+// Stores properties of each level, including what words are included in the level, 
+// and the position and scale of the backgound image customized for that level.
+
 namespace WordTree
 {
 	public class LevelProperties : ScriptableObject {
 
-		string[] words;
-		Vector3 backgroundPosn;
-		float backgroundScale;
+		string[] words; // words in the level
+		Vector3 backgroundPosn; // position of background object
+		float backgroundScale; // scale of background object
 
+		// Get words in the level
 		public string[] Words()
 		{
 			return this.words;
 		}
 
+		// Get position of background object
 		public Vector3 BackgroundPosn()
 		{
 			return this.backgroundPosn;
 		}
 
+		// Get scale of background object
 		public float BackgroundScale()
 		{
 			return this.backgroundScale;
 		}
 
+		// Set properties of the level
 		void Init (string[] words, Vector3 backgroundPosn, float backgroundScale)
 		{
 			this.words = words;
@@ -31,7 +38,7 @@ namespace WordTree
 			this.backgroundScale = backgroundScale;
 		}
 		
-		
+		// Create an instance of LevelProperties, with the properties of the level set
 		static LevelProperties CreateInstance(string[] words, Vector3 backgroundPosn, float backgroundScale)
 		{
 			LevelProperties prop = ScriptableObject.CreateInstance<LevelProperties> ();
@@ -39,6 +46,8 @@ namespace WordTree
 			return prop;
 		}
 
+		// Get properties of the level
+		// info for all levels stored here
 		public static LevelProperties GetLevelProperties(string level)
 		{
 			switch (level) 

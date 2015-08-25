@@ -1,31 +1,36 @@
 ﻿using UnityEngine;
 using System.Collections;
 
+// Stores properties of each word, including its phonemes and the scale of its object/image.
+
 namespace WordTree
 {
 
 	public class WordProperties : ScriptableObject {
 
-		string[] phonemes;
-		float objScale;
+		string[] phonemes; // phonemes in the word
+		float objScale; // scale of word object
 
+		// Get phonemes in the word
 		public string[] Phonemes()
 		{
 			return this.phonemes;
 		}
-		
+
+		// Get scale of word object
 		public float ObjScale()
 		{
 			return this.objScale;
 		}
 
+		// Set the word's properties
 		void Init (string[] phonemes, float objScale)
 		{
 			this.phonemes = phonemes;
 			this.objScale = objScale;
 		}
 		
-		
+		// Create an instance of WordProperties with the desired properties set
 		static WordProperties CreateInstance(string[] phonemes, float objScale)
 		{
 			WordProperties prop = ScriptableObject.CreateInstance<WordProperties> ();
@@ -34,6 +39,8 @@ namespace WordTree
 		}
 
 
+		// Get properties of a word
+		// info for all words stored here
 		public static WordProperties GetWordProperties(string word)
 		{
 			switch (word) 

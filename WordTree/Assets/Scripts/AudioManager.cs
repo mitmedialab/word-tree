@@ -8,11 +8,10 @@ namespace WordTree
 
 
 		static public float clipLength = .9f; //time allocated to play audio clip for each letter
-		public float pulseLength = .15f; //time to complete single scale up
-		public float scaleUp = 1.3f; //scale object up by this much, only for letters (not blanks)
+		public float pulseLength = .15f; //time to scale up object once
+		public float scaleUp = 1.3f; //how much to scale up object by
 
-		//Play audio for each letter of word one after another, then play audio for actual word
-		//Supports words of length 3-5 letters
+		//Play each letter's sound and pulse it, then do same for entire word
 		public void SpellOutWord(GameObject[] gos)
 		{
 			
@@ -35,11 +34,11 @@ namespace WordTree
 			//Check if object has audio clip attached
 			if (go.audio != null && go.audio.clip != null) {
 				Debug.Log ("Playing clip for " + go.name);
-				//Delay playing audio clip for (index * clipLength) seconds
+				//Wait for previous letters to complete before playing audio clip
 				go.audio.PlayDelayed (index*clipLength);  
 			}
 
-			//Wait for (index * clipLength) seconds before pulsing
+			//Wait for previous letters to complete before pulsing
 			StartCoroutine(PulseLetter (go,index*clipLength));
 		}
 
@@ -50,11 +49,11 @@ namespace WordTree
 			GameObject go = GameObject.FindGameObjectWithTag ("WordObject");
 			if (go.audio != null && go.audio.clip != null) {
 				Debug.Log ("Playing clip for " + go.name);
-				//Delay playing audio clip for (index * clipLength) seconds
+				//Wait for previous letters to complete before playing audio clip
 				go.audio.PlayDelayed ((gos.Length) * clipLength);
 			}
 
-			//Wait for (gos.Length * clipLength) seconds before pulsing
+			//Wait for all letters to complete before pulsing
 			StartCoroutine (PulseWord (gos,(gos.Length)*clipLength));
 
 		}
@@ -62,24 +61,26 @@ namespace WordTree
 		//Pulse letter once, i.e. grow and then shrink the letter back to original size
 		IEnumerator PulseLetter(GameObject go, float delayTime)
 		{
-			//Delay the pulsing by delayTime seconds
+			//Delay the pulsing
 			yield return new WaitForSeconds (delayTime);
 
 			//if object is a letter
 			if (go.tag == "TargetLetter" || go.tag == "MovableLetter") {
+				// scale up letter
 				LeanTween.scale (go, new Vector3 (scaleUp * WordCreation.letterScale, scaleUp * WordCreation.letterScale, 1), pulseLength).setDelay (.2f);
+				// scale down letter back to original size
 				LeanTween.scale (go, new Vector3 (1f * WordCreation.letterScale, 1f * WordCreation.letterScale, 1), clipLength * .5f).setDelay (clipLength * .5f);
 			}
 
-			//if object is a rectangle blank
+			//if object is a blank
 			if (go.tag == "TargetBlank") {
-				//Set desired scale size of rectangle blank
-				float xScale = .7f; // horizontal scale of rectangle blank
-				float yScale = 1.5f; // vertical scale of rectangele blank
+				//Set desired scale of blank
+				float xScale = .7f; // horizontal scale of blank
+				float yScale = 1.5f; // vertical scale of blank
 
-				//Scale up rectangle blank by 1.15 times its original size
+				//Scale up blank
 				LeanTween.scale (go, new Vector3 (1.15f * xScale, 1.15f * yScale, 1), pulseLength).setDelay (.2f);
-				//Scale down rectangle blank back to original size
+				//Scale down blank back to original size
 				LeanTween.scale (go, new Vector3 (xScale, yScale, 1), clipLength * .5f).setDelay (clipLength * .5f);
 			}
 			Debug.Log ("Pulse on " + go.name);
@@ -89,27 +90,29 @@ namespace WordTree
 		//Pulse word once, i.e. grown and then shrink all the letters of the word at the same time
 		IEnumerator PulseWord(GameObject[] gos, float delayTime)
 		{	
-			//Delay the pulsing by delayTime seconds
+			//Wait for pulsing of all letters to complete
 			yield return new WaitForSeconds (delayTime);
 
 			//if object is a letter
 			if (gos [0].tag == "TargetLetter" || gos [0].tag == "MovableLetter") {
 				for (int i=0; i < gos.Length; i++) {
+					// scale up letter
 					LeanTween.scale (gos [i], new Vector3 (scaleUp * WordCreation.letterScale, scaleUp * WordCreation.letterScale, 1), pulseLength).setDelay(.2f);
+					// scale down letter to original size
 					LeanTween.scale (gos [i], new Vector3 (1f * WordCreation.letterScale, 1f * WordCreation.letterScale, 1), clipLength * .5f).setDelay (clipLength * .5f);
 				}
 			}
 
-			//if object is a rectangle blank
+			//if object is a blank
 			if (gos [0].tag == "TargetBlank") {
-				//Set desired scale size of rectangle blank
-				float xScale = .7f; // horizontal scale of rectangle blank
-				float yScale = 1.5f; // vertical scale of rectangle blank
+				//Set desired scale of blank
+				float xScale = .7f; // horizontal scale of blank
+				float yScale = 1.5f; // vertical scale of blank
 
 				for (int i=0; i < gos.Length; i++) {
-					//Scale up rectangle blank by 1.15 times its original size
+					//Scale up blank
 					LeanTween.scale (gos [i], new Vector3 (1.15f * xScale, 1.15f * yScale, 1), pulseLength).setDelay (.2f);
-					//Scale down rectangle blank back to original size
+					//Scale down blank back to original size
 					LeanTween.scale (gos [i], new Vector3 (xScale, yScale, 1), clipLength * .5f).setDelay (clipLength * .5f);
 				}
 			}

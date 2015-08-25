@@ -1,8 +1,8 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-//Main controller for Scene 3: "Choose Object"
-//Initializes scene and creates objects, loads narrator kid, handles touch events and words completed
+//Main game controller for "Choose Object" scene
+//Creates word objects for user to pick, sets up kid avatar
 
 namespace WordTree
 {
@@ -14,11 +14,11 @@ namespace WordTree
 			//Create objects and background
 			LoadLevel (ProgressManager.currentLevel);
 
-			//Find narrator kid, load image for kid
+			//Set up kid
 			GameObject kid = GameObject.FindGameObjectWithTag ("Kid");
 			kid.GetComponent<SpriteRenderer> ().sprite = Resources.Load<Sprite> ("Graphics/" + ProgressManager.chosenKid);
 
-			//Grow Animation for kid
+			//Play Grow Animation for kid
 			GrowKid ();
 
 			//Load audio for kid
@@ -26,22 +26,22 @@ namespace WordTree
 			//Check if audio clip is attached
 			if (kid.audio.clip != null) {
 				kid.audio.priority = 255;
-				//Play audio - kid speaks
+				//Play audio clip attached to kid if there is one
 				kid.audio.Play ();
 			}
 
-			//Find ChooseObjectDirector
+			//Find ChooseObjectDirector gameObject
 			GameObject dir = GameObject.Find ("ChooseObjectDirector");
 			//Load background music for scene onto ChooseObjectDirector
 			dir.AddComponent<AudioSource> ().clip = Resources.Load ("Audio/BackgroundMusic/" + ProgressManager.currentLevel) as AudioClip;
 			//Check if audio clip is attached
 			if (dir.audio.clip != null) {
 				dir.audio.volume = .7f;
-				//Start playing background music
+				//Start playing background music if attached
 				dir.audio.Play ();
 			}
 
-			//Find buttons and suscribe to gestures
+			//Subscribe buttons to touch gestures
 			GameObject button = GameObject.FindGameObjectWithTag ("Button");
 			button.AddComponent<GestureManager> ().AddAndSubscribeToGestures (button);
 
@@ -53,7 +53,7 @@ namespace WordTree
 				Debug.Log ("Started pulsing for " + go.name);
 				go.GetComponent<PulseBehavior> ().StartPulsing (go);
 
-				//Check for word completion
+				//Check if word has been completed by user
 
 				//If word not completed, darken and fade out object
 				if (!ProgressManager.IsWordCompleted(go.name)){
@@ -66,9 +66,9 @@ namespace WordTree
 				}
 			}
 
-			//Check for level completion
+			//Check if this level has been completed, i.e. if all words in the level have been completed
 			if (CheckCompletedLevel ()) {
-				//If level completed, add to completedLevels and unlock the next level
+				//If level completed, add to completedLevels list and unlock the next level
 				ProgressManager.AddCompletedLevel (ProgressManager.currentLevel);
 				ProgressManager.UnlockNextLevel (ProgressManager.currentLevel);
 			}
@@ -92,9 +92,9 @@ namespace WordTree
 		//Animation to grow kid to desired size
 		void GrowKid()
 		{
-			float scale = .5f; //desired scale size to grow kid to
+			float scale = .5f; //desired scale to grow kid to
 			GameObject kid = GameObject.FindGameObjectWithTag ("Kid");
-			//Scale up kid
+			//Scale up kid to desired size
 			LeanTween.scale (kid, new Vector3 (scale, scale, 1f), 1f);
 		}
 
@@ -113,35 +113,36 @@ namespace WordTree
 		}
 
 		//Check if level has been completed, i.e. if all words have been completed
-		//Returns true if level completed, otherwise returns false
+		//Return true if level completed, otherwise returns false
 		bool CheckCompletedLevel()
 		{
-			int numCompleted = 0; //keep track of number of words completed
+			int numCompleted = 0; //counter for number of words completed in the scene
 
 			//Find word objects
 			GameObject[] gos = GameObject.FindGameObjectsWithTag ("WordObject");
 			foreach (GameObject go in gos) {
-				//For learn spelling mode
+				//if current scene is Learn Spelling
 				if (ProgressManager.currentMode == 1){
-					//increment numCompleted if word completed
+					//completed a word; update counter
 					if (ProgressManager.completedWordsLearn.Contains (go.name))
 						numCompleted = numCompleted + 1;
 				}
-				//For spelling game mode
+				//if current scene is Spelling Game
 				if (ProgressManager.currentMode == 2){
-					//increment numCompleted if word completed
+					//completed a word; update counter
 					if (ProgressManager.completedWordsSpell.Contains (go.name))
 						numCompleted = numCompleted + 1;
 				}
-				//For sound game mode
+				//if current scene is Sound Game
 				if (ProgressManager.currentMode == 3){
-					//increment numCompleted if word completed
+					//completed a word; update counter
 					if (ProgressManager.completedWordsSound.Contains (go.name))
 						numCompleted = numCompleted + 1;
 				}
 			}
 
 			//check if all words have been completed
+			//by comparing number of completed words with the number of word objects in the scene
 			if (numCompleted == gos.Length) {
 				Debug.Log ("Level Completed: " + ProgressManager.currentLevel);
 				return true;
@@ -175,7 +176,8 @@ namespace WordTree
 		//string level: name of level to load
 		void LoadLevel(string level)
 		{
-			//Get properties of the level, including the words, background position, and background scale
+			//Get properties of the level, including the words included in the level, the position of the background image, 
+			// and the desired scale of the background image
 			LevelProperties prop = LevelProperties.GetLevelProperties (level);
 			string[] words = prop.Words ();
 			Vector3 backgroundPosn = prop.BackgroundPosn ();

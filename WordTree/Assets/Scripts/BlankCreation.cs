@@ -1,17 +1,18 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-//Handles instantiating blanks programmatically
-//Two types of blanks: 
-// 1. Rectangle: for Spelling Game, drag letters to target rectangle blanks
-// 2. Circle: for Sound Game, drag movable circle blanks (sound bubble) to correct letter
+//Handles instantiating blanks - creates blank object for each letter in word.
+//Two types of games that need to create blanks:
+// 1. Spelling Game - user drags letters to target rectangle blanks (make user spell the word)
+// 2. Sound Game - user drags movable circle blanks (representing phonemes) to letters (make user match the phoneme to the correct letter)
+//Currently works for words with 3-5 letters.
 
 namespace WordTree{
 
 	public class BlankCreation : MonoBehaviour {
 
-		static float xScale; // horizontal scale size of blank
-		static float yScale; // vertical scale size of blank
+		static float xScale; // horizontal scale of blank
+		static float yScale; // vertical scale of blank
 		static float blankWidth = 2.5f; //distance between each blank, i.e. how spread out the blanks are
 		static int y; // y position of blank
 		static int z; // z position of blank
@@ -22,12 +23,13 @@ namespace WordTree{
 
 			Color[] shuffledColors = new Color[word.Length]; //contains possible colors to be assigned to blanks
 			Vector3[] posn = new Vector3[word.Length]; //contains the position for each blank
-			int[,] order = new int[4, word.Length]; //contains pre-programmed shuffled orders, i.e. ways to rearrange the order of blanks
+			int[,] order = new int[4, word.Length]; //contains pre-specified ways to rearrange the order of blanks
 
-			//Instantiate normal blanks
+			//Instantiate blanks
 			CreateBlanks (word, sounds, shape, tag, mode);
 
-			//Set 4 different shuffled orders for each possible word length
+			//Set 4 different shuffling templates for each possible word length
+			// i.e. different ways to shuffle the letters in the word
 			if (word.Length == 3){
 				order = new int[,] {{2,3,1}, {3,1,2}, {3,2,1}, {2,1,3}};
 			}
@@ -38,13 +40,14 @@ namespace WordTree{
 				order = new int[,] {{2,1,5,3,4}, {3,5,2,4,1}, {4,1,2,5,3}, {5,4,1,3,2}};
 			}
 
-			//Find all blanks with specified tag
+			//Find all blanks
 			GameObject[] blanks = GameObject.FindGameObjectsWithTag(tag);
 
 			//Set possible colors
 			Color[] colors = new Color[] {Color.green,Color.yellow,Color.cyan,Color.blue,Color.magenta};
 
 			//Shuffle colors and assign to blanks
+			//i.e. change blanks to random colors
 			shuffledColors = ShuffleArrayColor (colors);
 			for (int i=0; i<blanks.Length; i++) {
 				SpriteRenderer sprite = blanks[i].GetComponent<SpriteRenderer> ();
@@ -55,9 +58,10 @@ namespace WordTree{
 			for (int i=0; i<blanks.Length; i++)
 				posn [i] = blanks[i].transform.position;
 
-			//int index: for determining which shuffled order to use (4 to choose from currently)
+			//int index: for determining which shuffling template to use (4 to choose from currently)
 			int index = Random.Range (0,4);
-			//Reassign positions of each blank, according to shuffled order chosen
+			//Shuffle blank positions
+			//i.e. swap around positions of blanks
 			for (int i = 0; i<blanks.Length; i++) {
 				blanks [i].transform.position = posn [order[index, i]-1];
 			}
@@ -90,11 +94,11 @@ namespace WordTree{
 			return array;
 		}
 
-		//Instantiate blanks. Takes in the desired word, phonemes, blank shape (Rectangle or Circle), tag (MovableBlank or TargetBlank),
-		// and game mode (SpellingGame or SoundGame).
+		//Instantiate blanks. Takes in the desired word, phonemes in the word, shape of the blank (Rectangle or Circle),
+		// tag of object (MovableBlank or TargetBlank), and type of game (SpellingGame or SoundGame).
 		public static void CreateBlanks(string word, string[] sounds, string shape, string tag, string mode)
 		{
-			//Set scale size
+			//Set scale, according to blank shape
 			if (shape == "Rectangle") {
 				xScale = .7f;
 				yScale = 1.5f;
@@ -104,7 +108,7 @@ namespace WordTree{
 				yScale = .3f;
 			}
 
-			//Set y position
+			//Set y position, according to game mode
 			if (mode == "SpellingGame")
 				y = -3;
 			if (mode == "SoundGame")
@@ -112,20 +116,20 @@ namespace WordTree{
 
 			//Set z position
 			if (tag == "MovableBlank")
-				z = -2; //movable objects set at z = -2
+				z = -2;
 			if (tag == "TargetBlank")
-				z = 0; //static objects set at z = 0
+				z = 0; 
 
 
-			//Create array of uppercase letters
+			//Want the word in the format of an array of uppercase letters instead of a string
 			string[] letterArray = new string[word.Length];
 			for (int i=0; i<word.Length; i++) {
 				char letter = System.Char.ToUpper (word [i]);
 				letterArray [i] = System.Char.ToString (letter);
 			}
 
-			//Set x positions of each letter, for each possible word length
-			//Word is centered, letters evenly spaced out according to blankWidth
+			//Set x position of each blank, for each possible word length
+			//Word is centered at x = 0, letters are evenly spaced out according to blankWidth
 			Vector3[] position = new Vector3[word.Length];
 			if (word.Length == 3) {
 				position = new Vector3[3]{
@@ -152,7 +156,7 @@ namespace WordTree{
 				};
 			}
 
-			//Assign properties according to input given, then instantiate each blank
+			//Assign properties for the blanks according to input given, then instantiate each blank
 			for (int i=0; i<word.Length; i++) {
 				ObjectProperties blank = ObjectProperties.CreateInstance (letterArray [i], tag, position [i], new Vector3 (xScale, yScale, 1), shape, "Phonemes/" + sounds [i]);
 				ObjectProperties.InstantiateObject (blank);
