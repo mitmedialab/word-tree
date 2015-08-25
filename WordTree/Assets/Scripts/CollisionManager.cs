@@ -129,7 +129,7 @@ namespace WordTree
 						// mark the correct letters by changing their color
 						MarkCorrectLetters(1f);
 
-						// move letters back to original position
+						// move incorrect letters back to original position
 						ResetIncorrectLetters(1f);
 
 						// play word's sound
@@ -367,8 +367,7 @@ namespace WordTree
 			foreach (GameObject target in unoccupiedTargets)
 			{
 				if (target.GetComponent<CollisionManager> () == null) {
-					// add collisionManager component
-					// so OnTriggerEnter2D function can be called 
+					// add collision manager so we get trigger enter events
 					// when a movable object enters the collider of a target object
 					target.AddComponent<CollisionManager> ();
 					Debug.Log ("Enabled collisions for target " + go.name);
@@ -547,8 +546,8 @@ namespace WordTree
 					// letter fades out and moves behind background to z = 3
 					LeanTween.alpha (hint, 0f, .01f).setDelay (3f);
 					LeanTween.moveZ (hint, 3, .01f).setDelay (3f);
-
-					// sound object rotates back around and fades in
+				
+					// sound blank rotates back around and fades in
 					LeanTween.alpha (go, 1f, .5f).setDelay (3f);
 					LeanTween.rotateAround (go, Vector3.left, 180, 1f).setDelay (3f);
 

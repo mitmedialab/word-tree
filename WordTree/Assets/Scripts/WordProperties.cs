@@ -40,7 +40,7 @@ namespace WordTree
 
 
 		// Get properties of a word
-		// info for all words stored here
+		// info for all words stored here, so we can access when instantiating a word
 		public static WordProperties GetWordProperties(string word)
 		{
 			switch (word) 

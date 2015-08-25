@@ -46,7 +46,7 @@ namespace WordTree
 				rg.Released += releasedHandler;
 				Debug.Log (go.name + " subscribed to release events");
 
-				// add Transformer2D component
+				// add transformer component so object automatically moves on drag
 				go.AddComponent<Transformer2D>();
 
 			}
@@ -288,11 +288,13 @@ namespace WordTree
 			PlaySound(gesture.gameObject);
 
 			// If the loaded scene is Spelling Game, re-enable collisions
+			// when a letter is first pressed after resetting incorrect letters
 			if (Application.loadedLevelName == "5. Spelling Game") {
 				CollisionManager.EnableCollisions(gesture.gameObject,"TargetBlank");
 			}
 
 			// if the loaded scene is the sound game, re-enable collisions
+			// when a sound blank is first pressed after resetting incorrect blanks
 			if (Application.loadedLevelName == "6. Sound Game") {
 				CollisionManager.EnableCollisions(gesture.gameObject,"TargetLetter");
 			}
@@ -340,7 +342,7 @@ namespace WordTree
 				// move the object with the drag
 				gesture.gameObject.transform.position = new Vector3(hit2d.Point.x,hit2d.Point.y,-2);
 
-				// TODO make sure the objects being dragged can't fly off the screen
+				// TODO make sure the object being dragged can't fly off the screen
 
 			
 			}

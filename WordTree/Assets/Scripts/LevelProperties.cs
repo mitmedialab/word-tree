@@ -47,7 +47,7 @@ namespace WordTree
 		}
 
 		// Get properties of the level
-		// info for all levels stored here
+		// info for all levels stored here, so we can access when instantiating a level
 		public static LevelProperties GetLevelProperties(string level)
 		{
 			switch (level) 
