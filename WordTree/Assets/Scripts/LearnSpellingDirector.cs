@@ -21,7 +21,7 @@ namespace WordTree
 
 			// play word's sound
 			GameObject word = GameObject.FindGameObjectWithTag ("WordObject");
-			word.audio.Play();
+			word.GetComponent<AudioSource>().Play();
 
 			// start pulsing movable letters
 			StartCoroutine (StartPulsing (.5f));
@@ -193,6 +193,12 @@ namespace WordTree
 			audio.PlayDelayed (delayTime);
 
 		}
+		void Update ()
+		{
+			// if user presses escape or 'back' button on android, exit program
+			if (Input.GetKeyDown (KeyCode.Escape))
+				Application.Quit ();
+		}	
 
 
 	}

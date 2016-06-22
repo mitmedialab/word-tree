@@ -2,7 +2,6 @@
 using System;
 using System.Collections;
 using TouchScript.Gestures;
-using TouchScript.Gestures.Simple;
 using TouchScript.Behaviors;
 using TouchScript.Hit;
 
@@ -26,12 +25,12 @@ namespace WordTree
 
 			if (go.tag == "MovableLetter" || go.tag == "MovableBlank") {
 				// add pan gesture component
-				PanGesture pg = go.AddComponent<PanGesture> ();
+				TransformGesture pg = go.AddComponent<TransformGesture> ();
 				pg.CombineTouchesInterval = 0.2f;
 				// subscribe to pan events
-				pg.PanStarted += panStartedHandler;
-				pg.Panned += pannedHandler;
-				pg.PanCompleted += panCompleteHandler;
+				pg.TransformStarted += panStartedHandler;
+				pg.Transformed += pannedHandler;
+				pg.TransformCompleted += panCompleteHandler;
 				Debug.Log (go.name + " subscribed to pan events");
 
 				// add press gesture component
@@ -47,7 +46,7 @@ namespace WordTree
 				Debug.Log (go.name + " subscribed to release events");
 
 				// add transformer component so object automatically moves on drag
-				go.AddComponent<Transformer2D>();
+				go.AddComponent<Transformer>();
 
 			}
 
@@ -70,7 +69,7 @@ namespace WordTree
 			}
 
 			// enable pan events
-			PanGesture pg = go.GetComponent<PanGesture> ();
+			TransformGesture pg = go.GetComponent<TransformGesture> ();
 			if (pg != null) {
 				pg.enabled = true;
 			}
@@ -100,7 +99,7 @@ namespace WordTree
 			}
 
 			// disable pan events
-			PanGesture pg = go.GetComponent<PanGesture> ();
+			TransformGesture pg = go.GetComponent<TransformGesture> ();
 			if (pg != null) {
 				pg.enabled = false;
 			}
@@ -126,16 +125,15 @@ namespace WordTree
 			// get the gesture that was sent to us
 			// this gesture will tell us what object was touched
 			TapGesture gesture = sender as TapGesture;
-			ITouchHit hit;
+			TouchHit hit;
 			GameObject go = gesture.gameObject;
 
 			// get info about where the hit object was located when the gesture was
 			// recognized - i.e., where on the object (in screen dimensions) did
 			// the tap occur?
 			if (gesture.GetTargetHitResult (out hit)) { 
-				// want the info as a 2D point
-				ITouchHit2D hit2d = (ITouchHit2D)hit; 
-				Debug.Log ("TAP on " + gesture.gameObject.name + " at " + hit2d.Point);
+				// want the info as a 2D point 
+				Debug.Log ("TAP on " + gesture.gameObject.name + " at " + hit.Point);
 			}
 
 			// if kid is tapped - stop pulsing kid, make kid bounce up and down, make kid speak
@@ -143,8 +141,8 @@ namespace WordTree
 				go.GetComponent<PulseBehavior>().StopPulsing(go);
 				BounceKid(go);
 				go.AddComponent<AudioSource>().clip = Resources.Load ("Audio/KidSpeaking/Intro") as AudioClip;
-				if (go.audio.clip != null)
-					go.audio.Play ();
+				if (go.GetComponent<AudioSource>().clip != null)
+					go.GetComponent<AudioSource>().Play ();
 
 				// keep track of which kid was tapped on (boy or girl)
 				ProgressManager.chosenKid = go.name;
@@ -194,7 +192,7 @@ namespace WordTree
 
 			// play word's sound when tapped
 			if (go.tag == "WordObject" && Application.loadedLevelName != "3. Choose Object")
-				go.audio.Play ();
+				go.GetComponent<AudioSource>().Play ();
 
 			// if home button is tapped, go back to the intro scene
 			if (go.name == "HomeButton")
@@ -213,7 +211,7 @@ namespace WordTree
 
 			// if sound button is tapped, play word's sound
 			if (go.name == "SoundButton")
-				GameObject.FindGameObjectWithTag ("WordObject").audio.Play ();
+				GameObject.FindGameObjectWithTag ("WordObject").GetComponent<AudioSource>().Play ();
 
 			// if hint button is tapped, show a hint
 			if (go.name == "HintButton") {
@@ -276,12 +274,12 @@ namespace WordTree
 			PressGesture gesture = sender as PressGesture;
 
 			// get info about where the hit object was located when the gesture was recognized
-			ITouchHit hit;
+			TouchHit hit;
 
 			if (gesture.GetTargetHitResult (out hit)) {
 				// want the info as a 2D point
-				ITouchHit2D hit2d = (ITouchHit2D)hit; 
-				Debug.Log ("PRESS on " + gesture.gameObject.name + " at " + hit2d.Point);
+ 
+				Debug.Log ("PRESS on " + gesture.gameObject.name + " at " + hit.Point);
 			}
 
 			// play audio clip attached to object when pressed
@@ -311,15 +309,15 @@ namespace WordTree
 		private void panStartedHandler (object sender, EventArgs e)
 		{
 			// get the gesture that was sent to us, which will tell us which object was pressed
-			PanGesture gesture = sender as PanGesture;
+			TransformGesture gesture = sender as TransformGesture;
 
 			// get info about where the hit object was located when the gesture was recognized
-			ITouchHit hit;
+			TouchHit hit;
 
 			if (gesture.GetTargetHitResult (out hit)) {
 				// want the info as a 2D point
-				ITouchHit2D hit2d = (ITouchHit2D)hit; 
-				Debug.Log ("PAN STARTED on " + gesture.gameObject.name + " at " + hit2d.Point);
+				//ITouchHit2D hit2d = (ITouchHit2D)hit; 
+				Debug.Log ("PAN STARTED on " + gesture.gameObject.name + " at " + hit.Point);
 			
 			}
 
@@ -329,18 +327,18 @@ namespace WordTree
 		private void pannedHandler (object sender, EventArgs e)
 		{
 			// get the gesture that was sent to us, which will tell us which object was pressed
-			PanGesture gesture = sender as PanGesture;
+			TransformGesture gesture = sender as TransformGesture;
 
 			// get info about where the hit object was located when the gesture was recognized
-			ITouchHit hit;
+			TouchHit hit;
 			
 			if (gesture.GetTargetHitResult (out hit)) {
 				// want the info as a 2D point
-				ITouchHit2D hit2d = (ITouchHit2D)hit; 
-				Debug.Log ("PAN on " + gesture.gameObject.name + " at " + hit2d.Point);
+
+				Debug.Log ("PAN on " + gesture.gameObject.name + " at " + hit.Point);
 
 				// move the object with the drag
-				gesture.gameObject.transform.position = new Vector3(hit2d.Point.x,hit2d.Point.y,-2);
+				gesture.gameObject.transform.position = new Vector3(hit.Point.x,hit.Point.y,-2);
 
 				// TODO make sure the object being dragged can't fly off the screen
 
@@ -386,8 +384,8 @@ namespace WordTree
 				// Load audio onto kid
 				kid.AddComponent<AudioSource> ().clip = Resources.Load ("Audio/TumbleSound") as AudioClip;
 				// Play audio clip attached to kid if it exists
-				if (kid.audio.clip != null)
-					kid.audio.Play ();
+				if (kid.GetComponent<AudioSource>().clip != null)
+					kid.GetComponent<AudioSource>().Play ();
 			}
 		}
 
@@ -411,7 +409,7 @@ namespace WordTree
 			// Play audio clip attached to object if it exists
 			if (auds != null && auds.clip != null) {
 				Debug.Log("Playing clip for " + go.name);
-				go.audio.Play ();  
+				go.GetComponent<AudioSource>().Play ();  
 			} 
 			else {
 				Debug.Log ("No clip found for " + go.name);

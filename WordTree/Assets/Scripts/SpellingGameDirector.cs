@@ -107,8 +107,8 @@ namespace WordTree
 
 			// play "slap" sound
 			tryAgain.AddComponent<AudioSource> ().clip = Resources.Load ("Audio/IncorrectSound") as AudioClip;
-			if (tryAgain.audio.clip != null)
-				tryAgain.audio.Play ();
+			if (tryAgain.GetComponent<AudioSource>().clip != null)
+				tryAgain.GetComponent<AudioSource>().Play ();
 			
 		}
 
@@ -138,6 +138,12 @@ namespace WordTree
 
 			
 		}
+			void Update ()
+		{
+			// if user presses escape or 'back' button on android, exit program
+			if (Input.GetKeyDown (KeyCode.Escape))
+				Application.Quit ();
+		}	
 
 
 	}
