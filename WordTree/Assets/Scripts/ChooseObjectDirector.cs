@@ -97,7 +97,7 @@ namespace WordTree
 		//Animation to grow kid to desired size
 		void GrowKid()
 		{
-			float scale = .5f; //desired scale to grow kid to
+			float scale = .3f; //desired scale to grow kid to
 			GameObject kid = GameObject.FindGameObjectWithTag ("Kid");
 			//Scale up kid to desired size
 			LeanTween.scale (kid, new Vector3 (scale, scale, 1f), 1f);

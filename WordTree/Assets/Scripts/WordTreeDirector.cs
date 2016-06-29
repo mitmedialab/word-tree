@@ -108,7 +108,7 @@ namespace WordTree
 		// Grow kid animation - kid spirals into place
 		void GrowKid()
 		{
-			float scale = .5f; // scale to grow kid to
+			float scale = .25f; // scale to grow kid to
 			GameObject kid = GameObject.FindGameObjectWithTag ("Kid"); 
 
 			// grow kid to specified size

@@ -7,8 +7,8 @@ This tablet app was built and tested with Unity 4.6.2, Unity 5.3.5 and MonoDevel
 ## Image and Sound Credits
 Images were found at:
 - [Iconfinder] (http://www.iconfinder.com "Iconfinder") for level icons and buttons, licensed for noncommercial and commercial use with no link back required;
-- [Pixabay] (http://www.pixabay.com "Pixabay") for word images,  backgrounds, any other miscellaneous things (tree, jar, sound blank, locks, red X), also licensed for noncommercial and commercial use with no attribution required;
-- [MyCuteGraphics] (http://www.mycutegraphics.com "MyCuteGraphics") for letters, girl and boy avatars, licensed for use in personal educational apps but not more than that. 
+- [Pixabay] (http://www.pixabay.com "Pixabay") for word images, girl and boy avatars, letters, backgrounds, any other miscellaneous things (tree, jar, sound blank, locks, red X), also licensed for noncommercial and commercial use with no attribution required;
+ 
 
 The speech used in this app  from:
 - Speech was recorded by Jacqueline Kory Westlund
