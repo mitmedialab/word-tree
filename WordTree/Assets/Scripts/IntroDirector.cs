@@ -10,16 +10,20 @@ namespace WordTree
 
 		// Called on start, used to initialize stuff
 		void Start () {
+			//create instance of grestureManager
+			GestureManager gestureManager =GameObject.FindGameObjectWithTag(Constants.Tags.TAG_GESTURE_MANAGER)
+				.GetComponent<GestureManager> ();
+
 
 			// find kid
-			GameObject[] kids = GameObject.FindGameObjectsWithTag ("Kid");
+			GameObject[] kids = GameObject.FindGameObjectsWithTag (Constants.Tags.TAG_KID);
 
 			foreach (GameObject kid in kids) {
 				// start pulsing kid
 				kid.AddComponent<PulseBehavior> ().StartPulsing (kid);
 
 				// subscribe kid to touch gestures
-				kid.AddComponent<GestureManager> ().AddAndSubscribeToGestures (kid);
+				gestureManager.AddAndSubscribeToGestures (kid);
 			}
 
 			// find IntroDirector
@@ -42,6 +46,7 @@ namespace WordTree
 			//If attached audio (background music) has stopped playing, play the audio
 			//For keeping background music playing in a loop
 			if (!dir.GetComponent<AudioSource>().isPlaying)
+				dir.GetComponent<AudioSource>().volume = .25f;
 				dir.GetComponent<AudioSource>().Play ();
 			// if user presses escape or 'back' button on android, exit program
 			if (Input.GetKeyDown (KeyCode.Escape))

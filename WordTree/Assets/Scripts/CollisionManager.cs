@@ -12,11 +12,15 @@ using System.Linq;
 namespace WordTree
 {
 	public class CollisionManager : MonoBehaviour {
+		GestureManager gestureManager;
 
 		// Called when an object enters the collider of another object
 		// Set the target object as the trigger
 		void OnTriggerEnter2D (Collider2D other)
 		{
+			GestureManager gestureManager = GameObject.
+				FindGameObjectWithTag(Constants.Tags.TAG_GESTURE_MANAGER).GetComponent<GestureManager> ();
+
 
 			// if the current scene is Learn Spelling
 			if (Application.loadedLevelName == "4. Learn Spelling") {
@@ -50,7 +54,7 @@ namespace WordTree
 					if (CheckCompletedWord ()) {
 
 						// sound out the word
-						GameObject[] tar = GameObject.FindGameObjectsWithTag("TargetLetter");
+						GameObject[] tar = GameObject.FindGameObjectsWithTag(Constants.Tags.TAG_TARGET_LETTER);
 						GameObject audioManager = GameObject.Find ("AudioManager");
 						audioManager.GetComponent<AudioManager>().SpellOutWord(tar);
 
@@ -71,7 +75,7 @@ namespace WordTree
 				Debug.Log ("Collision on " + other.name);
 
 				// disable touch gestures for letter
-				other.gameObject.GetComponent<GestureManager>().DisableGestures(other.gameObject);
+				gestureManager.DisableGestures(other.gameObject);
 
 				// stop pulsing letter
 				other.gameObject.GetComponent<PulseBehavior>().StopPulsing (other.gameObject);
@@ -99,11 +103,11 @@ namespace WordTree
 					if (CheckCorrectSpelling("TargetBlank")){
 
 						// find all movable letters
-						GameObject[] mov = GameObject.FindGameObjectsWithTag("MovableLetter");
+						GameObject[] mov = GameObject.FindGameObjectsWithTag(Constants.Tags.TAG_MOVABLE_LETTER);
 
 						// disable touch gestures for sound & hint buttons
-						GameObject.Find ("SoundButton").GetComponent<GestureManager>().DisableGestures(GameObject.Find ("SoundButton"));
-						GameObject.Find ("HintButton").GetComponent<GestureManager>().DisableGestures(GameObject.Find ("HintButton"));
+						gestureManager.DisableGestures(GameObject.Find ("SoundButton"));
+						gestureManager.GetComponent<GestureManager>().DisableGestures(GameObject.Find ("HintButton"));
 
 						// mark all correct letters by changing their colors
 						MarkCorrectLetters(0f);
@@ -132,7 +136,7 @@ namespace WordTree
 						ResetIncorrectLetters(1f);
 
 						// play word's sound
-						GameObject.FindGameObjectWithTag("WordObject").GetComponent<AudioSource>().PlayDelayed (1f);
+						GameObject.FindGameObjectWithTag(Constants.Tags.TAG_WORD_OBJECT).GetComponent<AudioSource>().PlayDelayed (1f);
 
 						// flash hint button to call attention to it
 						FlashHintButton (2f);
@@ -150,7 +154,7 @@ namespace WordTree
 				Debug.Log ("Collision on " + other.name);
 
 				// disable touch gestures for sound blank
-				other.gameObject.GetComponent<GestureManager> ().DisableGestures (other.gameObject);
+				gestureManager.DisableGestures (other.gameObject);
 
 				// stop pulsing sound blank
 				other.gameObject.GetComponent<PulseBehavior> ().StopPulsing (other.gameObject);
@@ -180,17 +184,17 @@ namespace WordTree
 					if (CheckCorrectSpelling ("TargetLetter")) {
 
 						// find all sound blanks
-						GameObject[] mov = GameObject.FindGameObjectsWithTag ("MovableBlank");
+						GameObject[] mov = GameObject.FindGameObjectsWithTag (Constants.Tags.TAG_MOVABLE_BLANK);
 
 						// disable touch gestures for sound + hint buttons
-						GameObject.Find ("SoundButton").GetComponent<GestureManager> ().DisableGestures (GameObject.Find ("SoundButton"));
-						GameObject.Find ("HintButton").GetComponent<GestureManager> ().DisableGestures (GameObject.Find ("HintButton"));
+						gestureManager.DisableGestures (GameObject.Find ("SoundButton"));
+						gestureManager.DisableGestures (GameObject.Find ("HintButton"));
 
 						// reset correct sound blanks back to original size
 						MarkCorrectSounds (0f);
 
 						// sound out word
-						GameObject[] tar = GameObject.FindGameObjectsWithTag("TargetLetter");
+						GameObject[] tar = GameObject.FindGameObjectsWithTag(Constants.Tags.TAG_TARGET_LETTER);
 						GameObject audioManager = GameObject.Find ("AudioManager");
 						audioManager.GetComponent<AudioManager>().SpellOutWord(tar);
 
@@ -215,7 +219,7 @@ namespace WordTree
 						ResetIncorrectSounds (1f);
 
 						// play word's sound 
-						GameObject.FindGameObjectWithTag("WordObject").GetComponent<AudioSource>().PlayDelayed (1f);
+						GameObject.FindGameObjectWithTag(Constants.Tags.TAG_WORD_OBJECT).GetComponent<AudioSource>().PlayDelayed (1f);
 
 						// flash hint button to call attention to it
 						FlashHintButton (2f);

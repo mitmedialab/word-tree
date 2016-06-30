@@ -31,6 +31,7 @@ namespace WordTree
 
 			// play background music if attached to director
 			if (dir.GetComponent<AudioSource>().clip != null)
+				dir.GetComponent<AudioSource>().volume = .25f;
 				dir.GetComponent<AudioSource>().Play ();
 
 			// subscribe home button to gestures
@@ -107,7 +108,7 @@ namespace WordTree
 		// Grow kid animation - kid spirals into place
 		void GrowKid()
 		{
-			float scale = .5f; // scale to grow kid to
+			float scale = .25f; // scale to grow kid to
 			GameObject kid = GameObject.FindGameObjectWithTag ("Kid"); 
 
 			// grow kid to specified size
