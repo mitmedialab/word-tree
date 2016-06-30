@@ -15,7 +15,7 @@ namespace WordTree
 		// subscribes an object to all relevant gestures, according to its tag
 		public void AddAndSubscribeToGestures (GameObject go)
 		{
-			if (go.tag == "LevelIcon" || go.tag == "WordObject" || go.tag == "Button" || go.tag == "Kid" || go.tag == "Lock") {
+			if (go.tag == Constants.Tags.TAG_LEVEL_ICON|| go.tag == Constants.Tags.TAG_WORD_OBJECT || go.tag == Constants.Tags.TAG_BUTTON|| go.tag == Constants.Tags.TAG_KID || go.tag == Constants.Tags.TAG_LOCK) {
 				// add tap gesture component
 				TapGesture tg = go.AddComponent<TapGesture> ();
 				// subscribe to tap events
@@ -23,7 +23,7 @@ namespace WordTree
 				Debug.Log (go.name + " subscribed to tap events");
 			}
 
-			if (go.tag == "MovableLetter" || go.tag == "MovableBlank") {
+			if (go.tag == Constants.Tags.TAG_MOVABLE_LETTER || go.tag == Constants.Tags.TAG_MOVABLE_BLANK) {
 				// add pan gesture component
 				TransformGesture pg = go.AddComponent<TransformGesture> ();
 				pg.CombineTouchesInterval = 0.2f;
@@ -50,7 +50,7 @@ namespace WordTree
 
 			}
 
-			if (go.tag == "TargetLetter" || go.tag == "TargetBlank") {
+			if (go.tag == Constants.Tags.TAG_TARGET_LETTER || go.tag == Constants.Tags.TAG_TARGET_BLANK) {
 				// add press gesture component
 				PressGesture prg = go.AddComponent<PressGesture> ();
 				// subscribe to press events
@@ -137,7 +137,7 @@ namespace WordTree
 			}
 
 			// if kid is tapped - stop pulsing kid, make kid bounce up and down, make kid speak
-			if (go.tag == "Kid") {
+			if (go.tag == Constants.Tags.TAG_KID) {
 				go.GetComponent<PulseBehavior>().StopPulsing(go);
 				BounceKid(go);
 				go.AddComponent<AudioSource>().clip = Resources.Load ("Audio/KidSpeaking/Intro") as AudioClip;
@@ -152,7 +152,7 @@ namespace WordTree
 			}
 
 			// if a levelIcon is tapped on - make kid "shrink into" the levelIcon 
-			if (go.tag == "LevelIcon") {
+			if (go.tag == Constants.Tags.TAG_LEVEL_ICON) {
 				ShrinkKid(new Vector3(go.transform.position.x, go.transform.position.y, -2));
 
 				// keep track of what level Icon was tapped: stores the name of the current level
@@ -256,7 +256,7 @@ namespace WordTree
 
 			// if any button is tapped, darken the button briefly to indicate to user that 
 			// tap gesture has been registered
-			if (go.tag == "Button") {
+			if (go.tag == Constants.Tags.TAG_BUTTON) {
 				LeanTween.color (go, Color.grey, .01f);
 				LeanTween.color (go, Color.white, .01f).setDelay (.2f);
 			}
@@ -365,7 +365,7 @@ namespace WordTree
 		// Play animation for kid spiraling into level icon with sound ("Whee!")
 		void ShrinkKid(Vector3 posn)
 		{
-			GameObject kid = GameObject.FindGameObjectWithTag ("Kid");
+			GameObject kid = GameObject.FindGameObjectWithTag (Constants.Tags.TAG_KID);
 
 			// Rotate kid 360 degrees
 			LeanTween.rotateAround (kid, Vector3.forward, 360f, 1f);

@@ -6,25 +6,30 @@ using System.Collections;
 namespace WordTree
 {
 	public class SoundGameDirector : MonoBehaviour {
+		private GestureManager gestureManager;
 
 		// called on start
 		void Start () {
+			//make reference to existing gestureManager 
+			GestureManager gestureManager = GameObject.
+				FindGameObjectWithTag(Constants.Tags.TAG_GESTURE_MANAGER).GetComponent<GestureManager> ();
+
 
 			// create sound blanks, letters, and word object
 			LoadSoundGameWord (ProgressManager.currentWord);
 
 			// subscribe buttons to gestures
-			GameObject[] buttons = GameObject.FindGameObjectsWithTag ("Button");
+			GameObject[] buttons = GameObject.FindGameObjectsWithTag (Constants.Tags.TAG_BUTTON);
 			foreach (GameObject button in buttons)
 				button.AddComponent<GestureManager> ().AddAndSubscribeToGestures (button);
 
 			// sound out word
-			GameObject[] tar = GameObject.FindGameObjectsWithTag("TargetLetter");
+			GameObject[] tar = GameObject.FindGameObjectsWithTag(Constants.Tags.TAG_TARGET_LETTER);
 			GameObject audioManager = GameObject.Find ("AudioManager");
 			audioManager.GetComponent<AudioManager>().SpellOutWord(tar);
 
 			// start pulsing sound blanks
-			GameObject[] mov = GameObject.FindGameObjectsWithTag ("MovableBlank");
+			GameObject[] mov = GameObject.FindGameObjectsWithTag (Constants.Tags.TAG_MOVABLE_BLANK);
 			foreach (GameObject go in mov) {
 				go.GetComponent<PulseBehavior> ().StartPulsing (go, (tar.Length+1) * AudioManager.clipLength);
 			}
@@ -51,7 +56,7 @@ namespace WordTree
 			CreateJars ();
 
 			// make letters black color
-			GameObject[] tar = GameObject.FindGameObjectsWithTag ("TargetLetter");
+			GameObject[] tar = GameObject.FindGameObjectsWithTag (Constants.Tags.TAG_TARGET_LETTER);
 			foreach (GameObject go in tar)
 				go.GetComponent<SpriteRenderer> ().color = Color.black;
 			
@@ -71,7 +76,7 @@ namespace WordTree
 		void CreateJars()
 		{
 			// find letters
-			GameObject[] gos = GameObject.FindGameObjectsWithTag ("TargetLetter");
+			GameObject[] gos = GameObject.FindGameObjectsWithTag (Constants.Tags.TAG_TARGET_LETTER);
 
 			foreach (GameObject go in gos) {
 
@@ -115,7 +120,7 @@ namespace WordTree
 			
 			float time = .3f; // time to complete one wiggle
 			
-			GameObject go = GameObject.FindGameObjectWithTag ("WordObject");
+			GameObject go = GameObject.FindGameObjectWithTag (Constants.Tags.TAG_WORD_OBJECT);
 
 			// wiggle object sideways a few times
 			Debug.Log ("Wiggling " + go.name);
