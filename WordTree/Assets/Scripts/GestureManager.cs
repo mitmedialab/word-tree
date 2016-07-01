@@ -11,6 +11,22 @@ using TouchScript.Hit;
 namespace WordTree
 {
 	public class GestureManager : MonoBehaviour {
+		//create rectangle for screen boundaries
+		private Rect cameraRect;
+		public GameObject recentObj;
+
+
+		//creates rectangle to limit where objects can go on the screen
+		public  void Start(){
+			// store camera parameters for adjusting screen size
+			//convert camera parameters to world view for calculations
+			Vector3 bottomLeft = Camera.main.ScreenToWorldPoint (Vector3.zero);
+			Vector3 topRight = Camera.main.ScreenToWorldPoint (new Vector3 (Camera.main.pixelWidth, 
+				Camera.main.pixelHeight));
+			this.cameraRect = new Rect (bottomLeft.x, bottomLeft.y, topRight.x - bottomLeft.x, topRight.y - bottomLeft.y);
+			this.recentObj = new GameObject ();
+
+		}
 
 		// subscribes an object to all relevant gestures, according to its tag
 		public void AddAndSubscribeToGestures (GameObject go)
@@ -337,9 +353,7 @@ namespace WordTree
 
 				Debug.Log ("PAN on " + gesture.gameObject.name + " at " + hit.Point);
 
-				// move the object with the drag
-				gesture.gameObject.transform.position = new Vector3(hit.Point.x,hit.Point.y,-2);
-
+				this.recentObj = gesture.gameObject;
 				// TODO make sure the object being dragged can't fly off the screen
 
 			
@@ -415,6 +429,29 @@ namespace WordTree
 				Debug.Log ("No clip found for " + go.name);
 			}
 		}
+		void Update(){
+
+			//changes transform.position of most recently hit gameObject
+			//restricits the position of gameObject to rectangle
+
+			//changes transform.position of most recently hit gameObject
+			//restricits the position of gameObject to rectangle
+
+
+			if (this.recentObj.transform.position.x
+			    <= this.cameraRect.xMin |
+			    this.recentObj.transform.position.x
+			    >= this.cameraRect.xMax |
+			    this.recentObj.transform.position.y
+			    <= this.cameraRect.yMin |
+			    this.recentObj.transform.position.y
+			    >= this.cameraRect.yMax) {
+				transform.position = new Vector3 (Mathf.Clamp (transform.position.x, this.cameraRect.xMin, this.cameraRect.xMax),
+					Mathf.Clamp (transform.position.y, this.cameraRect.yMin, this.cameraRect.yMax), transform.position.z);
+			}
+		}
+
+
 
 		
 		
