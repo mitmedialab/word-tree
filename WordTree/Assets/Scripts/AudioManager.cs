@@ -16,15 +16,15 @@ namespace WordTree
 		public void SpellOutWord(GameObject[] gos)
 		{
 			
-			PlaySoundAndPulseLetter (gos[0], 0);
-			PlaySoundAndPulseLetter (gos[1], 1);
-			PlaySoundAndPulseLetter (gos[2], 2);
+			PlaySoundAndPulseLetter(gos[0], 0);
+			PlaySoundAndPulseLetter(gos[1], 1);
+			PlaySoundAndPulseLetter(gos[2], 2);
 			if (gos.Length >= 4)
-				PlaySoundAndPulseLetter (gos[3], 3);
+				PlaySoundAndPulseLetter(gos[3], 3);
 			if (gos.Length >= 5)
-				PlaySoundAndPulseLetter (gos[4], 4);
+				PlaySoundAndPulseLetter(gos[4], 4);
 			
-			PlaySoundAndPulseWord (gos);
+			PlaySoundAndPulseWord(gos);
 			
 		}
 
@@ -37,7 +37,7 @@ namespace WordTree
 			if (go.GetComponent<AudioSource>() != null && go.GetComponent<AudioSource>().clip != null) {
 				Debug.Log ("Playing clip for " + go.name);
 				//Wait for previous letters to complete before playing audio clip
-				go.GetComponent<AudioSource>().PlayDelayed (index*clipLength);  
+				go.GetComponent<AudioSource>().PlayDelayed(index*clipLength);  
 			}
 
 			//Wait for previous letters to complete before pulsing
@@ -49,15 +49,15 @@ namespace WordTree
 		void PlaySoundAndPulseWord(GameObject[] gos)
 		{	
 			//Check if word object has audio clip attached
-			GameObject go = GameObject.FindGameObjectWithTag (Constants.Tags.TAG_WORD_OBJECT);
+			GameObject go = GameObject.FindGameObjectWithTag(Constants.Tags.TAG_WORD_OBJECT);
 			if (go.GetComponent<AudioSource>() != null && go.GetComponent<AudioSource>().clip != null) {
 				Debug.Log ("Playing clip for " + go.name);
 				//Wait for previous letters to complete before playing audio clip
-				go.GetComponent<AudioSource>().PlayDelayed ((gos.Length) * clipLength);
+				go.GetComponent<AudioSource>().PlayDelayed((gos.Length) * clipLength);
 			}
 
 			//Wait for all letters to complete before pulsing
-			StartCoroutine (PulseWord (gos,(gos.Length)*clipLength));
+			StartCoroutine(PulseWord(gos,(gos.Length)*clipLength));
 
 		}
 
@@ -65,14 +65,14 @@ namespace WordTree
 		IEnumerator PulseLetter(GameObject go, float delayTime)
 		{
 			//Wait for specified seconds, want to time it so that letter pulses right after previous letter finishes
-			yield return new WaitForSeconds (delayTime);
+			yield return new WaitForSeconds(delayTime);
 
 			//if object is a letter
 			if (go.tag == Constants.Tags.TAG_TARGET_LETTER || go.tag == Constants.Tags.TAG_MOVABLE_LETTER) {
 				// scale up letter
-				LeanTween.scale (go, new Vector3 (scaleUp * WordCreation.letterScale, scaleUp * WordCreation.letterScale, 1), pulseLength).setDelay (.2f);
+				LeanTween.scale(go, new Vector3 (scaleUp * WordCreation.letterScale, scaleUp * WordCreation.letterScale, 1), pulseLength).setDelay (.2f);
 				// then scale down letter back to original size
-				LeanTween.scale (go, new Vector3 (1f * WordCreation.letterScale, 1f * WordCreation.letterScale, 1), clipLength * .5f).setDelay (clipLength * .5f);
+				LeanTween.scale(go, new Vector3 (1f * WordCreation.letterScale, 1f * WordCreation.letterScale, 1), clipLength * .5f).setDelay (clipLength * .5f);
 			}
 
 			//if object is a blank
@@ -82,11 +82,11 @@ namespace WordTree
 				float yScale = 1.5f; // vertical scale of blank
 
 				//Scale up blank
-				LeanTween.scale (go, new Vector3 (1.15f * xScale, 1.15f * yScale, 1), pulseLength).setDelay (.2f);
+				LeanTween.scale(go, new Vector3(1.15f * xScale, 1.15f * yScale, 1), pulseLength).setDelay (.2f);
 				//Then scale down blank back to original size
-				LeanTween.scale (go, new Vector3 (xScale, yScale, 1), clipLength * .5f).setDelay (clipLength * .5f);
+				LeanTween.scale(go, new Vector3 (xScale, yScale, 1), clipLength * .5f).setDelay (clipLength * .5f);
 			}
-			Debug.Log ("Pulse on " + go.name);
+			Debug.Log("Pulse on " + go.name);
 
 		}
 
@@ -94,15 +94,15 @@ namespace WordTree
 		IEnumerator PulseWord(GameObject[] gos, float delayTime)
 		{	
 			//Wait for pulsing of all letters to complete
-			yield return new WaitForSeconds (delayTime);
+			yield return new WaitForSeconds(delayTime);
 
 			//if object is a letter
 			if (gos [0].tag == Constants.Tags.TAG_TARGET_LETTER || gos [0].tag == Constants.Tags.TAG_MOVABLE_LETTER) {
 				for (int i=0; i < gos.Length; i++) {
 					// scale up letter
-					LeanTween.scale (gos [i], new Vector3 (scaleUp * WordCreation.letterScale, scaleUp * WordCreation.letterScale, 1), pulseLength).setDelay(.2f);
+					LeanTween.scale(gos [i], new Vector3 (scaleUp * WordCreation.letterScale, scaleUp * WordCreation.letterScale, 1), pulseLength).setDelay(.2f);
 					// then scale down letter to original size
-					LeanTween.scale (gos [i], new Vector3 (1f * WordCreation.letterScale, 1f * WordCreation.letterScale, 1), clipLength * .5f).setDelay (clipLength * .5f);
+					LeanTween.scale(gos [i], new Vector3 (1f * WordCreation.letterScale, 1f * WordCreation.letterScale, 1), clipLength * .5f).setDelay (clipLength * .5f);
 				}
 			}
 
@@ -114,9 +114,9 @@ namespace WordTree
 
 				for (int i=0; i < gos.Length; i++) {
 					//Scale up blank
-					LeanTween.scale (gos [i], new Vector3 (1.15f * xScale, 1.15f * yScale, 1), pulseLength).setDelay (.2f);
+					LeanTween.scale(gos [i], new Vector3(1.15f * xScale, 1.15f * yScale, 1), pulseLength).setDelay (.2f);
 					//Then scale down blank back to original size
-					LeanTween.scale (gos [i], new Vector3 (xScale, yScale, 1), clipLength * .5f).setDelay (clipLength * .5f);
+					LeanTween.scale(gos [i], new Vector3(xScale, yScale, 1), clipLength * .5f).setDelay (clipLength * .5f);
 				}
 			}
 			Debug.Log ("Pulse on word");
