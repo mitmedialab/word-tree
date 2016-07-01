@@ -25,8 +25,7 @@ namespace WordTree
 			Vector3 topRight = Camera.main.ScreenToWorldPoint (new Vector3 (Camera.main.pixelWidth, 
 				Camera.main.pixelHeight));
 			this.cameraRect = new Rect (bottomLeft.x, bottomLeft.y, topRight.x - bottomLeft.x, topRight.y - bottomLeft.y);
-			//give recentObj an initial value since it starts out as null
-			this.recentObj = new GameObject ();
+
 
 		}
 
@@ -434,16 +433,21 @@ namespace WordTree
 
 			//changes transform.position of most recently hit gameObject
 			//restricts the position of gameObject to rectangle
-			if (this.recentObj.transform.position.x
-			    <= this.cameraRect.xMin |
-			    this.recentObj.transform.position.x
-			    >= this.cameraRect.xMax |
-			    this.recentObj.transform.position.y
-			    <= this.cameraRect.yMin |
-			    this.recentObj.transform.position.y
-			    >= this.cameraRect.yMax) {
-				transform.position = new Vector3 (Mathf.Clamp (transform.position.x, this.cameraRect.xMin, this.cameraRect.xMax),
-					Mathf.Clamp (transform.position.y, this.cameraRect.yMin, this.cameraRect.yMax), transform.position.z);
+			//checks if recentObj is null
+			if (this.recentObj != null) {
+				//checks if object position is within boundaries
+				if (this.recentObj.transform.position.x
+				   <= this.cameraRect.xMin ||
+				   this.recentObj.transform.position.x
+				   >= this.cameraRect.xMax ||
+				   this.recentObj.transform.position.y
+				   <= this.cameraRect.yMin ||
+				   this.recentObj.transform.position.y
+				   >= this.cameraRect.yMax) {
+					//restricts object's position to rectangle with screen boundaries
+					transform.position = new Vector3 (Mathf.Clamp (transform.position.x, this.cameraRect.xMin, this.cameraRect.xMax),
+						Mathf.Clamp (transform.position.y, this.cameraRect.yMin, this.cameraRect.yMax), transform.position.z);
+				}
 			}
 		}
 
