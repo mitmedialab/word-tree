@@ -15,8 +15,6 @@ namespace WordTree
 		private Rect cameraRect;
 		//create reference for most recent object
 		private GameObject recentObj;
-
-
 		//creates rectangle to limit where objects can go on the screen
 		public  void Start(){
 			// store camera parameters for adjusting screen size
@@ -25,10 +23,7 @@ namespace WordTree
 			Vector3 topRight = Camera.main.ScreenToWorldPoint (new Vector3 (Camera.main.pixelWidth, 
 				Camera.main.pixelHeight));
 			this.cameraRect = new Rect (bottomLeft.x, bottomLeft.y, topRight.x - bottomLeft.x, topRight.y - bottomLeft.y);
-
-
 		}
-
 		// subscribes an object to all relevant gestures, according to its tag
 		public void AddAndSubscribeToGestures (GameObject go)
 		{
@@ -353,7 +348,8 @@ namespace WordTree
 				// want the info as a 2D point
 
 				Debug.Log ("PAN on " + gesture.gameObject.name + " at " + hit.Point);
-
+				//saving reference to last dragged object
+				//will check if last dragged object is within screen in Update function 
 				this.recentObj = gesture.gameObject;
 
 			
