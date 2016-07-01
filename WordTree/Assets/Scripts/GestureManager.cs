@@ -356,7 +356,6 @@ namespace WordTree
 				Debug.Log ("PAN on " + gesture.gameObject.name + " at " + hit.Point);
 
 				this.recentObj = gesture.gameObject;
-				// TODO make sure the object being dragged can't fly off the screen
 
 			
 			}
