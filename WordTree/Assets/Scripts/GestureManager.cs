@@ -13,7 +13,8 @@ namespace WordTree
 	public class GestureManager : MonoBehaviour {
 		//create rectangle for screen boundaries
 		private Rect cameraRect;
-		public GameObject recentObj;
+		//create reference for most recent object
+		private GameObject recentObj;
 
 
 		//creates rectangle to limit where objects can go on the screen
@@ -24,6 +25,7 @@ namespace WordTree
 			Vector3 topRight = Camera.main.ScreenToWorldPoint (new Vector3 (Camera.main.pixelWidth, 
 				Camera.main.pixelHeight));
 			this.cameraRect = new Rect (bottomLeft.x, bottomLeft.y, topRight.x - bottomLeft.x, topRight.y - bottomLeft.y);
+			//give recentObj an initial value since it starts out as null
 			this.recentObj = new GameObject ();
 
 		}
@@ -432,12 +434,7 @@ namespace WordTree
 		void Update(){
 
 			//changes transform.position of most recently hit gameObject
-			//restricits the position of gameObject to rectangle
-
-			//changes transform.position of most recently hit gameObject
-			//restricits the position of gameObject to rectangle
-
-
+			//restricts the position of gameObject to rectangle
 			if (this.recentObj.transform.position.x
 			    <= this.cameraRect.xMin |
 			    this.recentObj.transform.position.x
