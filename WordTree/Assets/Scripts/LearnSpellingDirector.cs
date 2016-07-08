@@ -1,12 +1,15 @@
 ﻿using UnityEngine;
 using System.Collections;
-
+using System.Collections.Generic;
 // Main game controller for "Learn Spelling" scene.
 // Creates two sets of words, handles word explosion and animations
+using System.Linq;
 
 namespace WordTree
 {
 	public class LearnSpellingDirector : MonoBehaviour {
+		// Initalize list of possible locations for letters to go
+		List<Vector3> points = new List<Vector3>();
 
 		// called on start, initialize stuff
 		void Start () {
@@ -33,6 +36,13 @@ namespace WordTree
 
 			// then enable collisions to occur
 			StartCoroutine(EnableCollisions(2));
+			//Possible regions where letters can move
+			//TODO make sure these locations are on the screen
+			points.Add(new Vector3(-5.5f, 3.5f, 0f)); 
+			points.Add(new Vector3(-6f, -3.9f, 0f));
+			points.Add(new Vector3(-6f, 0f, 0f));
+			points.Add(new Vector3(4f, 3f, 0f));
+			points.Add(new Vector3(6f, 0f, 0f));
 
 		}
 
@@ -64,77 +74,34 @@ namespace WordTree
 
 		// explode letters of word
 		// currently handles words with 3-5 letters
-		IEnumerator ExplodeWord(float delayTime)
+		IEnumerator ExplodeWord (float delayTime)
 		{
 			// wait for scene to load before exploding
-			yield return new WaitForSeconds(delayTime);
+			yield return new WaitForSeconds (delayTime);
 
 			// find movable letters
-			GameObject[] gos = GameObject.FindGameObjectsWithTag(Constants.Tags.TAG_MOVABLE_LETTER);
+			GameObject[] gos = GameObject.FindGameObjectsWithTag (Constants.Tags.TAG_MOVABLE_LETTER);
 
 			Vector3[] posn = new Vector3[gos.Length]; // contains desired position to move each letter to
 			Vector3[] shuffledPosn = new Vector3[gos.Length]; // contains the new positions after being shuffled
+			System.Random rnd = new System.Random ();
 
-			int y1 = 3; // y-position
-			int y2 = 2; // y-position
-			int z = -2; // z-position
-
-			// set final positions for letters after explosion
-			if (gos.Length == 3) {
-
-				posn = new Vector3[3] {
-					new Vector3(-6, 0, z),
-					new Vector3(5, y2, z),
-					new Vector3(7, -y1, z)
-				};
-			}
-			if (gos.Length == 4) {
-
-				posn = new Vector3[4] {
-					new Vector3(-7, -y1, z),
-					new Vector3(-5, y2, z),
-					new Vector3(5, y2, z),
-					new Vector3(7, -y1, z)
-				};
-			}
-			if (gos.Length == 5) {
-
-				posn = new Vector3[5] {
-					new Vector3(-7, -y2, z),
-					new Vector3(-5, y2, z),
-					new Vector3(4, y1, z),
-					new Vector3(8, 0, z),
-					new Vector3(7, -y1, z)
-				};
-			}
-
-			// shuffle the letters' positions
-			shuffledPosn = ShuffleArray(posn);
-
-			for (int i=0; i<gos.Length; i++) {
-				// move letter to desired position
-				LeanTween.move(gos[i],shuffledPosn[i],1.0f);
-
-				// rotate letter around once
-				LeanTween.rotateAround(gos[i], Vector3.forward, 360f, 1.0f);
-
-			}
-			Debug.Log("Exploded draggable letters");
+			//randomize the positions that letters can explode too
+			this.points = this.points.OrderBy (x => rnd.Next ()).ToList ();
+			//move each letter to a random position
+			for (int i = 0; i < gos.Length; i++) {
+				//if we have more letters than points to move them to, then we should not 
+				//try to move the letters; otherwise, app will throw error and crash
+				if (i >= points.Count) {
+					Debug.LogError ("We have more letters (" + gos.Length + ") than positions to "
+					+ "explode them to (" + points.Count + ")! We moved all we can.");
+					break;
+				}
+				//move letter to new position and spin letter
+				LeanTween.move (gos [i], points [i], 1.0f);
+				LeanTween.rotateAround (gos [i], Vector3.forward, 360f, 1.0f);
+			} 
 		}
-
-		// shuffle array
-		Vector3[] ShuffleArray(Vector3[] array)
-		{
-			for (int i = array.Length; i > 0; i--)
-			{
-				int j = Random.Range(0,i);
-				Vector3 temp = array[j];
-				array[j] = array[i - 1];
-				array[i - 1]  = temp;
-			}
-			return array;
-		}
-
 		// enable collisions between target and movable letters
 		IEnumerator EnableCollisions(float delayTime)
 		{
