@@ -46,10 +46,9 @@ namespace WordTree
 		void Update(){
 
 			GameObject dir = GameObject.Find("IntroDirector");
-			//If attached audio (background music) has stopped playing, play the audio
+			dir.GetComponent<AudioSource>().loop=true;
 			//For keeping background music playing in a loop
-			if (!dir.GetComponent<AudioSource>().isPlaying)
-				dir.GetComponent<AudioSource>().Play();
+
 			// if user presses escape or 'back' button on android, exit program
 			if (Input.GetKeyDown(KeyCode.Escape))
 				Application.Quit();
