@@ -12,7 +12,7 @@ namespace WordTree
 		void Start() {
 			
 			//Scale graphics to screen size
-			Utilities.setCameraViewForScreen ();
+			Utilities.setCameraViewForScreen();
 			// add all levels onto level list
 			ProgressManager.InitiateLevelList();
 

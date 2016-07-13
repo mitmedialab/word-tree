@@ -1,9 +1,6 @@
 ﻿using UnityEngine;
 using System;
 using System.Collections;
-using TouchScript.Gestures;
-using TouchScript.Behaviors;
-using TouchScript.Hit;
 
 // Manage gesture events
 // Governs what happens when certain gestures are used (tap, press, release, pan/drag)

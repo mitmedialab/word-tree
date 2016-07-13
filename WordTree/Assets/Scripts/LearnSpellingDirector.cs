@@ -13,7 +13,7 @@ namespace WordTree
 		//called on start, initialize stuff
 		void Start () {
 			//Scale graphics to screen size
-			Utilities.setCameraViewForScreen ();
+			Utilities.setCameraViewForScreen();
 
 			//create instance of grestureManager
 			GestureManager gestureManager =GameObject.FindGameObjectWithTag
