@@ -218,7 +218,7 @@ namespace WordTree
 					go.GetComponent<Renderer>().material.color = color;
 
 					// stop pulsing and reset scale for level icon
-					go.GetComponent<PulseBehavior>().StopPulsing(go);
+					//go.GetComponent<PulseBehavior>().StopPulsing(go);
 					go.transform.localScale = new Vector3(.5f, .5f, 1);
 
 					// disable touch gestures for level icon
