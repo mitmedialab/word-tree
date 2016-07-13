@@ -49,7 +49,6 @@ namespace WordTree
 			//If attached audio (background music) has stopped playing, play the audio
 			//For keeping background music playing in a loop
 			if (!dir.GetComponent<AudioSource>().isPlaying)
-				dir.GetComponent<AudioSource>().volume = .25f;
 				dir.GetComponent<AudioSource>().Play();
 			// if user presses escape or 'back' button on android, exit program
 			if (Input.GetKeyDown(KeyCode.Escape))
