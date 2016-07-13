@@ -10,7 +10,9 @@ namespace WordTree
 
 		// called on start, initialize stuff
 		void Start() {
-
+			
+			//Scale graphics to screen size
+			Utilities.setCameraViewForScreen();
 			// add all levels onto level list
 			ProgressManager.InitiateLevelList();
 
@@ -20,6 +22,7 @@ namespace WordTree
 
 			// set up kid
 			GameObject kid = GameObject.FindGameObjectWithTag("Kid");
+
 			kid.GetComponent<SpriteRenderer>().sprite = Resources.Load<Sprite>("Graphics/" + ProgressManager.chosenKid);
 
 			// grow kid animation
@@ -52,7 +55,8 @@ namespace WordTree
 			// find level icons
 			GameObject[] gos = GameObject.FindGameObjectsWithTag("LevelIcon");
 			foreach (GameObject go in gos) {
-
+				
+			
 				// if level is not unlocked yet, make level icon disappear
 				if (!ProgressManager.IsLevelUnlocked(go.name)){
 					Color color = go.GetComponent<Renderer>().material.color;
@@ -91,6 +95,7 @@ namespace WordTree
 		
 		}
 
+
 		// Called once per frame
 		void Update(){
 
@@ -116,6 +121,7 @@ namespace WordTree
 
 			// rotate kid around once
 			LeanTween.rotateAround(kid, Vector3.forward, 360f, 1f);
+
 
 			// if we are going back to the word tree scene from another level
 			// i.e. if this isn't the first time entering the word tree scene

@@ -10,6 +10,8 @@ namespace WordTree
 
 		// Called on start, used to initialize stuff
 		void Start () {
+			//Scale graphics to screen size
+			Utilities.setCameraViewForScreen(); 
 			//create instance of grestureManager
 			GestureManager gestureManager =GameObject.FindGameObjectWithTag(Constants.Tags.TAG_GESTURE_MANAGER)
 				.GetComponent<GestureManager>();
@@ -18,8 +20,9 @@ namespace WordTree
 			// find kid
 			GameObject[] kids = GameObject.FindGameObjectsWithTag(Constants.Tags.TAG_KID);
 
-			foreach (GameObject kid in kids) {
+		foreach (GameObject kid in kids) {
 				// start pulsing kid
+				
 				kid.AddComponent<PulseBehavior>().StartPulsing(kid);
 
 				// subscribe kid to touch gestures

@@ -10,10 +10,11 @@ namespace WordTree
 
 		// called on start
 		void Start () {
+			//Scale graphics to screen size
+			Utilities.setCameraViewForScreen();
 			//make reference to existing gestureManager 
 			GestureManager gestureManager = GameObject.
 				FindGameObjectWithTag(Constants.Tags.TAG_GESTURE_MANAGER).GetComponent<GestureManager>();
-
 
 			// create sound blanks, letters, and word object
 			LoadSoundGameWord(ProgressManager.currentWord);
