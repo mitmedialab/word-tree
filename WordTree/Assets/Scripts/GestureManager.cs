@@ -250,7 +250,13 @@ namespace WordTree
 			// if sound button is tapped, play word's sound
 			if (go.name == "SoundButton") 
 			{
-				GameObject.FindGameObjectWithTag("WordObject").GetComponent<AudioSource>().Play();
+				GameObject word = GameObject.FindGameObjectWithTag(Constants.Tags.TAG_WORD_OBJECT);
+				//create audio source
+				AudioSource audioSource = gameObject.AddComponent<AudioSource>();
+				//load and play audio file for word
+				string file = "Audio" + "/Words/"+ word.transform.name;
+				audioSource.clip = Resources.Load(file) as AudioClip;
+				audioSource.Play();
 			}
 			// if hint button is tapped, show a hint
 			if (go.name == "HintButton") 
@@ -439,15 +445,25 @@ namespace WordTree
 		//</summary>
 		public void PlaySound(GameObject go)
 		{ 
-			AudioSource auds = go.GetComponent<AudioSource>();
-			// Play audio clip attached to object if it exists
-			if (auds != null && auds.clip != null) 
+			//find word in scene
+			GameObject word = GameObject.FindGameObjectWithTag(Constants.Tags.TAG_WORD_OBJECT);
+			//get phonemes of the word 
+			WordProperties prop = WordProperties.GetWordProperties(word.transform.name);
+			// phonemes in word
+			string[] phonemes = prop.Phonemes(); 
+			//if phoeme contains the current letter
+			//play the phoneme for that letter 
+			foreach (string sound in phonemes)
 			{
-				Debug.Log("Playing clip for " + go.name);
-				go.GetComponent<AudioSource>().Play();  
-			} else 
-			{
-				Debug.Log("No clip found for " + go.name);
+				if (sound.Contains(go.transform.name))
+				{
+					AudioSource audioSource = gameObject.AddComponent<AudioSource>();
+					string file = "Audio" + "/Phonemes/" + sound;
+					Debug.Log(file);
+					audioSource.clip = Resources.Load(file) as AudioClip;
+					audioSource.Play();  
+				}
+
 			}
 		}
 

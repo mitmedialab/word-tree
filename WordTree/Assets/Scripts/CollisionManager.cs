@@ -147,7 +147,7 @@ namespace WordTree
 				// to indicate successful collision
 				Color color = other.gameObject.GetComponent<SpriteRenderer>().color;
 				Vector2 posn = gameObject.transform.position;
-				Collider2D[] jar = Physics2D.OverlapCircleAll(posn, .1f, 1, 1.5f, 1.5f);
+				Collider2D[] jar = Physics2D.OverlapCircleAll(posn, .1f, 1, 1.5f, 0f);
 				LeanTween.color(jar[0].gameObject, color, .01f);
 				// disable collisions for target letter
 				Debug.Log("Disabled collisions for Letter " + gameObject.name);
@@ -420,8 +420,8 @@ namespace WordTree
 				go.GetComponent<GestureManager>().EnableGestures(go);
 				// find the jar that the sound object was dragged onto
 				Vector2 position = go.transform.position;
-				Collider2D[] jar = Physics2D.OverlapCircleAll(position, 2f, 1, 1.5f, 1.5f);
-				// change color of jar back to white
+				Collider2D[] jar = Physics2D.OverlapCircleAll(position, 2f, 1, 1.5f, 0);
+				// change color of letter back to white
 				LeanTween.color(jar[0].gameObject, Color.white, .01f).setDelay(delayTime);
 			}	
 		}
