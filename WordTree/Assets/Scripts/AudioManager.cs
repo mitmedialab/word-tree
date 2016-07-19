@@ -39,16 +39,20 @@ namespace WordTree
 		//float index: order/position of the letter in the word
 		//Synchronizes the pulse and sound for each letter
 		//</summary>
-		void PlaySoundAndPulseLetter(GameObject go, float index)
+		void PlaySoundAndPulseLetter(GameObject go, int index)
 		{
-			//Check if object has audio clip attached
-			if (go.GetComponent<AudioSource>() != null && go.GetComponent<AudioSource>().clip != null) 
-			{
-				Debug.Log("Playing clip for " + go.name);
-				//Wait for previous letters to complete before playing audio clip
-				go.GetComponent<AudioSource>().PlayDelayed(index * clipLength);  
-			}
-			//Wait for previous letters to complete before pulsing
+			//find word, the letters are part of
+			GameObject word = GameObject.FindGameObjectWithTag(Constants.Tags.TAG_WORD_OBJECT);
+			//get the phonemes for the word in the scene
+			WordProperties prop = WordProperties.GetWordProperties(word.transform.name);
+			// phonemes in word
+			string[] phonemes = prop.Phonemes(); 
+			//create an audio source
+			AudioSource audioSource = gameObject.AddComponent<AudioSource>();
+			//load and play audio file attached to the letters
+			string file = "Audio" + "/Phonemes/" + phonemes[index];
+			audioSource.clip = Resources.Load(file) as AudioClip;
+			audioSource.PlayDelayed(index * clipLength);  
 			StartCoroutine(PulseLetter(go, index * clipLength));
 		}
 
@@ -58,14 +62,14 @@ namespace WordTree
 		//</summary>
 		void PlaySoundAndPulseWord(GameObject[] gos)
 		{	
-			//Check if word object has audio clip attached
-			GameObject go = GameObject.FindGameObjectWithTag(Constants.Tags.TAG_WORD_OBJECT);
-			if (go.GetComponent<AudioSource>() != null && go.GetComponent<AudioSource>().clip != null) 
-			{
-				Debug.Log("Playing clip for " + go.name);
-				//Wait for previous letters to complete before playing audio clip
-				go.GetComponent<AudioSource>().PlayDelayed((gos.Length) * clipLength);
-			}
+			// get properties of current word in game
+			GameObject word = GameObject.FindGameObjectWithTag(Constants.Tags.TAG_WORD_OBJECT);
+			//create audio source for the word
+			AudioSource audioSource = gameObject.AddComponent<AudioSource>();
+			//load and play the audio file attached to the word
+			string file = "Audio" + "/Words/" + word.name;
+			audioSource.clip = Resources.Load(file) as AudioClip;
+			audioSource.PlayDelayed((gos.Length) * clipLength);
 			//Wait for all letters to complete before pulsing
 			StartCoroutine(PulseWord(gos, (gos.Length) * clipLength));
 		}

@@ -33,9 +33,14 @@ namespace WordTree
 				gestureManager.AddAndSubscribeToGestures(button);
 			}
 			// play word's sound
+			//find the word 
 			GameObject word = GameObject.FindGameObjectWithTag(Constants.Tags.TAG_WORD_OBJECT);
-			word.GetComponent<AudioSource>().Play();
-			// start pulsing movable letters
+			//create new audio source for the sound
+			AudioSource audioSource = gameObject.AddComponent<AudioSource>();
+			//load the audio file with word's name in it
+			string file = "Audio" + "/Words/"+ word.transform.name;
+			audioSource.clip = Resources.Load(file) as AudioClip;
+			audioSource.Play();
 			StartCoroutine(StartPulsing(.5f));
 			// then explode the letters
 			StartCoroutine(ExplodeWord(1));
