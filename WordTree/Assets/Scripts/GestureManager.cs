@@ -473,52 +473,36 @@ namespace WordTree
 		private void OnDestroy ()
 		{
 			// unsubscribe from gesture events
-			foreach (GameObject go in GameObject.FindObjectsOfType<GameObject>()) 
+			foreach (GameObject go in GameObject.FindObjectsOfType<GameObject>())
 			{
-				if (go.tag == Constants.Tags.TAG_LEVEL_ICON || go.tag == Constants.Tags.TAG_WORD_OBJECT
-				    || go.tag == Constants.Tags.TAG_BUTTON || go.tag == Constants.Tags.TAG_KID
-				    || go.tag == Constants.Tags.TAG_LOCK) 
+				TapGesture tg = go.GetComponent<TapGesture>();
+				//unsubscribte from tap events
+				if (tg != null) 
 				{
-					TapGesture tg = go.GetComponent<TapGesture>();
-					//unsubscribte from tap events
-					if (tg != null) 
-					{
-						tg.Tapped -= tappedHandler;
-					}
+					tg.Tapped -= tappedHandler;
 				}
-				if (go.tag == Constants.Tags.TAG_MOVABLE_LETTER || go.tag == Constants.Tags.TAG_MOVABLE_BLANK) 
+
+				TransformGesture pg = go.GetComponent<TransformGesture>();
+				if (pg != null) 
 				{
-					TransformGesture pg = go.GetComponent<TransformGesture>();
-					if (pg != null) 
-					{
-						// unsubscribe from pan events
-						pg.TransformStarted -= panStartedHandler;
-						pg.Transformed -= pannedHandler;
-						pg.TransformCompleted -= panCompleteHandler;
-					}
-					PressGesture prg = go.GetComponent<PressGesture>();
-					// unsubscribe from press events
-					if (prg != null) 
-					{
-						prg.Pressed -= pressedHandler;
-					}
-					ReleaseGesture rg = go.GetComponent<ReleaseGesture>();
-					// unsubscribe to release events
-					if (rg != null) 
-					{
-						rg.Released -= releasedHandler;
-					}
+					// unsubscribe from pan events
+					pg.TransformStarted -= panStartedHandler;
+					pg.Transformed -= pannedHandler;
+					pg.TransformCompleted -= panCompleteHandler;
 				}
-				if (go.tag == Constants.Tags.TAG_TARGET_LETTER || go.tag == Constants.Tags.TAG_TARGET_BLANK) 
+				PressGesture prg = go.GetComponent<PressGesture>();
+				// unsubscribe from press events
+				if (prg != null) 
 				{
-					PressGesture prg = go.GetComponent<PressGesture>();
-					// unsubscribe to press events
-					if (prg != null) 
-					{
-						prg.Pressed -= pressedHandler;
-					}
+					prg.Pressed -= pressedHandler;
 				}
-			}
+				ReleaseGesture rg = go.GetComponent<ReleaseGesture>();
+				// unsubscribe to release events
+				if (rg != null)
+				{
+					rg.Released -= releasedHandler;
+				}
+			}	
 		}
 			
 		//<summary>
