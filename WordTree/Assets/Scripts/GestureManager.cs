@@ -467,6 +467,44 @@ namespace WordTree
 			}
 		}
 
+		/// <summary>
+		/// On destroy, disable some stuff
+		/// </summary>
+		private void OnDestroy ()
+		{
+			// unsubscribe from gesture events
+			foreach (GameObject go in GameObject.FindObjectsOfType<GameObject>())
+			{
+				TapGesture tg = go.GetComponent<TapGesture>();
+				//unsubscribte from tap events
+				if (tg != null) 
+				{
+					tg.Tapped -= tappedHandler;
+				}
+
+				TransformGesture pg = go.GetComponent<TransformGesture>();
+				if (pg != null) 
+				{
+					// unsubscribe from pan events
+					pg.TransformStarted -= panStartedHandler;
+					pg.Transformed -= pannedHandler;
+					pg.TransformCompleted -= panCompleteHandler;
+				}
+				PressGesture prg = go.GetComponent<PressGesture>();
+				// unsubscribe from press events
+				if (prg != null) 
+				{
+					prg.Pressed -= pressedHandler;
+				}
+				ReleaseGesture rg = go.GetComponent<ReleaseGesture>();
+				// unsubscribe to release events
+				if (rg != null)
+				{
+					rg.Released -= releasedHandler;
+				}
+			}	
+		}
+			
 		//<summary>
 		// Update is called once per frame
 		//</summary>
