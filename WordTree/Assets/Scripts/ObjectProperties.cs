@@ -54,6 +54,8 @@ namespace WordTree
 			GameObject go = new GameObject();
 			// set name
 			go.name = prop.Name();
+			//Add properties component to each letter/sound created
+			Properties props = go.AddComponent<Properties>();
 			Debug.Log("Created new object " + go.name);
 			// set tag
 			go.tag = prop.Tag();
