@@ -98,25 +98,29 @@ namespace WordTree
 		}
 
 		//<summary>
-		// Animation played when user gets word wrong
-		// Big red X appears along with a "slap" sound
+		//Play ping sound when word is incorrect
 		//</summary>
 		// TODO: make animation more kid-friendly
 		public static void TryAgainAnimation()
 		{	
-			// find red X object
+			// find red X object which has sound attached
 			GameObject tryAgain = GameObject.Find("TryAgain");
-			// make object appear
-			LeanTween.alpha(tryAgain, 1f, .1f);
-			LeanTween.alpha(tryAgain, 0f, .1f).setDelay(1f);
-			// grow and shrink object
-			LeanTween.scale(tryAgain, new Vector3(2f, 2f, 1), .7f);
-			LeanTween.scale(tryAgain, new Vector3(.5f, .5f, 1), .5f).setDelay(.5f);
-			// play "slap" sound
-			tryAgain.AddComponent<AudioSource>().clip = Resources.Load("Audio/IncorrectSound") as AudioClip;
-			if (tryAgain.GetComponent<AudioSource>().clip != null) 
+			// play "ping" sound
+			if (tryAgain != null) 
 			{
-				tryAgain.GetComponent<AudioSource>().Play();
+				tryAgain.AddComponent<AudioSource>().clip = Resources.Load("Audio/IncorrectSound") as AudioClip;
+				if (tryAgain.GetComponent<AudioSource>().clip != null) 
+				{
+					tryAgain.GetComponent<AudioSource>().Play();
+				} 
+				else
+				{
+					Debug.LogWarning("Tried to find TryAgain audio source but it couldn't be found");
+				}
+			} 
+			else 
+			{
+				Debug.LogWarning("Tried to find TryAgain GameObject but it couldn't be found!");
 			}
 		}
 
