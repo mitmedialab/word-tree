@@ -106,10 +106,21 @@ namespace WordTree
 			// find red X object which has sound attached
 			GameObject tryAgain = GameObject.Find("TryAgain");
 			// play "ping" sound
-			tryAgain.AddComponent<AudioSource>().clip = Resources.Load("Audio/IncorrectSound") as AudioClip;
-			if (tryAgain.GetComponent<AudioSource>().clip != null) 
+			if (tryAgain != null) 
 			{
-				tryAgain.GetComponent<AudioSource>().Play();
+				tryAgain.AddComponent<AudioSource>().clip = Resources.Load("Audio/IncorrectSound") as AudioClip;
+				if (tryAgain.GetComponent<AudioSource>().clip != null) 
+				{
+					tryAgain.GetComponent<AudioSource>().Play();
+				} 
+				else
+				{
+					Debug.LogWarning("Tried to find TryAgain audio source but it couldn't be found");
+				}
+			} 
+			else 
+			{
+				Debug.LogWarning("Tried to find TryAgain GameObject but it couldn't be found!");
 			}
 		}
 
