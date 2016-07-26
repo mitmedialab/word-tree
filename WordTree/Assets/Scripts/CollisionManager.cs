@@ -67,7 +67,8 @@ namespace WordTree
 				}
 			}
 			//only want to get these components if on the spelling or sound game
-			if (Application.loadedLevelName != "4. Learn Spelling") {
+			if (Application.loadedLevelName != "4. Learn Spelling") 
+			{
 				//get properties component 
 				Properties prop = other.gameObject.GetComponent<Properties>();
 				//We track whether or not letters have been dragged into the right spots using this isinblank flag, 
@@ -82,7 +83,6 @@ namespace WordTree
 				{
 					prop.iscorrect = true;
 				}
-			
 				// if the current scene is Spelling Game
 				if (Application.loadedLevelName == "5. Spelling Game") 
 				{
@@ -609,7 +609,7 @@ namespace WordTree
 				{
 					return false;
 				}
-				if (go.GetComponent<Properties>().iscorrect == false) {
+				if (go.GetComponent<Properties>().iscorrect) {
 					return false;
 				}
 			}

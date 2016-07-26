@@ -90,14 +90,13 @@ namespace WordTree
 				Collider2D[] letters = Physics2D.OverlapCircleAll(posn, 1.0f, 1, -1, -1);
 				mov[i] = letters[0].gameObject;
 			}
-
 			// sound out word
 			GameObject audioManager = GameObject.Find("AudioManager");
 			audioManager.GetComponent<AudioManager>().SpellOutWord(mov);
 		}
 
 		//<summary>
-		// Olay ping sound when word is incorrect
+		// Play ping sound when word is incorrect
 		//</summary>
 		// TODO: make animation more kid-friendly
 		public static void TryAgainAnimation()
