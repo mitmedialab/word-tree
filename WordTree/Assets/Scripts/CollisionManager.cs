@@ -108,21 +108,6 @@ namespace WordTree
 					// if all letters have been dragged to a blank
 					if (CheckCompletedTargets("MovableLetter"))
 					{
-						// if user spelled word incorrectly
-						if (!CheckCorrectSpelling("MovableLetter")) 
-						{
-							// play try again animation
-							SpellingGameDirector.TryAgainAnimation();
-							// mark the correct letters by changing their color
-							MarkCorrectLetters(1f);
-							// move incorrect letters back to original position
-							ResetIncorrectLetters(1f);
-							// play word's sound
-							GameObject.FindGameObjectWithTag(Constants.Tags.TAG_WORD_OBJECT).
-							GetComponent<AudioSource>().PlayDelayed(1f);
-							// flash hint button to call attention to it
-							FlashHintButton(2f);
-						}
 						// if the user spelled the word correctly
 						if (CheckCorrectSpelling("MovableLetter")) 
 						{
@@ -139,7 +124,7 @@ namespace WordTree
 							SpellingGameDirector.SpellOutWord();
 							// play celebratory animation
 							SpellingGameDirector.CelebratoryAnimation((mov.Length + 1.5f) *
-							AudioManager.clipLength);
+								AudioManager.clipLength);
 							// add word to completedWord list
 							ProgressManager.AddCompletedWord(ProgressManager.currentWord);
 							//reset letters in case user wants to play again on the same screen
@@ -148,6 +133,22 @@ namespace WordTree
 								letter.GetComponent<Properties>().iscorrect = false;
 							}
 						}
+						// if user spelled word incorrectly
+						if (!CheckCorrectSpelling("MovableLetter")) 
+						{
+							// play try again animation
+							SpellingGameDirector.TryAgainAnimation();
+							// mark the correct letters by changing their color
+							MarkCorrectLetters(1f);
+							// move incorrect letters back to original position
+							ResetIncorrectLetters(1f);
+							// play word's sound
+							GameObject.FindGameObjectWithTag(Constants.Tags.TAG_WORD_OBJECT).
+							GetComponent<AudioSource>().PlayDelayed(1f);
+							// flash hint button to call attention to it
+							FlashHintButton(2f);
+						}
+					
 					}
 				}
 				// if current scene is Sound Game
@@ -609,7 +610,8 @@ namespace WordTree
 				{
 					return false;
 				}
-				if (go.GetComponent<Properties>().iscorrect) {
+				if (!go.GetComponent<Properties>().iscorrect) 
+				{
 					return false;
 				}
 			}
