@@ -589,9 +589,9 @@ namespace WordTree
 					Debug.LogWarning("Tried to get Properties component for GameObject " + go.name + " but it was null!");
 					return false;
 				}
-				Debug.Log("Word Completed");
-				return true;	
 			}
+			Debug.Log("Word Completed");
+			return true;
 		}
 
 		//<summary>
