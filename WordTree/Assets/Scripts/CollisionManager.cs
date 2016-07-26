@@ -106,10 +106,10 @@ namespace WordTree
 					Debug.Log("Disabled collisions for Blank " + gameObject.name);
 					Destroy(gameObject.GetComponent<CollisionManager>());
 					// if all letters have been dragged to a blank
-					if (CheckCompletedTargets("MovableLetter"))
+					if (CheckCompletedTargets(Constants.Tags.TAG_MOVABLE_LETTER))
 					{
 						// if the user spelled the word correctly
-						if (CheckCorrectSpelling("MovableLetter")) 
+						if (CheckCorrectSpelling(Constants.Tags.TAG_MOVABLE_LETTER)) 
 						{
 							// find all movable letters
 							GameObject[] mov = GameObject.FindGameObjectsWithTag
@@ -134,7 +134,7 @@ namespace WordTree
 							}
 						}
 						// if user spelled word incorrectly
-						if (!CheckCorrectSpelling("MovableLetter")) 
+						if (!CheckCorrectSpelling(Constants.Tags.TAG_MOVABLE_LETTER)) 
 						{
 							// play try again animation
 							SpellingGameDirector.TryAgainAnimation();
@@ -173,10 +173,10 @@ namespace WordTree
 					Debug.Log("Disabled collisions for Letter " + gameObject.name);
 					Destroy(gameObject.GetComponent<CollisionManager>());
 					// if all sound blanks have been dragged onto a jar
-					if (CheckCompletedTargets("MovableBlank")) 
+					if (CheckCompletedTargets(Constants.Tags.TAG_MOVABLE_BLANK)) 
 					{
 						// if user did not drag all sound blanks to correct letter
-						if (!CheckCorrectSpelling("MovableBlank")) 
+						if (!CheckCorrectSpelling(Constants.Tags.TAG_MOVABLE_BLANK)) 
 						{
 							// play try again animation
 							SoundGameDirector.TryAgainAnimation();
@@ -191,7 +191,7 @@ namespace WordTree
 							FlashHintButton(2f);	
 						}
 						// if user dragged all sound blanks to their correct corresponding letters
-						if (CheckCorrectSpelling("MovableBlank")) 
+						if (CheckCorrectSpelling(Constants.Tags.TAG_MOVABLE_BLANK)) 
 						{
 							// find all sound blanks
 							GameObject[] mov = GameObject.FindGameObjectsWithTag
@@ -238,12 +238,12 @@ namespace WordTree
 			// set parameters for Physics2D.OverlapCircleAll function 
 			// z = z-position of movable object to search for
 			// radius = distance around target object to search
-			if (tag == "TargetBlank") 
+			if (tag == Constants.Tags.TAG_TARGET_BLANK) 
 			{
 				z = -1;
 				radius = .5f;
 			}
-			if (tag == "TargetLetter") 
+			if (tag == Constants.Tags.TAG_TARGET_LETTER) 
 			{
 				z = 1;
 				radius = 1.5f;
@@ -380,7 +380,7 @@ namespace WordTree
 		void MarkCorrectLetters(float delayTime)
 		{
 			// get the correct letters
-			List<GameObject> correctLetters = CorrectObjects("TargetBlank");
+			List<GameObject> correctLetters = CorrectObjects(Constants.Tags.TAG_TARGET_BLANK);
 			foreach (GameObject go in correctLetters)
 			{
 				// change color of letter
@@ -396,7 +396,7 @@ namespace WordTree
 		//</summary>
 		void MarkCorrectSounds(float delayTime)
 		{
-			List<GameObject> correctSounds = CorrectObjects("TargetLetter");
+			List<GameObject> correctSounds = CorrectObjects(Constants.Tags.TAG_TARGET_LETTER);
 			foreach (GameObject go in correctSounds)
 			{
 				go.transform.localScale = new Vector3(.3f, .3f, 1);
@@ -410,7 +410,7 @@ namespace WordTree
 		//</summary>
 		public void ResetIncorrectLetters(float delayTime)
 		{
-			List<GameObject> incorrectLetters = IncorrectObjects("TargetBlank");
+			List<GameObject> incorrectLetters = IncorrectObjects(Constants.Tags.TAG_TARGET_BLANK);
 			foreach (GameObject go in incorrectLetters) 
 			{
 				// make sure letters are scaled back to original size
@@ -439,7 +439,7 @@ namespace WordTree
 		//</summary>
 		public void ResetIncorrectSounds(float delayTime)
 		{
-			List<GameObject> incorrectSounds = IncorrectObjects("TargetLetter");
+			List<GameObject> incorrectSounds = IncorrectObjects(Constants.Tags.TAG_TARGET_LETTER);
 			foreach (GameObject go in incorrectSounds) 
 			{
 				// make sure sound blank is correct scale
@@ -470,7 +470,7 @@ namespace WordTree
 		//<//summary>
 		public static void ShowLetterHint()
 		{
-			List<GameObject> unoccupiedTargets = UnoccupiedTargets("TargetBlank");
+			List<GameObject> unoccupiedTargets = UnoccupiedTargets(Constants.Tags.TAG_TARGET_BLANK);
 			int i = 0;
 			string letterName = unoccupiedTargets[i].name; // get letter that we want to create a hint for
 			// create a letter if not already created
@@ -503,7 +503,7 @@ namespace WordTree
 		public static void ShowSoundHint()
 		{
 			// find movable sound blanks
-			GameObject[] mov = GameObject.FindGameObjectsWithTag("MovableBlank");
+			GameObject[] mov = GameObject.FindGameObjectsWithTag(Constants.Tags.TAG_MOVABLE_BLANK);
 			// loop through sound blanks
 			foreach (GameObject go in mov) 
 			{
@@ -624,7 +624,7 @@ namespace WordTree
 		bool CheckCompletedWord()
 		{
 			// find all movable letters
-			GameObject[] mov = GameObject.FindGameObjectsWithTag("MovableLetter");
+			GameObject[] mov = GameObject.FindGameObjectsWithTag(Constants.Tags.TAG_MOVABLE_LETTER);
 			Debug.Log("Letters left: " + (mov.Length - 1));
 			// if word is completed should only find 1 movable letter
 			// since movable letters are destroyed after colliding with the correct target letter
