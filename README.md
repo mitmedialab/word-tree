@@ -21,11 +21,19 @@ You don't need to pull in these submodules for the main project to run (the nece
 ### TouchScript
 [TouchScript] (https://github.com/TouchScript/TouchScript "TouchScript") makes it easy to detect and respond to touch events, such as taps and drags. You can build it from source following the instructions [here] (https://github.com/TouchScript/TouchScript/wiki/Building-TouchScript "Building TouchScript").
 
-TouchScript makes it easy to detect and respond to touch events, such as taps and drags. You can build it from source following the instructions here.
+We built a unitypackage from the TouchScript 8.1 source, which has been imported into the game in the Assets folder.
 
-If you build from source, you can copy TouchScript/UnityPackages/TouchScript.Android to SAR-opal-base/Assets/ to access everything (like prefabs and examples) from within the Unity editor. That said, the only really important thing is the TouchScript dll in the Plugins folder (which is in the SAR-opal-base Assets/Plugins folder already).
+Instructions on building TouchScript's unitypackage from source are online (https://github.com/TouchScript/TouchScript/wiki/How-to-Contribute). For 8.1, the steps are:
+
+-init and update TouchScript's git submodules
+-init and update any submodules of those submodules
+-run Build/build_external.sh
+-run Build/package.sh
+-import the generated TouchScript.unitypackage file in the Unity editor
 
 Note that the MainCamera in the Unity scene needs a CameraLayer2D component attached. The camera layer is used to "see" which objects in the scene can be touched - see Layers. If you don't have a camera layer of some kind attached to the MainCamera, TouchScript will automatically add one, but the default is a CameraLayer that handles 3D objects and 3D colliders. Since Opal is a 2D game, we need to use the CameraLayer2D, which is for 2D objects and 2D colliders. (Emphasizing this extra because it can cause needless headache.)
+
+The TouchScript game object should have a Touch Manager component attached, which will list the different camera layers in the scene.
 ### LeanTween
 [LeanTween] (https://github.com/dentedpixel/LeanTween/ "LeanTween git") is a library for animating sprites ([docs here] (http://dentedpixel.com/LeanTweenDocumentation/classes/LeanTween.html "LeanTween docs")).
 
