@@ -24,17 +24,15 @@ namespace WordTree
 			//create instance of grestureManager
 			GestureManager gestureManager = GameObject.FindGameObjectWithTag
 				(Constants.Tags.TAG_GESTURE_MANAGER).GetComponent<GestureManager>();
-			if (gestureManager != null) {
+			if (gestureManager != null) 
+			{
 				// create two sets of words - movable and target
 				LoadSpellingLesson(ProgressManager.currentWord);
 				// subscribe buttons to gestures
 				GameObject[] buttons = GameObject.FindGameObjectsWithTag(Constants.Tags.TAG_BUTTON);
-				foreach (GameObject button in buttons) {
-					if (button != null) {
-						gestureManager.AddAndSubscribeToGestures(button);
-					} else {
-						Debug.LogWarning("Cannot find buttons");
-					}
+				foreach (GameObject button in buttons) 
+				{
+					gestureManager.AddAndSubscribeToGestures(button);
 				}
 				// play word's sound
 				//find the word 

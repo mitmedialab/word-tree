@@ -53,27 +53,27 @@ namespace WordTree
 					string[] phonemes = prop.Phonemes(); 
 					//create an audio source
 					AudioSource audioSource = gameObject.AddComponent<AudioSource>();
+					//load and play audio file attached to the letters
+					string file = "Audio" + "/Phonemes/" + phonemes[index];
 					if (audioSource != null) 
 					{
-						//load and play audio file attached to the letters
-						string file = "Audio" + "/Phonemes/" + phonemes[index];
 						audioSource.clip = Resources.Load(file) as AudioClip;
 						audioSource.PlayDelayed(index * clipLength);  
 						StartCoroutine(PulseLetter(go, index * clipLength));
 					} 
 					else 
 					{
-						Debug.LogWarning("Cannot find audio file attached");
+						Debug.LogWarning("Cannot find" + file + " audio component");
 					}
 				} 
 				else 
 				{
-					Debug.LogError("Cannot find the word properties component");
+					Debug.LogError("Cannot find" + prop.name + "properties component" );
 				}
 			}
 			else
 			{
-				Debug.LogError("Cannot find word in scene");
+				Debug.LogError("Cannot find" + word.name + " in scene");
 			}
 		}
 
@@ -90,18 +90,18 @@ namespace WordTree
 			{
 				//create audio source for the word
 				AudioSource audioSource = gameObject.AddComponent<AudioSource>();
-				//check if audio source is attached
-				if (audioSource != null) 
+				//load and play the audio file attached to the word
+				string file = "Audio" + "/Words/" + word.name;
+				audioSource.clip = Resources.Load(file) as AudioClip;
+				if (audioSource.clip != null) 
 				{
-					//load and play the audio file attached to the word
-					string file = "Audio" + "/Words/" + word.name;
-					audioSource.clip = Resources.Load(file) as AudioClip;
 					audioSource.PlayDelayed((gos.Length) * clipLength);
 				} 
 				else 
 				{
-					Debug.LogWarning("No audio file attached");
+					Debug.LogWarning("Cannot load" + file + " clip");
 				}
+				
 			} 
 			else 
 			{

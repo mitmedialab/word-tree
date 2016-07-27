@@ -26,8 +26,16 @@ namespace WordTree
 				LoadLevel(ProgressManager.currentLevel);
 				//Set up kid
 				GameObject kid = GameObject.FindGameObjectWithTag(Constants.Tags.TAG_KID);
-				kid.GetComponent<SpriteRenderer>().sprite = Resources.Load<Sprite>("Graphics/"
-				+ ProgressManager.chosenKid);
+				//check if kid is attached
+				if (kid != null)
+				{
+					kid.GetComponent<SpriteRenderer>().sprite = Resources.Load<Sprite>("Graphics/"
+					+ ProgressManager.chosenKid);
+				} 
+				else 
+				{
+					Debug.LogWarning("Cannot find kid in scene");
+				}
 				//check if sprite is attached
 				if (kid.GetComponent<SpriteRenderer>().sprite != null) 
 				{
@@ -77,8 +85,8 @@ namespace WordTree
 				{
 					Debug.LogWarning("Cannot find ChooseObjectDirector");
 				}
-					//Subscribe buttons to touch gestures
-					GameObject button = GameObject.FindGameObjectWithTag(Constants.Tags.TAG_BUTTON);
+				//Subscribe buttons to touch gestures
+				GameObject button = GameObject.FindGameObjectWithTag(Constants.Tags.TAG_BUTTON);
 				if (button != null) 
 				{
 					button.AddComponent<GestureManager>().AddAndSubscribeToGestures(button);
@@ -87,10 +95,10 @@ namespace WordTree
 				{
 					Debug.LogWarning("Cannot find button");
 				}
-					//Find word objects
-					GameObject[] gos = GameObject.FindGameObjectsWithTag(Constants.Tags.TAG_WORD_OBJECT);
+				//Find word objects
+				GameObject[] gos = GameObject.FindGameObjectsWithTag(Constants.Tags.TAG_WORD_OBJECT);
 				foreach (GameObject go in gos) 
-				{
+				{	
 					if (go != null) 
 					{
 						//Start pulsing for each object
@@ -114,13 +122,13 @@ namespace WordTree
 						Debug.LogWarning("Cannot find word");
 					}
 				}
-					//Check if this level has been completed, i.e. if all words in the level have been completed
-					if (CheckCompletedLevel()) 
-					{
-						//If level completed, add to completedLevels list and unlock the next level
-						ProgressManager.AddCompletedLevel(ProgressManager.currentLevel);
-						ProgressManager.UnlockNextLevel(ProgressManager.currentLevel);
-					}
+				//Check if this level has been completed, i.e. if all words in the level have been completed
+				if (CheckCompletedLevel()) 
+				{
+					//If level completed, add to completedLevels list and unlock the next level
+					ProgressManager.AddCompletedLevel(ProgressManager.currentLevel);
+					ProgressManager.UnlockNextLevel(ProgressManager.currentLevel);
+				}
 			}
 			else 
 			{
@@ -137,11 +145,18 @@ namespace WordTree
 			GameObject dir = GameObject.Find("ChooseObjectDirector");
 			if (dir != null) 
 			{
-				//If attached audio (background music) has stopped playing, play the audio
-				//For keeping background music playing in a loop
-				if (!dir.GetComponent<AudioSource>().isPlaying) 
+				if (dir.GetComponent<AudioSource>() != null) 
 				{
-					dir.GetComponent<AudioSource>().Play();
+					//If attached audio (background music) has stopped playing, play the audio
+					//For keeping background music playing in a loop
+					if (!dir.GetComponent<AudioSource>().isPlaying) 
+					{
+						dir.GetComponent<AudioSource>().Play();
+					}
+				} 
+				else 
+				{ 
+					Debug.LogWarning("Cannot load audio component of ChooseObjectDirector");
 				}
 			}
 			else 
@@ -198,39 +213,32 @@ namespace WordTree
 			GameObject[] gos = GameObject.FindGameObjectsWithTag(Constants.Tags.TAG_WORD_OBJECT);
 			foreach (GameObject go in gos) 
 			{
-				if (go != null) 
+				//if current scene is Learn Spelling
+				if (ProgressManager.currentMode == 1) 
 				{
-					//if current scene is Learn Spelling
-					if (ProgressManager.currentMode == 1) 
+					//completed a word; update counter
+					if (ProgressManager.completedWordsLearn.Contains(go.name))
 					{
-						//completed a word; update counter
-						if (ProgressManager.completedWordsLearn.Contains(go.name))
-						{
-							numCompleted = numCompleted + 1;
-						}
+						numCompleted = numCompleted + 1;
 					}
-					//if current scene is Spelling Game
-					if (ProgressManager.currentMode == 2) 
-					{
-						//completed a word; update counter
-						if (ProgressManager.completedWordsSpell.Contains(go.name))
-						{
-							numCompleted = numCompleted + 1;
-						}
-					}
-					//if current scene is Sound Game
-					if (ProgressManager.currentMode == 3) 
-					{
-						//completed a word; update counter
-						if (ProgressManager.completedWordsSound.Contains(go.name)) 
-						{
-							numCompleted = numCompleted + 1;
-						}
-					}
-				} 
-				else 
+				}
+				//if current scene is Spelling Game
+				if (ProgressManager.currentMode == 2) 
 				{
-					Debug.LogWarning("Cannot find word");
+					//completed a word; update counter
+					if (ProgressManager.completedWordsSpell.Contains(go.name))
+					{
+						numCompleted = numCompleted + 1;
+					}
+				}
+				//if current scene is Sound Game
+				if (ProgressManager.currentMode == 3) 
+				{
+					//completed a word; update counter
+					if (ProgressManager.completedWordsSound.Contains(go.name)) 
+					{
+						numCompleted = numCompleted + 1;
+					}
 				}
 			}
 			//check if all words have been completed
@@ -251,20 +259,27 @@ namespace WordTree
 		{
 			//Find background object
 			GameObject background = GameObject.Find("Background");
-			//load image
-			SpriteRenderer spriteRenderer = background.AddComponent<SpriteRenderer>();
-			Sprite sprite = Resources.Load<Sprite>("Graphics/Backgrounds/" + name);
-			if (sprite != null)
+			if (background != null) 
 			{
-				spriteRenderer.sprite = sprite;
-				//set position
-				background.transform.position = posn;
-				//set scale
-				background.transform.localScale = new Vector3(scale, scale, 1);
+				//load image
+				SpriteRenderer spriteRenderer = background.AddComponent<SpriteRenderer>();
+				Sprite sprite = Resources.Load<Sprite>("Graphics/Backgrounds/" + name);
+				if (sprite != null) 
+				{
+					spriteRenderer.sprite = sprite;
+					//set position
+					background.transform.position = posn;
+					//set scale
+					background.transform.localScale = new Vector3(scale, scale, 1);
+				}
+				else
+				{
+					Debug.Log("ERROR: could not load background");
+				}
 			} 
 			else 
 			{
-				Debug.Log("ERROR: could not load background");
+				Debug.LogWarning("Cannot find background game object");
 			}
 		}
 

@@ -36,7 +36,7 @@ namespace WordTree
 						Debug.Log("Collision on " + other.name);
 						// change color of target letter to match that of movable letter
 						gameObject.GetComponent<SpriteRenderer>().color = other.GetComponent<SpriteRenderer>()
-						.color;
+							.color;
 						Color color = gameObject.GetComponent<Renderer>().material.color;
 						color.a = 1.0f;
 						gameObject.GetComponent<Renderer>().material.color = color;
@@ -425,15 +425,7 @@ namespace WordTree
 			List<GameObject> correctSounds = CorrectObjects(Constants.Tags.TAG_TARGET_LETTER);
 			foreach (GameObject go in correctSounds)
 			{
-				if (go != null) 
-				{
 					go.transform.localScale = new Vector3(.3f, .3f, 1);
-				} 
-				else
-				{
-					Debug.LogError("Cannot find correct sounds");
-				}
-
 			}
 		}
 
