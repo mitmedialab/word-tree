@@ -95,6 +95,7 @@ namespace WordTree
 			}
 			else 
 			{
+				Debug.LogError("Number does not match up with level");
 				return null;
 			}
 		}

@@ -91,10 +91,17 @@ namespace WordTree
 			foreach (GameObject go in tar) 
 			{
 				SpriteRenderer sprite = go.GetComponent<SpriteRenderer>();
-				sprite.color = Color.black;
-				Color color = go.GetComponent<Renderer>().material.color;
-				color.a = .5f;
-				go.GetComponent<Renderer>().material.color = color;
+				if (sprite != null) 
+				{
+					sprite.color = Color.black;
+					Color color = go.GetComponent<Renderer>().material.color;
+					color.a = .5f;
+					go.GetComponent<Renderer>().material.color = color;
+				} 
+				else 
+				{
+					Debug.LogWarning("Could not load sprite");
+				}
 			}
 			GameObject[] mov = GameObject.FindGameObjectsWithTag(Constants.Tags.TAG_MOVABLE_LETTER);
 			// set possible colors for movable letters

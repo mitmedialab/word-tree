@@ -19,18 +19,32 @@ namespace WordTree
 			//create instance of grestureManager
 			GestureManager gestureManager = GameObject.FindGameObjectWithTag
 				(Constants.Tags.TAG_GESTURE_MANAGER).GetComponent<GestureManager>();
-			// create letters, blanks, and word object
-			LoadSpellingGameWord(ProgressManager.currentWord);
-			// subscribe buttons to gestures
-			GameObject[] buttons = GameObject.FindGameObjectsWithTag(Constants.Tags.TAG_BUTTON);
-			foreach (GameObject button in buttons) 
+			if (gestureManager != null) 
 			{
-				button.AddComponent<GestureManager>().AddAndSubscribeToGestures(button);
+				// create letters, blanks, and word object
+				LoadSpellingGameWord(ProgressManager.currentWord);
+				// subscribe buttons to gestures
+				GameObject[] buttons = GameObject.FindGameObjectsWithTag(Constants.Tags.TAG_BUTTON);
+				foreach (GameObject button in buttons) 
+				{
+					button.AddComponent<GestureManager>().AddAndSubscribeToGestures(button);
+				}
+			} 
+			else 
+			{
+				Debug.LogWarning("Cannot find gesture manager");
 			}
 			// sound out word
 			GameObject[] tar = GameObject.FindGameObjectsWithTag(Constants.Tags.TAG_TARGET_BLANK);
 			GameObject audioManager = GameObject.Find("AudioManager");
-			audioManager.GetComponent<AudioManager>().SpellOutWord(tar);
+			if (audioManager != null) 
+			{
+				audioManager.GetComponent<AudioManager>().SpellOutWord(tar);
+			}
+			else 
+			{
+				Debug.LogWarning("Cannot find audio manager");
+			}
 			// start pulsing movable letters
 			GameObject[] mov = GameObject.FindGameObjectsWithTag(Constants.Tags.TAG_MOVABLE_LETTER);
 			foreach (GameObject go in mov) 
@@ -47,14 +61,21 @@ namespace WordTree
 		{
 			// get properties of current word in game
 			WordProperties prop = WordProperties.GetWordProperties(word);
-			string[] phonemes = prop.Phonemes(); // phonemes in word
-			float objScale = prop.ObjScale(); // scale of object
-			// create word with scrambled letters
-			WordCreation.CreateScrambledWord(word, phonemes);
-			// create blanks
-			BlankCreation.CreateBlanks(word, phonemes, "Rectangle", "TargetBlank", "SpellingGame");
-			// create word object
-			CreateWordImage(word, objScale);
+			if (prop != null) 
+			{
+				string[] phonemes = prop.Phonemes(); // phonemes in word
+				float objScale = prop.ObjScale(); // scale of object
+				// create word with scrambled letters
+				WordCreation.CreateScrambledWord(word, phonemes);
+				// create blanks
+				BlankCreation.CreateBlanks(word, phonemes, "Rectangle", "TargetBlank", "SpellingGame");
+				// create word object
+				CreateWordImage(word, objScale);
+			} 
+			else 
+			{
+				Debug.LogWarning("Cannot find word properties");
+			}
 		}
 
 		//<summary>
@@ -92,7 +113,14 @@ namespace WordTree
 			}
 			// sound out word
 			GameObject audioManager = GameObject.Find("AudioManager");
-			audioManager.GetComponent<AudioManager>().SpellOutWord(mov);
+			if (audioManager != null) 
+			{
+				audioManager.GetComponent<AudioManager>().SpellOutWord(mov);
+			} 
+			else 
+			{
+				Debug.LogWarning("Cannot find audio manager");
+			}
 		}
 
 		//<summary>
@@ -108,6 +136,10 @@ namespace WordTree
 			if (tryAgain.GetComponent<AudioSource>().clip != null) 
 			{
 				tryAgain.GetComponent<AudioSource>().Play();
+			}
+			else 
+			{
+				Debug.LogWarning("Cannot find audio file");
 			}
 			Debug.Log("Play incorrect sound");
 		}
@@ -132,7 +164,14 @@ namespace WordTree
 			Debug.Log("Playing clip for congrats");
 			AudioSource audio = go.AddComponent<AudioSource>();
 			audio.clip = Resources.Load("Audio/CongratsSound") as AudioClip;
-			audio.PlayDelayed(delayTime);
+			if (audio.clip != null) 
+			{
+				audio.PlayDelayed(delayTime);
+			} 
+			else 
+			{
+				Debug.LogWarning("Cannot find audio file");
+			}
 		}
 
 		//<summary>

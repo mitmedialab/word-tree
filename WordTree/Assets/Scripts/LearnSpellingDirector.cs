@@ -24,37 +24,59 @@ namespace WordTree
 			//create instance of grestureManager
 			GestureManager gestureManager = GameObject.FindGameObjectWithTag
 				(Constants.Tags.TAG_GESTURE_MANAGER).GetComponent<GestureManager>();
-			// create two sets of words - movable and target
-			LoadSpellingLesson(ProgressManager.currentWord);
-			// subscribe buttons to gestures
-			GameObject[] buttons = GameObject.FindGameObjectsWithTag(Constants.Tags.TAG_BUTTON);
-			foreach (GameObject button in buttons) 
-			{
-				gestureManager.AddAndSubscribeToGestures(button);
+			if (gestureManager != null) {
+				// create two sets of words - movable and target
+				LoadSpellingLesson(ProgressManager.currentWord);
+				// subscribe buttons to gestures
+				GameObject[] buttons = GameObject.FindGameObjectsWithTag(Constants.Tags.TAG_BUTTON);
+				foreach (GameObject button in buttons) {
+					if (button != null) {
+						gestureManager.AddAndSubscribeToGestures(button);
+					} else {
+						Debug.LogWarning("Cannot find buttons");
+					}
+				}
+				// play word's sound
+				//find the word 
+				GameObject word = GameObject.FindGameObjectWithTag(Constants.Tags.TAG_WORD_OBJECT);
+				if (word != null) 
+				{
+					//create new audio source for the sound
+					AudioSource audioSource = gameObject.AddComponent<AudioSource>();
+					//load the audio file with word's name in it
+					string file = "Audio" + "/Words/" + word.transform.name;
+					audioSource.clip = Resources.Load(file) as AudioClip;
+					if (audioSource.clip != null)
+					{
+						audioSource.Play();
+					} 
+					else 
+					{
+						Debug.LogWarning("Cannot find audio file");
+					}
+					StartCoroutine(StartPulsing(.5f));
+					// then explode the letters
+					StartCoroutine(ExplodeWord(1));
+					// then enable collisions to occur
+					StartCoroutine(EnableCollisions(2));
+					//Possible regions where letters can move
+					//TODO make sure these locations are on the screen
+					points.Add(new Vector3(-5.5f, 3.5f, 0f)); 
+					points.Add(new Vector3(-6f, -3.9f, 0f));
+					points.Add(new Vector3(-6f, 0f, 0f));
+					points.Add(new Vector3(4f, 3f, 0f));
+					points.Add(new Vector3(6f, 0f, 0f));
+				} 
+				else 
+				{
+					Debug.LogWarning("Cannot find word");
+				}
 			}
-			// play word's sound
-			//find the word 
-			GameObject word = GameObject.FindGameObjectWithTag(Constants.Tags.TAG_WORD_OBJECT);
-			//create new audio source for the sound
-			AudioSource audioSource = gameObject.AddComponent<AudioSource>();
-			//load the audio file with word's name in it
-			string file = "Audio" + "/Words/"+ word.transform.name;
-			audioSource.clip = Resources.Load(file) as AudioClip;
-			audioSource.Play();
-			StartCoroutine(StartPulsing(.5f));
-			// then explode the letters
-			StartCoroutine(ExplodeWord(1));
-			// then enable collisions to occur
-			StartCoroutine(EnableCollisions(2));
-			//Possible regions where letters can move
-			//TODO make sure these locations are on the screen
-			points.Add(new Vector3(-5.5f, 3.5f, 0f)); 
-			points.Add(new Vector3(-6f, -3.9f, 0f));
-			points.Add(new Vector3(-6f, 0f, 0f));
-			points.Add(new Vector3(4f, 3f, 0f));
-			points.Add(new Vector3(6f, 0f, 0f));
+			else 
+			{
+				Debug.LogError("Cannot find gesture manager");
+			}
 		}
-
 		//<summary>
 		// create all letters and word object
 		//</summary>
@@ -62,15 +84,20 @@ namespace WordTree
 		{
 			// get properties of current word being learned
 			WordProperties prop = WordProperties.GetWordProperties(word);
-			string[] phonemes = prop.Phonemes(); // phonemes in word
-			float objScale = prop.ObjScale(); // scale of object
+			if (prop != null) 
+			{
+				string[] phonemes = prop.Phonemes(); // phonemes in word
+				float objScale = prop.ObjScale(); // scale of object
+				// create movable and target letters
+				WordCreation.CreateMovableAndTargetWords(word, phonemes);
 
-			// create movable and target letters
-			WordCreation.CreateMovableAndTargetWords(word, phonemes);
-
-			// create word object
-			CreateWordImage(word, objScale);
-
+				// create word object
+				CreateWordImage(word, objScale);
+			} 
+			else 
+			{
+				Debug.LogWarning("Cannot find word");
+			}
 		}
 
 		//<summary>
@@ -176,7 +203,14 @@ namespace WordTree
 			Debug.Log("Playing clip for congrats");
 			AudioSource audio = go.AddComponent<AudioSource>();
 			audio.clip = Resources.Load("Audio/CongratsSound") as AudioClip;
-			audio.PlayDelayed(delayTime);
+			if (audio.clip != null) 
+			{
+				audio.PlayDelayed(delayTime);
+			} 
+			else
+			{
+				Debug.LogWarning("Cannot find audio clip");
+			}
 		}
 
 		//<summary>

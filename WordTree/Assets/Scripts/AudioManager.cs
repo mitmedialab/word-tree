@@ -43,17 +43,38 @@ namespace WordTree
 		{
 			//find word, the letters are part of
 			GameObject word = GameObject.FindGameObjectWithTag(Constants.Tags.TAG_WORD_OBJECT);
-			//get the phonemes for the word in the scene
-			WordProperties prop = WordProperties.GetWordProperties(word.transform.name);
-			// phonemes in word
-			string[] phonemes = prop.Phonemes(); 
-			//create an audio source
-			AudioSource audioSource = gameObject.AddComponent<AudioSource>();
-			//load and play audio file attached to the letters
-			string file = "Audio" + "/Phonemes/" + phonemes[index];
-			audioSource.clip = Resources.Load(file) as AudioClip;
-			audioSource.PlayDelayed(index * clipLength);  
-			StartCoroutine(PulseLetter(go, index * clipLength));
+			if (word != null) 
+			{
+				//get the phonemes for the word in the scene
+				WordProperties prop = WordProperties.GetWordProperties(word.transform.name);
+				if (prop != null) 
+				{
+					// phonemes in word
+					string[] phonemes = prop.Phonemes(); 
+					//create an audio source
+					AudioSource audioSource = gameObject.AddComponent<AudioSource>();
+					if (audioSource != null) 
+					{
+						//load and play audio file attached to the letters
+						string file = "Audio" + "/Phonemes/" + phonemes[index];
+						audioSource.clip = Resources.Load(file) as AudioClip;
+						audioSource.PlayDelayed(index * clipLength);  
+						StartCoroutine(PulseLetter(go, index * clipLength));
+					} 
+					else 
+					{
+						Debug.LogWarning("Cannot find audio file attached");
+					}
+				} 
+				else 
+				{
+					Debug.LogError("Cannot find the word properties component");
+				}
+			}
+			else
+			{
+				Debug.LogError("Cannot find word in scene");
+			}
 		}
 
 		//<summary>
@@ -64,12 +85,28 @@ namespace WordTree
 		{	
 			// get properties of current word in game
 			GameObject word = GameObject.FindGameObjectWithTag(Constants.Tags.TAG_WORD_OBJECT);
-			//create audio source for the word
-			AudioSource audioSource = gameObject.AddComponent<AudioSource>();
-			//load and play the audio file attached to the word
-			string file = "Audio" + "/Words/" + word.name;
-			audioSource.clip = Resources.Load(file) as AudioClip;
-			audioSource.PlayDelayed((gos.Length) * clipLength);
+			//check if word is null
+			if (word != null) 
+			{
+				//create audio source for the word
+				AudioSource audioSource = gameObject.AddComponent<AudioSource>();
+				//check if audio source is attached
+				if (audioSource != null) 
+				{
+					//load and play the audio file attached to the word
+					string file = "Audio" + "/Words/" + word.name;
+					audioSource.clip = Resources.Load(file) as AudioClip;
+					audioSource.PlayDelayed((gos.Length) * clipLength);
+				} 
+				else 
+				{
+					Debug.LogWarning("No audio file attached");
+				}
+			} 
+			else 
+			{
+				Debug.LogError("Cannot find the word in the scene");
+			}
 			//Wait for all letters to complete before pulsing
 			StartCoroutine(PulseWord(gos, (gos.Length) * clipLength));
 		}

@@ -44,30 +44,58 @@ namespace WordTree
 			{
 				// add tap gesture component
 				TapGesture tg = go.AddComponent<TapGesture>();
-				// subscribe to tap events
-				tg.Tapped += tappedHandler;
-				Debug.Log(go.name + " subscribed to tap events");
+				if (tg != null) {
+					// subscribe to tap events
+					tg.Tapped += tappedHandler;
+					Debug.Log(go.name + " subscribed to tap events");
+				} 
+				else 
+				{
+					Debug.LogError("Cannot find tap gesture");
+				}
+
 			}
 			if (go.tag == Constants.Tags.TAG_MOVABLE_LETTER || go.tag == Constants.Tags.TAG_MOVABLE_BLANK) 
 			{
 				// add pan gesture component
 				TransformGesture pg = go.AddComponent<TransformGesture>();
 				pg.CombineTouchesInterval = 0.2f;
-				// subscribe to pan events
-				pg.TransformStarted += panStartedHandler;
-				pg.Transformed += pannedHandler;
-				pg.TransformCompleted += panCompleteHandler;
-				Debug.Log(go.name + " subscribed to pan events");
+				if (pg != null) 
+				{
+					// subscribe to pan events
+					pg.TransformStarted += panStartedHandler;
+					pg.Transformed += pannedHandler;
+					pg.TransformCompleted += panCompleteHandler;
+					Debug.Log(go.name + " subscribed to pan events");
+				} 
+				else 
+				{
+					Debug.LogError("Cannot find transform gesture");
+				}
 				// add press gesture component
 				PressGesture prg = go.AddComponent<PressGesture>();
-				// subscribe to press events
-				prg.Pressed += pressedHandler;
-				Debug.Log(go.name + " subscribed to press events");
+				if (prg != null) 
+				{
+					// subscribe to press events
+					prg.Pressed += pressedHandler;
+					Debug.Log(go.name + " subscribed to press events");
+				} 
+				else 
+				{
+					Debug.LogError("Cannot find press gesture");
+				}
 				// add release gesture component
 				ReleaseGesture rg = go.AddComponent<ReleaseGesture>();
-				// subscribe to release events
-				rg.Released += releasedHandler;
-				Debug.Log(go.name + " subscribed to release events");
+				if (rg != null) 
+				{
+					// subscribe to release events
+					rg.Released += releasedHandler;
+					Debug.Log(go.name + " subscribed to release events");
+				} 
+				else 
+				{
+					Debug.LogError("Cannot find release gesture");
+				}
 				// add transformer component so object automatically moves on drag
 				go.AddComponent<Transformer>();
 			}
@@ -75,9 +103,16 @@ namespace WordTree
 			{
 				// add press gesture component
 				PressGesture prg = go.AddComponent<PressGesture>();
-				// subscribe to press events
-				prg.Pressed += pressedHandler;
-				Debug.Log(go.name + " subscribed to press events");
+				if (prg != null) 
+				{
+					// subscribe to press events
+					prg.Pressed += pressedHandler;
+					Debug.Log(go.name + " subscribed to press events");
+				}
+				else 
+				{
+					Debug.LogError("Cannot find press gesture");
+				}
 			}
 		}
 
@@ -88,28 +123,28 @@ namespace WordTree
 		{
 			// enable tap events
 			TapGesture tg = go.GetComponent<TapGesture>();
-			if (tg != null) {
+			if (tg != null) 
+			{
 				tg.enabled = true;
 			}
-
 			// enable pan events
 			TransformGesture pg = go.GetComponent<TransformGesture>();
-			if (pg != null) {
+			if (pg != null)
+			{
 				pg.enabled = true;
 			}
-
 			// enable press events
 			PressGesture prg = go.GetComponent<PressGesture>();
-			if (prg != null) {
+			if (prg != null) 
+			{
 				prg.enabled = true;
 			}
-
 			// enable release events
 			ReleaseGesture rg = go.GetComponent<ReleaseGesture>();
-			if (rg != null) {
+			if (rg != null) 
+			{
 				rg.enabled = true;
 			}
-			
 			Debug.Log("Enabled gestures for " + go.name);
 		}
 
@@ -172,6 +207,10 @@ namespace WordTree
 				if (go.GetComponent<AudioSource>().clip != null) 
 				{
 					go.GetComponent<AudioSource>().Play();
+				} 
+				else 
+				{
+					Debug.LogWarning("Cannot load audio file");
 				}
 				// keep track of which kid was tapped on (boy or girl)
 				ProgressManager.chosenKid = go.name;
@@ -251,12 +290,26 @@ namespace WordTree
 			if (go.name == "SoundButton") 
 			{
 				GameObject word = GameObject.FindGameObjectWithTag(Constants.Tags.TAG_WORD_OBJECT);
-				//create audio source
-				AudioSource audioSource = gameObject.AddComponent<AudioSource>();
-				//load and play audio file for word
-				string file = "Audio" + "/Words/"+ word.transform.name;
-				audioSource.clip = Resources.Load(file) as AudioClip;
-				audioSource.Play();
+				if (word != null) 
+				{
+					//create audio source
+					AudioSource audioSource = gameObject.AddComponent<AudioSource>();
+					if (audioSource != null) 
+					{
+						//load and play audio file for word
+						string file = "Audio" + "/Words/" + word.transform.name;
+						audioSource.clip = Resources.Load(file) as AudioClip;
+						audioSource.Play();
+					} 
+					else 
+					{
+						Debug.LogWarning("Cannot find audio file");
+					}
+				} 
+				else 
+				{
+					Debug.LogWarning("Cannot find word object");
+				}
 			}
 			// if hint button is tapped, show a hint
 			if (go.name == "HintButton") 
@@ -458,12 +511,18 @@ namespace WordTree
 				if (sound.Contains(go.transform.name))
 				{
 					AudioSource audioSource = gameObject.AddComponent<AudioSource>();
-					string file = "Audio" + "/Phonemes/" + sound;
-					Debug.Log(file);
-					audioSource.clip = Resources.Load(file) as AudioClip;
-					audioSource.Play();  
+					if (audioSource != null) 
+					{
+						string file = "Audio" + "/Phonemes/" + sound;
+						Debug.Log(file);
+						audioSource.clip = Resources.Load(file) as AudioClip;
+						audioSource.Play();  
+					}
+					else 
+					{
+						Debug.LogWarning("Cannot find audio file");
+					}
 				}
-
 			}
 		}
 
@@ -481,7 +540,6 @@ namespace WordTree
 				{
 					tg.Tapped -= tappedHandler;
 				}
-
 				TransformGesture pg = go.GetComponent<TransformGesture>();
 				if (pg != null) 
 				{

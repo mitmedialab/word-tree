@@ -20,66 +20,111 @@ namespace WordTree
 			//create instance of grestureManager
 			GestureManager gestureManager = GameObject.
 				FindGameObjectWithTag(Constants.Tags.TAG_GESTURE_MANAGER).GetComponent<GestureManager>();
-			//Create objects and background
-			LoadLevel(ProgressManager.currentLevel);
-			//Set up kid
-			GameObject kid = GameObject.FindGameObjectWithTag(Constants.Tags.TAG_KID);
-			kid.GetComponent<SpriteRenderer>().sprite = Resources.Load<Sprite>("Graphics/"
+			if (gestureManager != null) 
+			{
+				//Create objects and background
+				LoadLevel(ProgressManager.currentLevel);
+				//Set up kid
+				GameObject kid = GameObject.FindGameObjectWithTag(Constants.Tags.TAG_KID);
+				kid.GetComponent<SpriteRenderer>().sprite = Resources.Load<Sprite>("Graphics/"
 				+ ProgressManager.chosenKid);
-			//Play Grow Animation for kid
-			GrowKid();
-			//Load audio for kid
-			kid.AddComponent<AudioSource>().clip = Resources.Load("Audio/KidSpeaking/" 
-				+ ProgressManager.currentLevel) as AudioClip;
-			//Check if audio clip is attached
-			if (kid.GetComponent<AudioSource>().clip != null) 
-			{
-				kid.GetComponent<AudioSource>().priority = 0;
-				kid.GetComponent<AudioSource>().volume = 1.0f;
-				//Play audio clip attached to kid if there is one
-				kid.GetComponent<AudioSource>().Play();
-			}
-			//Find ChooseObjectDirector gameObject
-			GameObject dir = GameObject.Find("ChooseObjectDirector");
-			//Load background music for scene onto ChooseObjectDirector
-			dir.AddComponent<AudioSource>().clip = Resources.Load("Audio/BackgroundMusic/" 
-				+ ProgressManager.currentLevel) as AudioClip;
-			//Check if audio clip is attached
-			if (dir.GetComponent<AudioSource>().clip != null) 
-			{
-				dir.GetComponent<AudioSource>().priority = 0;
-				dir.GetComponent<AudioSource>().volume = .25f;
-				//Start playing background music if attached
-				dir.GetComponent<AudioSource>().Play();
-			}
-			//Subscribe buttons to touch gestures
-			GameObject button = GameObject.FindGameObjectWithTag(Constants.Tags.TAG_BUTTON);
-			button.AddComponent<GestureManager>().AddAndSubscribeToGestures(button);
-			//Find word objects
-			GameObject[] gos = GameObject.FindGameObjectsWithTag(Constants.Tags.TAG_WORD_OBJECT);
-			foreach (GameObject go in gos) 
-			{
-				//Start pulsing for each object
-				Debug.Log("Started pulsing for " + go.name);
-				go.GetComponent<PulseBehavior>().StartPulsing(go);
-				//Check if word has been completed by user
-				//If word not completed, darken and fade out object
-				if (!ProgressManager.IsWordCompleted(go.name)) 
+				//check if sprite is attached
+				if (kid.GetComponent<SpriteRenderer>().sprite != null) 
 				{
-					SetColorAndTransparency(go, Color.grey, .9f);
+					//Play Grow Animation for kid
+					GrowKid();
+					//Load audio for kid
+					kid.AddComponent<AudioSource>().clip = Resources.Load("Audio/KidSpeaking/"
+					+ ProgressManager.currentLevel) as AudioClip;
+					//Check if audio clip is attached
+					if (kid.GetComponent<AudioSource>().clip != null) 
+					{
+						kid.GetComponent<AudioSource>().priority = 0;
+						kid.GetComponent<AudioSource>().volume = 1.0f;
+						//Play audio clip attached to kid if there is one
+						kid.GetComponent<AudioSource>().Play();
+					} 
+					else 
+					{
+						Debug.LogWarning("No audio found");
+					}
 				}
-				//If word completed, brighten and fill in object
-				if (ProgressManager.IsWordCompleted(go.name)) {
-					Debug.Log("Word Completed: " + go.name);
-					SetColorAndTransparency(go, Color.white, 1f);
+				else 
+				{
+					Debug.LogWarning("Cannot load sprite");
 				}
+					//Find ChooseObjectDirector gameObject
+					GameObject dir = GameObject.Find("ChooseObjectDirector");
+				if (dir != null) 
+				{
+					//Load background music for scene onto ChooseObjectDirector
+					dir.AddComponent<AudioSource>().clip = Resources.Load("Audio/BackgroundMusic/"
+					+ ProgressManager.currentLevel) as AudioClip;
+					//Check if audio clip is attached
+					if (dir.GetComponent<AudioSource>().clip != null)
+					{
+						dir.GetComponent<AudioSource>().priority = 0;
+						dir.GetComponent<AudioSource>().volume = .25f;
+						//Start playing background music if attached
+						dir.GetComponent<AudioSource>().Play();
+					} 
+					else 
+					{
+						Debug.LogWarning("No audio file found");
+					}
+				} 
+				else 
+				{
+					Debug.LogWarning("Cannot find ChooseObjectDirector");
+				}
+					//Subscribe buttons to touch gestures
+					GameObject button = GameObject.FindGameObjectWithTag(Constants.Tags.TAG_BUTTON);
+				if (button != null) 
+				{
+					button.AddComponent<GestureManager>().AddAndSubscribeToGestures(button);
+				}
+				else 
+				{
+					Debug.LogWarning("Cannot find button");
+				}
+					//Find word objects
+					GameObject[] gos = GameObject.FindGameObjectsWithTag(Constants.Tags.TAG_WORD_OBJECT);
+				foreach (GameObject go in gos) 
+				{
+					if (go != null) 
+					{
+						//Start pulsing for each object
+						Debug.Log("Started pulsing for " + go.name);
+						go.GetComponent<PulseBehavior>().StartPulsing(go);
+						//Check if word has been completed by user
+						//If word not completed, darken and fade out object
+						if (!ProgressManager.IsWordCompleted(go.name))
+						{
+							SetColorAndTransparency(go, Color.grey, .9f);
+						}
+						//If word completed, brighten and fill in object
+						if (ProgressManager.IsWordCompleted(go.name)) 
+						{
+							Debug.Log("Word Completed: " + go.name);
+							SetColorAndTransparency(go, Color.white, 1f);
+						}
+					} 
+					else 
+					{
+						Debug.LogWarning("Cannot find word");
+					}
+				}
+					//Check if this level has been completed, i.e. if all words in the level have been completed
+					if (CheckCompletedLevel()) 
+					{
+						//If level completed, add to completedLevels list and unlock the next level
+						ProgressManager.AddCompletedLevel(ProgressManager.currentLevel);
+						ProgressManager.UnlockNextLevel(ProgressManager.currentLevel);
+					}
 			}
-			//Check if this level has been completed, i.e. if all words in the level have been completed
-			if (CheckCompletedLevel())
+			else 
 			{
-				//If level completed, add to completedLevels list and unlock the next level
-				ProgressManager.AddCompletedLevel(ProgressManager.currentLevel);
-				ProgressManager.UnlockNextLevel(ProgressManager.currentLevel);
+				Debug.LogError("Cannot find gesture manager component");
 			}
 		}
 
@@ -90,10 +135,18 @@ namespace WordTree
 		{
 			//Find ChooseObjectDirector
 			GameObject dir = GameObject.Find("ChooseObjectDirector");
-			//If attached audio (background music) has stopped playing, play the audio
-			//For keeping background music playing in a loop
-			if (!dir.GetComponent<AudioSource>().isPlaying) {
-				dir.GetComponent<AudioSource>().Play();
+			if (dir != null) 
+			{
+				//If attached audio (background music) has stopped playing, play the audio
+				//For keeping background music playing in a loop
+				if (!dir.GetComponent<AudioSource>().isPlaying) 
+				{
+					dir.GetComponent<AudioSource>().Play();
+				}
+			}
+			else 
+			{
+				Debug.LogWarning("Cannot load ChooseObjectDirector");
 			}
 			// if user presses escape or 'back' button on android, exit program
 			if (Input.GetKeyDown(KeyCode.Escape)) 
@@ -109,8 +162,15 @@ namespace WordTree
 		{
 			float scale = .3f; //desired scale to grow kid to
 			GameObject kid = GameObject.FindGameObjectWithTag(Constants.Tags.TAG_KID);
-			//Scale up kid to desired size
-			LeanTween.scale(kid, new Vector3(scale, scale, 1f), 1f);
+			if (kid != null) 
+			{
+				//Scale up kid to desired size
+				LeanTween.scale(kid, new Vector3(scale, scale, 1f), 1f);
+			}
+			else 
+			{
+				Debug.LogWarning("Cannot find kid");
+			}
 		}
 
 		//<summary>
@@ -138,32 +198,39 @@ namespace WordTree
 			GameObject[] gos = GameObject.FindGameObjectsWithTag(Constants.Tags.TAG_WORD_OBJECT);
 			foreach (GameObject go in gos) 
 			{
-				//if current scene is Learn Spelling
-				if (ProgressManager.currentMode == 1) 
+				if (go != null) 
 				{
-					//completed a word; update counter
-					if (ProgressManager.completedWordsLearn.Contains(go.name))
+					//if current scene is Learn Spelling
+					if (ProgressManager.currentMode == 1) 
 					{
-						numCompleted = numCompleted + 1;
+						//completed a word; update counter
+						if (ProgressManager.completedWordsLearn.Contains(go.name))
+						{
+							numCompleted = numCompleted + 1;
+						}
 					}
-				}
-				//if current scene is Spelling Game
-				if (ProgressManager.currentMode == 2) 
+					//if current scene is Spelling Game
+					if (ProgressManager.currentMode == 2) 
+					{
+						//completed a word; update counter
+						if (ProgressManager.completedWordsSpell.Contains(go.name))
+						{
+							numCompleted = numCompleted + 1;
+						}
+					}
+					//if current scene is Sound Game
+					if (ProgressManager.currentMode == 3) 
+					{
+						//completed a word; update counter
+						if (ProgressManager.completedWordsSound.Contains(go.name)) 
+						{
+							numCompleted = numCompleted + 1;
+						}
+					}
+				} 
+				else 
 				{
-					//completed a word; update counter
-					if (ProgressManager.completedWordsSpell.Contains(go.name))
-					{
-						numCompleted = numCompleted + 1;
-					}
-				}
-				//if current scene is Sound Game
-				if (ProgressManager.currentMode == 3) 
-				{
-					//completed a word; update counter
-					if (ProgressManager.completedWordsSound.Contains(go.name))
-					{
-						numCompleted = numCompleted + 1;
-					}
+					Debug.LogWarning("Cannot find word");
 				}
 			}
 			//check if all words have been completed
@@ -184,19 +251,21 @@ namespace WordTree
 		{
 			//Find background object
 			GameObject background = GameObject.Find("Background");
-
 			//load image
 			SpriteRenderer spriteRenderer = background.AddComponent<SpriteRenderer>();
 			Sprite sprite = Resources.Load<Sprite>("Graphics/Backgrounds/" + name);
-			if (sprite == null) 
+			if (sprite != null)
+			{
+				spriteRenderer.sprite = sprite;
+				//set position
+				background.transform.position = posn;
+				//set scale
+				background.transform.localScale = new Vector3(scale, scale, 1);
+			} 
+			else 
 			{
 				Debug.Log("ERROR: could not load background");
 			}
-			spriteRenderer.sprite = sprite;
-			//set position
-			background.transform.position = posn;
-			//set scale
-			background.transform.localScale = new Vector3(scale, scale, 1);
 		}
 
 		//<summary>
@@ -208,13 +277,20 @@ namespace WordTree
 			//Get properties of the level, including the words included in the level, the position of the background image, 
 			// and the desired scale of the background image
 			LevelProperties prop = LevelProperties.GetLevelProperties(level);
-			string[] words = prop.Words();
-			Vector3 backgroundPosn = prop.BackgroundPosn();
-			float backgroundScale = prop.BackgroundScale();
-			//Create word objects
-			LevelCreation.CreateWordObjects(level, words);
-			//Create background
-			CreateBackGround(level, backgroundPosn, backgroundScale);
+			if (prop != null) 
+			{
+				string[] words = prop.Words();
+				Vector3 backgroundPosn = prop.BackgroundPosn();
+				float backgroundScale = prop.BackgroundScale();
+				//Create word objects
+				LevelCreation.CreateWordObjects(level, words);
+				//Create background
+				CreateBackGround(level, backgroundPosn, backgroundScale);
+			} 
+			else 
+			{
+				Debug.LogWarning("Cannot find level name");
+			}
 		}
 			
 	}
