@@ -109,7 +109,7 @@ namespace WordTree
 						SetColorAndTransparency(go, Color.grey, .9f);
 					}
 					//If word completed, brighten and fill in object
-					if (ProgressManager.IsWordCompleted(go.name)) 
+					else 
 					{
 						Debug.Log("Word Completed: " + go.name);
 						SetColorAndTransparency(go, Color.white, 1f);

@@ -137,7 +137,7 @@ namespace WordTree
 								FlashHintButton(2f);
 							}
 							// if the user spelled the word correctly
-							if (CheckCorrectSpelling(Constants.Tags.TAG_MOVABLE_LETTER)) 
+							else  
 							{
 								// find all movable letters
 								GameObject[] mov = GameObject.FindGameObjectsWithTag
@@ -204,7 +204,7 @@ namespace WordTree
 								FlashHintButton(2f);	
 							}
 							// if user dragged all sound blanks to their correct corresponding letters
-							if (CheckCorrectSpelling(Constants.Tags.TAG_MOVABLE_BLANK)) 
+							else
 							{
 								// find all sound blanks
 								GameObject[] mov = GameObject.FindGameObjectsWithTag

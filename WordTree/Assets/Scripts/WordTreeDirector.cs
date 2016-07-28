@@ -82,7 +82,7 @@ namespace WordTree
 						go.GetComponent<SpriteRenderer>().color = Color.grey;
 					}
 					// if level has been completed
-					if (ProgressManager.IsLevelCompleted(go.name)) 
+					else
 					{
 						// brighten level icon
 						go.GetComponent<SpriteRenderer>().color = Color.white;
