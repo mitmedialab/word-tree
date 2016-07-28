@@ -403,17 +403,10 @@ namespace WordTree
 			List<GameObject> correctLetters = CorrectObjects(Constants.Tags.TAG_TARGET_BLANK);
 			foreach (GameObject go in correctLetters)
 			{
-				if (go != null) 
-				{
-					// change color of letter
-					// currently changes letter to green color
-					LeanTween.color(go, Color.yellow, .1f).setDelay(delayTime);
-					go.transform.localScale = new Vector3(WordCreation.letterScale, WordCreation.letterScale, 1);
-				} 
-				else 
-				{
-					Debug.LogError("Cannot find the correct letters");
-				}
+				// change color of letter
+				// currently changes letter to green color
+				LeanTween.color(go, Color.yellow, .1f).setDelay(delayTime);
+				go.transform.localScale = new Vector3(WordCreation.letterScale, WordCreation.letterScale, 1);
 			}
 		}
 

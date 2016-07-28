@@ -44,7 +44,8 @@ namespace WordTree
 			{
 				// add tap gesture component
 				TapGesture tg = go.AddComponent<TapGesture>();
-				if (tg != null) {
+				if (tg != null) 
+				{
 					// subscribe to tap events
 					tg.Tapped += tappedHandler;
 					Debug.Log(go.name + " subscribed to tap events");
@@ -294,11 +295,12 @@ namespace WordTree
 				{
 					//create audio source
 					AudioSource audioSource = gameObject.AddComponent<AudioSource>();
-					if (audioSource != null) 
+					//load audio file for word
+					string file = "Audio" + "/Words/" + word.transform.name;
+					audioSource.clip = Resources.Load(file) as AudioClip;
+					if (audioSource.clip != null) 
 					{
-						//load and play audio file for word
-						string file = "Audio" + "/Words/" + word.transform.name;
-						audioSource.clip = Resources.Load(file) as AudioClip;
+						//play sound clip 
 						audioSource.Play();
 					} 
 					else 
@@ -511,11 +513,12 @@ namespace WordTree
 				if (sound.Contains(go.transform.name))
 				{
 					AudioSource audioSource = gameObject.AddComponent<AudioSource>();
-					if (audioSource != null) 
+					string file = "Audio" + "/Phonemes/" + sound;
+					Debug.Log(file);
+					audioSource.clip = Resources.Load(file) as AudioClip;
+					if (audioSource.clip != null) 
 					{
-						string file = "Audio" + "/Phonemes/" + sound;
-						Debug.Log(file);
-						audioSource.clip = Resources.Load(file) as AudioClip;
+						//play sound clip
 						audioSource.Play();  
 					}
 					else 

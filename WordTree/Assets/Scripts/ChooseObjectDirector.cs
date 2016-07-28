@@ -30,7 +30,7 @@ namespace WordTree
 				if (kid != null)
 				{
 					kid.GetComponent<SpriteRenderer>().sprite = Resources.Load<Sprite>("Graphics/"
-					+ ProgressManager.chosenKid);
+						+ ProgressManager.chosenKid);
 				} 
 				else 
 				{
@@ -99,27 +99,20 @@ namespace WordTree
 				GameObject[] gos = GameObject.FindGameObjectsWithTag(Constants.Tags.TAG_WORD_OBJECT);
 				foreach (GameObject go in gos) 
 				{	
-					if (go != null) 
+					//Start pulsing for each object
+					Debug.Log("Started pulsing for " + go.name);
+					go.GetComponent<PulseBehavior>().StartPulsing(go);
+					//Check if word has been completed by user
+					//If word not completed, darken and fade out object
+					if (!ProgressManager.IsWordCompleted(go.name))
 					{
-						//Start pulsing for each object
-						Debug.Log("Started pulsing for " + go.name);
-						go.GetComponent<PulseBehavior>().StartPulsing(go);
-						//Check if word has been completed by user
-						//If word not completed, darken and fade out object
-						if (!ProgressManager.IsWordCompleted(go.name))
-						{
-							SetColorAndTransparency(go, Color.grey, .9f);
-						}
-						//If word completed, brighten and fill in object
-						if (ProgressManager.IsWordCompleted(go.name)) 
-						{
-							Debug.Log("Word Completed: " + go.name);
-							SetColorAndTransparency(go, Color.white, 1f);
-						}
-					} 
-					else 
+						SetColorAndTransparency(go, Color.grey, .9f);
+					}
+					//If word completed, brighten and fill in object
+					if (ProgressManager.IsWordCompleted(go.name)) 
 					{
-						Debug.LogWarning("Cannot find word");
+						Debug.Log("Word Completed: " + go.name);
+						SetColorAndTransparency(go, Color.white, 1f);
 					}
 				}
 				//Check if this level has been completed, i.e. if all words in the level have been completed
@@ -214,31 +207,22 @@ namespace WordTree
 			foreach (GameObject go in gos) 
 			{
 				//if current scene is Learn Spelling
-				if (ProgressManager.currentMode == 1) 
+				if (ProgressManager.currentMode == 1 && ProgressManager.completedWordsLearn.Contains(go.name))
 				{
 					//completed a word; update counter
-					if (ProgressManager.completedWordsLearn.Contains(go.name))
-					{
-						numCompleted = numCompleted + 1;
-					}
+					numCompleted = numCompleted + 1;
 				}
 				//if current scene is Spelling Game
-				if (ProgressManager.currentMode == 2) 
+				if (ProgressManager.currentMode == 2 && ProgressManager.completedWordsSpell.Contains(go.name))
 				{
 					//completed a word; update counter
-					if (ProgressManager.completedWordsSpell.Contains(go.name))
-					{
-						numCompleted = numCompleted + 1;
-					}
+					numCompleted = numCompleted + 1;
 				}
 				//if current scene is Sound Game
-				if (ProgressManager.currentMode == 3) 
+				if (ProgressManager.currentMode == 3 && ProgressManager.completedWordsSound.Contains(go.name)) 
 				{
-					//completed a word; update counter
-					if (ProgressManager.completedWordsSound.Contains(go.name)) 
-					{
-						numCompleted = numCompleted + 1;
-					}
+				    //completed a word; update counter
+					numCompleted = numCompleted + 1;
 				}
 			}
 			//check if all words have been completed
@@ -274,7 +258,7 @@ namespace WordTree
 				}
 				else
 				{
-					Debug.Log("ERROR: could not load background");
+					Debug.LogError("ERROR: could not load background");
 				}
 			} 
 			else 

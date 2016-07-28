@@ -55,9 +55,9 @@ namespace WordTree
 					AudioSource audioSource = gameObject.AddComponent<AudioSource>();
 					//load and play audio file attached to the letters
 					string file = "Audio" + "/Phonemes/" + phonemes[index];
+					audioSource.clip = Resources.Load(file) as AudioClip;
 					if (audioSource != null) 
 					{
-						audioSource.clip = Resources.Load(file) as AudioClip;
 						audioSource.PlayDelayed(index * clipLength);  
 						StartCoroutine(PulseLetter(go, index * clipLength));
 					} 
@@ -99,7 +99,7 @@ namespace WordTree
 				} 
 				else 
 				{
-					Debug.LogWarning("Cannot load" + file + " clip");
+					Debug.LogWarning("Cannot load " + file + " for game object " + gameObject.name);
 				}
 				
 			} 
