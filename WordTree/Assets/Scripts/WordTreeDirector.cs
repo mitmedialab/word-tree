@@ -24,6 +24,10 @@ namespace WordTree
 			GameObject kid = GameObject.FindGameObjectWithTag("Kid");
 			kid.GetComponent<SpriteRenderer>().sprite = Resources.Load<Sprite>
 				("Graphics/" + ProgressManager.chosenKid);
+			if (Resources.Load<Sprite>("Graphics/" + ProgressManager.chosenKid) == null)
+			{
+				Debug.LogWarning("Could not load sprite");
+			}
 			// grow kid animation
 			GrowKid();
 			// load background music onto the word tree director
@@ -31,11 +35,15 @@ namespace WordTree
 			dir.AddComponent<AudioSource>().clip = Resources.Load("Audio/BackgroundMusic/WordTree") 
 				as AudioClip;
 			// play background music if attached to director
-			if (dir.GetComponent<AudioSource>().clip != null)
+			if (dir.GetComponent<AudioSource>().clip != null) 
 			{
 				dir.GetComponent<AudioSource>().volume = .25f;
+				dir.GetComponent<AudioSource>().Play();
+			} 
+			else 
+			{
+				Debug.LogWarning("Could not load audio file");
 			}
-			dir.GetComponent<AudioSource>().Play();
 			// subscribe home button to gestures
 			GameObject home = GameObject.Find("HomeButton");
 			home.AddComponent<GestureManager>().AddAndSubscribeToGestures(home);

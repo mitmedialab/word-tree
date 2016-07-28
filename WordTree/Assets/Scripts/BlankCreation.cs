@@ -55,30 +55,44 @@ namespace WordTree
 			}
 			//Find all blanks
 			GameObject[] blanks = GameObject.FindGameObjectsWithTag(tag);
-			//Set possible colors
-			Color[] colors = new Color[] { Color.green, Color.yellow, Color.cyan, 
-				Color.blue, Color.magenta };
-			//Change blanks to random colors
-			shuffledColors = ShuffleArrayColor(colors);
-			for (int i = 0; i < blanks.Length; i++) 
+			if (blanks != null)
 			{
-				SpriteRenderer sprite = blanks[i].GetComponent<SpriteRenderer>();
-				sprite.color = shuffledColors[i];
-			}
-			//Get initial position of each blank
-			for (int i = 0; i < blanks.Length; i++)
+				//Set possible colors
+				Color[] colors = new Color[] { Color.green, Color.yellow, Color.cyan, 
+					Color.blue, Color.magenta
+				};
+				//Change blanks to random colors
+				shuffledColors = ShuffleArrayColor(colors);
+				for (int i = 0; i < blanks.Length; i++) 
+				{
+					SpriteRenderer sprite = blanks[i].GetComponent<SpriteRenderer>();
+					if (sprite != null) 
+					{
+						sprite.color = shuffledColors[i];
+					}
+					else 
+					{
+						Debug.LogWarning("Cannot load sprite");
+					}
+				}
+				//Get initial position of each blank
+				for (int i = 0; i < blanks.Length; i++) 
+				{
+					posn[i] = blanks[i].transform.position;
+				}
+				//int index: randomly pick a preset shuffling template (4 to choose from currently)
+				int index = Random.Range(0, 4);
+				//Shuffle blanks positions
+				//i.e. move blanks to new positions
+				for (int i = 0; i < blanks.Length; i++) 
+				{
+					blanks[i].transform.position = posn[order[index, i] - 1];
+				}
+			} 
+			else 
 			{
-				posn[i] = blanks[i].transform.position;
+				Debug.LogError("Cannot find blanks in scene");
 			}
-			//int index: randomly pick a preset shuffling template (4 to choose from currently)
-			int index = Random.Range(0, 4);
-			//Shuffle blanks positions
-			//i.e. move blanks to new positions
-			for (int i = 0; i < blanks.Length; i++) 
-			{
-				blanks[i].transform.position = posn[order[index, i] - 1];
-			}
-			
 		}
 
 		//<summary>

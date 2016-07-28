@@ -176,6 +176,7 @@ namespace WordTree
 			case "Tent":
 				return CreateInstance(new string[]{ "T", "E-short", "N-end", "T" }, .9f);
 			default:
+				Debug.LogError("Word is not in list");
 				return null;
 			}
 		}

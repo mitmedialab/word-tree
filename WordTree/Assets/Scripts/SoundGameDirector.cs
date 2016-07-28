@@ -20,24 +20,39 @@ namespace WordTree
 			//make reference to existing gestureManager 
 			GestureManager gestureManager = GameObject.
 				FindGameObjectWithTag(Constants.Tags.TAG_GESTURE_MANAGER).GetComponent<GestureManager>();
-			// create sound blanks, letters, and word object
-			LoadSoundGameWord(ProgressManager.currentWord);
-			// subscribe buttons to gestures
-			GameObject[] buttons = GameObject.FindGameObjectsWithTag(Constants.Tags.TAG_BUTTON);
-			foreach (GameObject button in buttons) 
+			if (gestureManager != null) 
 			{
-				button.AddComponent<GestureManager>().AddAndSubscribeToGestures(button);
+				// create sound blanks, letters, and word object
+				LoadSoundGameWord(ProgressManager.currentWord);
+				// subscribe buttons to gestures
+				GameObject[] buttons = GameObject.FindGameObjectsWithTag(Constants.Tags.TAG_BUTTON);
+				foreach (GameObject button in buttons) 
+				{
+					button.AddComponent<GestureManager>().AddAndSubscribeToGestures(button);
+				}
+				// sound out word
+				GameObject[] tar = GameObject.FindGameObjectsWithTag(Constants.Tags.TAG_TARGET_LETTER);
+				GameObject audioManager = GameObject.Find("AudioManager");
+				if (audioManager != null) 
+				{
+					audioManager.GetComponent<AudioManager>().SpellOutWord(tar);
+					// start pulsing sound blanks
+					GameObject[] mov = GameObject.FindGameObjectsWithTag(Constants.Tags.TAG_MOVABLE_BLANK);
+					foreach (GameObject go in mov) 
+					{
+						go.GetComponent<PulseBehavior>().StartPulsing(go, (tar.Length + 1) * AudioManager.clipLength);
+					}
+				} 
+				else 
+				{
+					Debug.LogWarning("Cannot find auio manager");
+					
+				} 
 			}
-			// sound out word
-			GameObject[] tar = GameObject.FindGameObjectsWithTag(Constants.Tags.TAG_TARGET_LETTER);
-			GameObject audioManager = GameObject.Find("AudioManager");
-			audioManager.GetComponent<AudioManager>().SpellOutWord(tar);
-			// start pulsing sound blanks
-			GameObject[] mov = GameObject.FindGameObjectsWithTag(Constants.Tags.TAG_MOVABLE_BLANK);
-			foreach (GameObject go in mov) 
+			else 
 			{
-				go.GetComponent<PulseBehavior>().StartPulsing(go, (tar.Length + 1) * AudioManager.clipLength);
-			}
+				Debug.LogError("Cannot find gesture manager");
+			}	
 		}
 
 		//<summary>
@@ -48,16 +63,23 @@ namespace WordTree
 		{
 			// get properties of current word in game
 			WordProperties prop = WordProperties.GetWordProperties(word);
-			// phonemes in word
-			string[] phonemes = prop.Phonemes(); 
-			// scale of word object
-			float objScale = prop.ObjScale(); 
-			// create sound blanks that are scrambled
-			BlankCreation.CreateScrambledBlanks(word, phonemes, "Circle", "MovableBlank", "SoundGame");
-			// create word object
-			WordCreation.CreateWord(word, phonemes, "TargetLetter", "SoundGame");
-			CreateWordImage(word, objScale);
-			// create jars that "hold" each letter
+			if (prop != null) 
+			{
+				// phonemes in word
+				string[] phonemes = prop.Phonemes(); 
+				// scale of word object
+				float objScale = prop.ObjScale(); 
+				// create sound blanks that are scrambled
+				BlankCreation.CreateScrambledBlanks(word, phonemes, "Circle", "MovableBlank", "SoundGame");
+				// create word object
+				WordCreation.CreateWord(word, phonemes, "TargetLetter", "SoundGame");
+				CreateWordImage(word, objScale);
+				// create jars that "hold" each letter
+			}
+			else 
+			{
+				Debug.LogWarning("Cannot find word properties");
+			}
 			CreateJars();
 			// make letters black color
 			GameObject[] tar = GameObject.FindGameObjectsWithTag(Constants.Tags.TAG_TARGET_LETTER);

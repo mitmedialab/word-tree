@@ -108,6 +108,7 @@ namespace WordTree
 				return CreateInstance(new string[] { "Bat", "Star", "Map", "Fox", "Tent" }, 
 					new Vector3(0, 2.5f, 2), 3.5f);
 			default:
+				Debug.LogError("Cannot find level");
 				return null;
 			}
 		}
