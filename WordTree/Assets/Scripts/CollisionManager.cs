@@ -121,6 +121,21 @@ namespace WordTree
 						// if all letters have been dragged to a blank
 						if (CheckCompletedTargets(Constants.Tags.TAG_MOVABLE_LETTER)) 
 						{
+							// if user spelled word incorrectly
+							if (!CheckCorrectSpelling(Constants.Tags.TAG_MOVABLE_LETTER)) 
+							{
+								// play try again animation
+								SpellingGameDirector.TryAgainAnimation();
+								// mark the correct letters by changing their color
+								MarkCorrectLetters(1f);
+								// move incorrect letters back to original position
+								ResetIncorrectLetters(1f);
+								// play word's sound
+								GameObject.FindGameObjectWithTag(Constants.Tags.TAG_WORD_OBJECT).
+								GetComponent<AudioSource>().PlayDelayed(1f);
+								// flash hint button to call attention to it
+								FlashHintButton(2f);
+							}
 							// if the user spelled the word correctly
 							if (CheckCorrectSpelling(Constants.Tags.TAG_MOVABLE_LETTER)) 
 							{
@@ -147,22 +162,6 @@ namespace WordTree
 									letter.GetComponent<Properties>().iscorrect = false;
 								}
 							}
-							// if user spelled word incorrectly
-							if (!CheckCorrectSpelling(Constants.Tags.TAG_MOVABLE_LETTER)) 
-							{
-								// play try again animation
-								SpellingGameDirector.TryAgainAnimation();
-								// mark the correct letters by changing their color
-								MarkCorrectLetters(1f);
-								// move incorrect letters back to original position
-								ResetIncorrectLetters(1f);
-								// play word's sound
-								GameObject.FindGameObjectWithTag(Constants.Tags.TAG_WORD_OBJECT).
-							    GetComponent<AudioSource>().PlayDelayed(1f);
-								// flash hint button to call attention to it
-								FlashHintButton(2f);
-							}
-					
 						}
 					}
 					// if current scene is Sound Game
