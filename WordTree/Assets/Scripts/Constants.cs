@@ -26,6 +26,7 @@ namespace WordTree
 			public const string TAG_MOVABLE_BLANK = "MovableBlank";
 			public const string TAG_JAR = "Jar";
 			public const string TAG_HINT = "Hint";
+			public const string TAG_AUDIO_MANAGER = "AudioManager";
 		}
 	}
 }

@@ -17,6 +17,8 @@ namespace WordTree
 		private Rect cameraRect;
 		//create reference for most recent object
 		private GameObject recentObj;
+		//create reference for audio manager
+		AudioManager audioManager;
 
 		//<summary>
 		// Called on start, used to initialize stuff
@@ -30,7 +32,10 @@ namespace WordTree
 				                   Camera.main.pixelHeight));
 			//creates rectangle to limit where objects can go on the screen
 			this.cameraRect = new Rect(bottomLeft.x, bottomLeft.y, topRight.x - bottomLeft.x, 
-				topRight.y - bottomLeft.y);
+				topRight.y - bottomLeft.y);	
+			//set up audio manager
+			 this.audioManager = GameObject.FindGameObjectWithTag(Constants.Tags.TAG_AUDIO_MANAGER)
+				.GetComponent<AudioManager>();	
 		}
 
 		//<summary>
@@ -204,15 +209,9 @@ namespace WordTree
 			{
 				go.GetComponent<PulseBehavior>().StopPulsing(go);
 				BounceKid(go);
-				go.AddComponent<AudioSource>().clip = Resources.Load("Audio/KidSpeaking/Intro") as AudioClip;
-				if (go.GetComponent<AudioSource>().clip != null) 
-				{
-					go.GetComponent<AudioSource>().Play();
-				} 
-				else 
-				{
-					Debug.LogWarning("Cannot load audio file");
-				}
+				//load and play speaking part for kid
+				string file = "Audio/KidSpeaking/Intro";
+				this.audioManager.PlayFromFile(file);
 				// keep track of which kid was tapped on (boy or girl)
 				ProgressManager.chosenKid = go.name;
 				// go to next scene with the word tree
@@ -293,20 +292,9 @@ namespace WordTree
 				GameObject word = GameObject.FindGameObjectWithTag(Constants.Tags.TAG_WORD_OBJECT);
 				if (word != null) 
 				{
-					//create audio source
-					AudioSource audioSource = gameObject.AddComponent<AudioSource>();
-					//load audio file for word
+					//load and play audio file for word
 					string file = "Audio" + "/Words/" + word.transform.name;
-					audioSource.clip = Resources.Load(file) as AudioClip;
-					if (audioSource.clip != null) 
-					{
-						//play sound clip 
-						audioSource.Play();
-					} 
-					else 
-					{
-						Debug.LogWarning("Cannot find audio file");
-					}
+					this.audioManager.PlayFromFile(file);
 				} 
 				else 
 				{
@@ -399,7 +387,6 @@ namespace WordTree
 		private void releasedHandler(object sender, EventArgs e)
 		{
 			Debug.Log("PRESS COMPLETE");
-
 		}
 
 		//<summary>
@@ -472,13 +459,9 @@ namespace WordTree
 			// if the current scene is Word Tree
 			if (Application.loadedLevelName == "2. Word Tree") 
 			{
-				// Load audio onto kid
-				kid.AddComponent<AudioSource>().clip = Resources.Load("Audio/TumbleSound") as AudioClip;
-				// Play audio clip attached to kid if it exists
-				if (kid.GetComponent<AudioSource>().clip != null)
-				{
-					kid.GetComponent<AudioSource>().Play();
-				}
+				// Load and play audio for kid exiting scene
+				string file= "Audio/TumbleSound";
+				this.audioManager.PlayFromFile(file);
 			}
 		}
 
@@ -512,19 +495,9 @@ namespace WordTree
 			{
 				if (sound.Contains(go.transform.name))
 				{
-					AudioSource audioSource = gameObject.AddComponent<AudioSource>();
+					//load and play phoneme for letters
 					string file = "Audio" + "/Phonemes/" + sound;
-					Debug.Log(file);
-					audioSource.clip = Resources.Load(file) as AudioClip;
-					if (audioSource.clip != null) 
-					{
-						//play sound clip
-						audioSource.Play();  
-					}
-					else 
-					{
-						Debug.LogWarning("Cannot find audio file");
-					}
+					this.audioManager.PlayFromFile(file);
 				}
 			}
 		}

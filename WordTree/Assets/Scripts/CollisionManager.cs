@@ -15,7 +15,10 @@ namespace WordTree
 	public class CollisionManager : MonoBehaviour
 	{
 		GestureManager gestureManager;
-
+		AudioManager audioManager;
+		SpellingGameDirector spellinggame; 
+		LearnSpellingDirector learn_Spelling; 
+		SoundGameDirector sound_Game;
 		//<summary>
 		// Called when an object enters the collider of another object
 		// Set the target object as the trigger
@@ -24,11 +27,16 @@ namespace WordTree
 		{
 			GestureManager gestureManager = GameObject.
 				FindGameObjectWithTag(Constants.Tags.TAG_GESTURE_MANAGER).GetComponent<GestureManager>();
+			AudioManager audioManager = GameObject.FindGameObjectWithTag(Constants.Tags.TAG_AUDIO_MANAGER).GetComponent<AudioManager>();
+
 			if (gestureManager != null)
 			{
 				// if the current scene is Learn Spelling
 				if (Application.loadedLevelName == "4. Learn Spelling") 
 				{
+					//create instance of learn spelling director
+					LearnSpellingDirector learn_Spelling = GameObject.FindGameObjectWithTag("LearnSpellingDirector")
+						.GetComponent<LearnSpellingDirector>();
 					// if the collided objects are the same letter
 					// i.e. if the movable letter that entered matches the target letter
 					if (other.name == gameObject.name) 
@@ -58,12 +66,11 @@ namespace WordTree
 							// sound out the word
 							GameObject[] tar = GameObject.FindGameObjectsWithTag
 							(Constants.Tags.TAG_TARGET_LETTER);
-							GameObject audioManager = GameObject.Find("AudioManager");
 							if (audioManager != null) 
 							{
-								audioManager.GetComponent<AudioManager>().SpellOutWord(tar);
+								audioManager.SpellOutWord(tar);
 								// play celebratory animation
-								LearnSpellingDirector.CelebratoryAnimation((tar.Length + 1.5f) *
+								learn_Spelling.CelebratoryAnimation((tar.Length + 1.5f) *
 								AudioManager.clipLength);
 								// add word to completedWord list
 								ProgressManager.AddCompletedWord(ProgressManager.currentWord);
@@ -99,6 +106,8 @@ namespace WordTree
 					// if the current scene is Spelling Game
 					if (Application.loadedLevelName == "5. Spelling Game") 
 					{
+						SpellingGameDirector spellinggame = GameObject.FindGameObjectWithTag("SpellingGameDirector").GetComponent<SpellingGameDirector>();
+
 						Debug.Log("Collision on " + other.name);
 						// stop pulsing letter
 						other.gameObject.GetComponent<PulseBehavior>().StopPulsing(other.gameObject);
@@ -125,7 +134,7 @@ namespace WordTree
 							if (!CheckCorrectSpelling(Constants.Tags.TAG_MOVABLE_LETTER)) 
 							{
 								// play try again animation
-								SpellingGameDirector.TryAgainAnimation();
+								GameObject.FindGameObjectWithTag("SpellingDirector").GetComponent<SpellingGameDirector>().TryAgainAnimation();
 								// mark the correct letters by changing their color
 								MarkCorrectLetters(1f);
 								// move incorrect letters back to original position
@@ -149,9 +158,9 @@ namespace WordTree
 								// mark all correct letters by changing their colors
 								MarkCorrectLetters(0f);
 								// sound out the word
-								SpellingGameDirector.SpellOutWord();
+								spellinggame.SpellOutWord();
 								// play celebratory animation
-								SpellingGameDirector.CelebratoryAnimation((mov.Length + 1.5f) *
+								spellinggame.CelebratoryAnimation((mov.Length + 1.5f) *
 								AudioManager.clipLength);
 								// add word to completedWord list
 								ProgressManager.AddCompletedWord(ProgressManager.currentWord);
@@ -167,6 +176,9 @@ namespace WordTree
 					// if current scene is Sound Game
 					if (Application.loadedLevelName == "6. Sound Game") 
 					{
+						//create instance of sound director component 
+						SoundGameDirector sound_Game= GameObject.FindGameObjectWithTag("SoundGameDirector").
+							GetComponent<SoundGameDirector>();
 						Debug.Log("Collision on " + other.name);
 						// stop pulsing sound blank
 						other.gameObject.GetComponent<PulseBehavior>().StopPulsing(other.gameObject);
@@ -192,7 +204,7 @@ namespace WordTree
 							if (!CheckCorrectSpelling(Constants.Tags.TAG_MOVABLE_BLANK)) 
 							{
 								// play try again animation
-								SoundGameDirector.TryAgainAnimation();
+								sound_Game.TryAgainAnimation();
 								// reset correct sound blanks back to original size
 								MarkCorrectSounds(1f);
 								// move incorrect sound blanks back to original position
@@ -216,12 +228,11 @@ namespace WordTree
 								MarkCorrectSounds(0f);
 								// sound out word
 								GameObject[] tar = GameObject.FindGameObjectsWithTag
-								(Constants.Tags.TAG_TARGET_LETTER);
-								GameObject audioManager = GameObject.Find("AudioManager");
-								audioManager.GetComponent<AudioManager>().SpellOutWord(tar);
+									(Constants.Tags.TAG_TARGET_LETTER);
+								audioManager.SpellOutWord(tar);
 								// play celebratory animation
-								SoundGameDirector.CelebratoryAnimation((mov.Length + 1.5f) *
-								AudioManager.clipLength);
+								sound_Game.CelebratoryAnimation((mov.Length + 1.5f) *
+									AudioManager.clipLength);
 								// add completed word to completedWord list
 								ProgressManager.AddCompletedWord(ProgressManager.currentWord);	
 								//reset letters in case user wants to play again on the same screen

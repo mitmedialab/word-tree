@@ -8,11 +8,16 @@ namespace WordTree
 {
 	public class WordTreeDirector : MonoBehaviour
 	{
+		//create reference for audio manager
+		AudioManager audioManager;
 		//<summary>
 		// called on start, initialize stuff
 		//</summary>
 		void Start()
 		{
+			//set up instance of audio manager
+			this.audioManager = GameObject.FindGameObjectWithTag(Constants.Tags.TAG_AUDIO_MANAGER)
+				.GetComponent<AudioManager>();
 			//Scale graphics to screen size
 			Utilities.setCameraViewForScreen();
 			// add all levels onto level list
@@ -31,19 +36,10 @@ namespace WordTree
 			// grow kid animation
 			GrowKid();
 			// load background music onto the word tree director
-			GameObject dir = GameObject.Find("WordTreeDirector");
-			dir.AddComponent<AudioSource>().clip = Resources.Load("Audio/BackgroundMusic/WordTree") 
-				as AudioClip;
-			// play background music if attached to director
-			if (dir.GetComponent<AudioSource>().clip != null) 
-			{
-				dir.GetComponent<AudioSource>().volume = .25f;
-				dir.GetComponent<AudioSource>().Play();
-			} 
-			else 
-			{
-				Debug.LogWarning("Could not load audio file");
-			}
+			string file = "Audio/BackgroundMusic/WordTree";
+			this.audioManager.PlayFromFile(file);
+			//set up volume for background music
+			this.audioManager.GetComponent<AudioSource>().volume = .25f;
 			// subscribe home button to gestures
 			GameObject home = GameObject.Find("HomeButton");
 			home.AddComponent<GestureManager>().AddAndSubscribeToGestures(home);
@@ -95,7 +91,6 @@ namespace WordTree
 				// keep showing all level icons on word tree
 				ProgressManager.UnlockAllLevels();
 			}
-		
 		}
 
 		//<summary>
@@ -104,10 +99,9 @@ namespace WordTree
 		void Update()
 		{
 			// keep background music playing in a loop
-			GameObject dir = GameObject.Find("WordTreeDirector");
-			if (!dir.GetComponent<AudioSource>().isPlaying)
+			if (!this.audioManager.GetComponent<AudioSource>().isPlaying)
 			{
-				dir.GetComponent<AudioSource>().Play();
+				this.audioManager.GetComponent<AudioSource>().Play();
 			}
 			// if user presses escape or 'back' button on android, exit program
 			if (Input.GetKeyDown(KeyCode.Escape)) 

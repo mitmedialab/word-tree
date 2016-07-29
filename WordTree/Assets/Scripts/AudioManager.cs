@@ -51,20 +51,10 @@ namespace WordTree
 				{
 					// phonemes in word
 					string[] phonemes = prop.Phonemes(); 
-					//create an audio source
-					AudioSource audioSource = gameObject.AddComponent<AudioSource>();
 					//load and play audio file attached to the letters
 					string file = "Audio" + "/Phonemes/" + phonemes[index];
-					audioSource.clip = Resources.Load(file) as AudioClip;
-					if (audioSource != null) 
-					{
-						audioSource.PlayDelayed(index * clipLength);  
-						StartCoroutine(PulseLetter(go, index * clipLength));
-					} 
-					else 
-					{
-						Debug.LogWarning("Cannot find" + file + " audio component");
-					}
+					PlayFromFileDelay(file, index * clipLength);
+					StartCoroutine(PulseLetter(go, index * clipLength));
 				} 
 				else 
 				{
@@ -88,20 +78,9 @@ namespace WordTree
 			//check if word is null
 			if (word != null) 
 			{
-				//create audio source for the word
-				AudioSource audioSource = gameObject.AddComponent<AudioSource>();
-				//load and play the audio file attached to the word
+				//play audio file
 				string file = "Audio" + "/Words/" + word.name;
-				audioSource.clip = Resources.Load(file) as AudioClip;
-				if (audioSource.clip != null) 
-				{
-					audioSource.PlayDelayed((gos.Length) * clipLength);
-				} 
-				else 
-				{
-					Debug.LogWarning("Cannot load " + file + " for game object " + gameObject.name);
-				}
-				
+				PlayFromFileDelay(file, gos.Length*clipLength);
 			} 
 			else 
 			{
@@ -184,6 +163,43 @@ namespace WordTree
 				}
 			}
 			Debug.Log("Pulse on word");	
+		}
+
+		//<summary>
+		//Play sound from audio file
+		//</summary>
+		public  void PlayFromFile(string file)
+		{
+			//create audio source component for file
+			AudioSource audioSource = gameObject.AddComponent<AudioSource>();
+			//load audio file
+			audioSource.clip = Resources.Load(file) as AudioClip;
+			if (audioSource.clip != null) 
+			{
+				audioSource.Play();
+			}
+			else 
+			{
+				Debug.LogWarning("Cannot load " + file + " for game object " + gameObject.name);
+			}
+		}
+
+		//<summary>
+		//Play sound from audio file
+		//</summary>
+		public void PlayFromFileDelay(string file, float time)
+		{
+			AudioSource audioSource = gameObject.AddComponent<AudioSource>();
+			audioSource.clip = Resources.Load(file) as AudioClip;
+			if (audioSource.clip != null) 
+			{
+
+				audioSource.PlayDelayed(time);
+			}
+			else 
+			{
+				Debug.LogWarning("Cannot load " + file + " for game object " + gameObject.name);
+			}
 		}
 			
 	}
