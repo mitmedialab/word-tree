@@ -19,26 +19,33 @@ namespace WordTree
 			//create instance of grestureManager
 			GestureManager gestureManager = GameObject.FindGameObjectWithTag
 				(Constants.Tags.TAG_GESTURE_MANAGER).GetComponent<GestureManager>();
-			GameObject dir = GameObject.Find("IntroDirector");
-			// load Background music onto IntroDirector
-			dir.AddComponent<AudioSource>().clip = Resources.Load
-				("Audio/BackgroundMusic/WordTree") as AudioClip;
-			// play background music if attached
-			if (dir.GetComponent<AudioSource>().clip != null) {
-				dir.GetComponent<AudioSource>().Play();
-			}
-			//For keeping background music playing in a loop
-			dir.GetComponent<AudioSource>().loop = true;
-			// find kid
-			GameObject[] kids = GameObject.FindGameObjectsWithTag(Constants.Tags.TAG_KID);
-			foreach (GameObject kid in kids)
+			if (gestureManager != null) 
 			{
-				// start pulsing kid	
-				kid.AddComponent<PulseBehavior>().StartPulsing(kid);
-				// subscribe kid to touch gestures
-				gestureManager.AddAndSubscribeToGestures(kid);
+				GameObject dir = GameObject.Find("IntroDirector");
+				// load Background music onto IntroDirector
+				dir.AddComponent<AudioSource>().clip = Resources.Load
+				("Audio/BackgroundMusic/WordTree") as AudioClip;
+				// play background music if attached
+				if (dir.GetComponent<AudioSource>().clip != null) {
+					dir.GetComponent<AudioSource>().Play();
+				}
+				//For keeping background music playing in a loop
+				dir.GetComponent<AudioSource>().loop = true;
+				// find kid
+				GameObject[] kids = GameObject.FindGameObjectsWithTag(Constants.Tags.TAG_KID);
+				foreach (GameObject kid in kids) 
+				{
+					// start pulsing kid	
+					kid.AddComponent<PulseBehavior>().StartPulsing(kid);
+					// subscribe kid to touch gestures
+					gestureManager.AddAndSubscribeToGestures(kid);
+				}
+				ProgressManager.lockStatus = "";
+			} 
+			else 
+			{
+				Debug.LogError("Cannot find gesture manager");
 			}
-			ProgressManager.lockStatus = "";
 		}
 
 		//<summary>

@@ -20,24 +20,39 @@ namespace WordTree
 			//make reference to existing gestureManager 
 			GestureManager gestureManager = GameObject.
 				FindGameObjectWithTag(Constants.Tags.TAG_GESTURE_MANAGER).GetComponent<GestureManager>();
-			// create sound blanks, letters, and word object
-			LoadSoundGameWord(ProgressManager.currentWord);
-			// subscribe buttons to gestures
-			GameObject[] buttons = GameObject.FindGameObjectsWithTag(Constants.Tags.TAG_BUTTON);
-			foreach (GameObject button in buttons) 
+			if (gestureManager != null) 
 			{
-				button.AddComponent<GestureManager>().AddAndSubscribeToGestures(button);
+				// create sound blanks, letters, and word object
+				LoadSoundGameWord(ProgressManager.currentWord);
+				// subscribe buttons to gestures
+				GameObject[] buttons = GameObject.FindGameObjectsWithTag(Constants.Tags.TAG_BUTTON);
+				foreach (GameObject button in buttons) 
+				{
+					button.AddComponent<GestureManager>().AddAndSubscribeToGestures(button);
+				}
+				// sound out word
+				GameObject[] tar = GameObject.FindGameObjectsWithTag(Constants.Tags.TAG_TARGET_LETTER);
+				GameObject audioManager = GameObject.Find("AudioManager");
+				if (audioManager != null) 
+				{
+					audioManager.GetComponent<AudioManager>().SpellOutWord(tar);
+					// start pulsing sound blanks
+					GameObject[] mov = GameObject.FindGameObjectsWithTag(Constants.Tags.TAG_MOVABLE_BLANK);
+					foreach (GameObject go in mov) 
+					{
+						go.GetComponent<PulseBehavior>().StartPulsing(go, (tar.Length + 1) * AudioManager.clipLength);
+					}
+				} 
+				else 
+				{
+					Debug.LogWarning("Cannot find auio manager");
+					
+				} 
 			}
-			// sound out word
-			GameObject[] tar = GameObject.FindGameObjectsWithTag(Constants.Tags.TAG_TARGET_LETTER);
-			GameObject audioManager = GameObject.Find("AudioManager");
-			audioManager.GetComponent<AudioManager>().SpellOutWord(tar);
-			// start pulsing sound blanks
-			GameObject[] mov = GameObject.FindGameObjectsWithTag(Constants.Tags.TAG_MOVABLE_BLANK);
-			foreach (GameObject go in mov) 
+			else 
 			{
-				go.GetComponent<PulseBehavior>().StartPulsing(go, (tar.Length + 1) * AudioManager.clipLength);
-			}
+				Debug.LogError("Cannot find gesture manager");
+			}	
 		}
 
 		//<summary>
@@ -48,16 +63,23 @@ namespace WordTree
 		{
 			// get properties of current word in game
 			WordProperties prop = WordProperties.GetWordProperties(word);
-			// phonemes in word
-			string[] phonemes = prop.Phonemes(); 
-			// scale of word object
-			float objScale = prop.ObjScale(); 
-			// create sound blanks that are scrambled
-			BlankCreation.CreateScrambledBlanks(word, phonemes, "Circle", "MovableBlank", "SoundGame");
-			// create word object
-			WordCreation.CreateWord(word, phonemes, "TargetLetter", "SoundGame");
-			CreateWordImage(word, objScale);
-			// create jars that "hold" each letter
+			if (prop != null) 
+			{
+				// phonemes in word
+				string[] phonemes = prop.Phonemes(); 
+				// scale of word object
+				float objScale = prop.ObjScale(); 
+				// create sound blanks that are scrambled
+				BlankCreation.CreateScrambledBlanks(word, phonemes, "Circle", "MovableBlank", "SoundGame");
+				// create word object
+				WordCreation.CreateWord(word, phonemes, "TargetLetter", "SoundGame");
+				CreateWordImage(word, objScale);
+				// create jars that "hold" each letter
+			}
+			else 
+			{
+				Debug.LogWarning("Cannot find word properties");
+			}
 			CreateJars();
 			// make letters black color
 			GameObject[] tar = GameObject.FindGameObjectsWithTag(Constants.Tags.TAG_TARGET_LETTER);
@@ -98,25 +120,29 @@ namespace WordTree
 		}
 
 		//<summary>
-		// Animation played when user gets word wrong
-		// Big red X appears along with a "slap" sound
+		//Play ping sound when word is incorrect
 		//</summary>
 		// TODO: make animation more kid-friendly
 		public static void TryAgainAnimation()
 		{	
-			// find red X object
+			// find red X object which has sound attached
 			GameObject tryAgain = GameObject.Find("TryAgain");
-			// make object appear
-			LeanTween.alpha(tryAgain, 1f, .1f);
-			LeanTween.alpha(tryAgain, 0f, .1f).setDelay(1f);
-			// grow and shrink object
-			LeanTween.scale(tryAgain, new Vector3(2f, 2f, 1), .7f);
-			LeanTween.scale(tryAgain, new Vector3(.5f, .5f, 1), .5f).setDelay(.5f);
-			// play "slap" sound
-			tryAgain.AddComponent<AudioSource>().clip = Resources.Load("Audio/IncorrectSound") as AudioClip;
-			if (tryAgain.GetComponent<AudioSource>().clip != null) 
+			// play "ping" sound
+			if (tryAgain != null) 
 			{
-				tryAgain.GetComponent<AudioSource>().Play();
+				tryAgain.AddComponent<AudioSource>().clip = Resources.Load("Audio/IncorrectSound") as AudioClip;
+				if (tryAgain.GetComponent<AudioSource>().clip != null) 
+				{
+					tryAgain.GetComponent<AudioSource>().Play();
+				} 
+				else
+				{
+					Debug.LogWarning("Tried to find TryAgain audio source but it couldn't be found");
+				}
+			} 
+			else 
+			{
+				Debug.LogWarning("Tried to find TryAgain GameObject but it couldn't be found!");
 			}
 		}
 

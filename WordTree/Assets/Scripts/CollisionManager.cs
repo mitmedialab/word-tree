@@ -24,175 +24,221 @@ namespace WordTree
 		{
 			GestureManager gestureManager = GameObject.
 				FindGameObjectWithTag(Constants.Tags.TAG_GESTURE_MANAGER).GetComponent<GestureManager>();
-			// if the current scene is Learn Spelling
-			if (Application.loadedLevelName == "4. Learn Spelling") 
+			if (gestureManager != null)
 			{
-				// if the collided objects are the same letter
-				// i.e. if the movable letter that entered matches the target letter
-				if (other.name == gameObject.name)
+				// if the current scene is Learn Spelling
+				if (Application.loadedLevelName == "4. Learn Spelling") 
 				{
-					Debug.Log("Collision on " + other.name);
-					// change color of target letter to match that of movable letter
-					gameObject.GetComponent<SpriteRenderer>().color = other.GetComponent<SpriteRenderer>()
-						.color;
-					Color color = gameObject.GetComponent<Renderer>().material.color;
-					color.a = 1.0f;
-					gameObject.GetComponent<Renderer>().material.color = color;
-					// destroy movable letter
-					Debug.Log("Destroyed draggable letter " + other.gameObject.name);
-					Destroy(other.gameObject);
-					// disable collisions for target letter
-					// so all other movable letters can no longer collide with this letter
-					Debug.Log("Disabled collisions for " + gameObject.name);
-					Destroy(gameObject.GetComponent<CollisionManager>());
-					// pulse target letter once
-					LeanTween.scale(gameObject, new Vector3(WordCreation.letterScale * 1.2f, 
-						WordCreation.letterScale * 1.2f, 1), .6f);
-					LeanTween.scale(gameObject, new Vector3(WordCreation.letterScale, 
-						WordCreation.letterScale, 1), .5f).setDelay(.4f);
-					// check if user has completed word
-					if (CheckCompletedWord()) 
+					// if the collided objects are the same letter
+					// i.e. if the movable letter that entered matches the target letter
+					if (other.name == gameObject.name) 
 					{
-						// sound out the word
-						GameObject[] tar = GameObject.FindGameObjectsWithTag
+						Debug.Log("Collision on " + other.name);
+						// change color of target letter to match that of movable letter
+						gameObject.GetComponent<SpriteRenderer>().color = other.GetComponent<SpriteRenderer>()
+							.color;
+						Color color = gameObject.GetComponent<Renderer>().material.color;
+						color.a = 1.0f;
+						gameObject.GetComponent<Renderer>().material.color = color;
+						// destroy movable letter
+						Debug.Log("Destroyed draggable letter " + other.gameObject.name);
+						Destroy(other.gameObject);
+						// disable collisions for target letter
+						// so all other movable letters can no longer collide with this letter
+						Debug.Log("Disabled collisions for " + gameObject.name);
+						Destroy(gameObject.GetComponent<CollisionManager>());
+						// pulse target letter once
+						LeanTween.scale(gameObject, new Vector3(WordCreation.letterScale * 1.2f, 
+							WordCreation.letterScale * 1.2f, 1), .6f);
+						LeanTween.scale(gameObject, new Vector3(WordCreation.letterScale, 
+							WordCreation.letterScale, 1), .5f).setDelay(.4f);
+						// check if user has completed word
+						if (CheckCompletedWord()) 
+						{
+							// sound out the word
+							GameObject[] tar = GameObject.FindGameObjectsWithTag
 							(Constants.Tags.TAG_TARGET_LETTER);
-						GameObject audioManager = GameObject.Find("AudioManager");
-						audioManager.GetComponent<AudioManager>().SpellOutWord(tar);
-						// play celebratory animation
-						LearnSpellingDirector.CelebratoryAnimation((tar.Length + 1.5f) * 
-							AudioManager.clipLength);
-						// add word to completedWord list
-						ProgressManager.AddCompletedWord(ProgressManager.currentWord);
+							GameObject audioManager = GameObject.Find("AudioManager");
+							if (audioManager != null) 
+							{
+								audioManager.GetComponent<AudioManager>().SpellOutWord(tar);
+								// play celebratory animation
+								LearnSpellingDirector.CelebratoryAnimation((tar.Length + 1.5f) *
+								AudioManager.clipLength);
+								// add word to completedWord list
+								ProgressManager.AddCompletedWord(ProgressManager.currentWord);
+							} 
+							else 
+							{
+								Debug.LogError("Cannot find audio manager");
+							}
+						}
 					}
 				}
-			}
-			// if the current scene is Spelling Game
-			if (Application.loadedLevelName == "5. Spelling Game") 
-			{
-				Debug.Log("Collision on " + other.name);
-				// disable touch gestures for letter
-				gestureManager.DisableGestures(other.gameObject);
-				// stop pulsing letter
-				other.gameObject.GetComponent<PulseBehavior>().StopPulsing(other.gameObject);
-				// move letter to center of target blank
-				// z-position of letter = -1, so letter is in front of the blank (z-position of blank = 0)
-				other.gameObject.transform.position = new Vector3(gameObject.transform.position.x, 
-					gameObject.transform.position.y, -1);
-				// change color of letter to indicate collision succesfully occurred
-				other.gameObject.GetComponent<SpriteRenderer>().color = Color.blue;
-				// pulse letter once
-				LeanTween.scale(other.gameObject, new Vector3(WordCreation.letterScale * 1.25f,
-					WordCreation.letterScale * 1.25f, 1), .3f);
-				LeanTween.scale(other.gameObject, new Vector3(WordCreation.letterScale,
-					WordCreation.letterScale, 1), .3f).setDelay(.2f);
-				// disable collisions for target blank
-				// so no other movable letters can collide with this blank anymore
-				Debug.Log("Disabled collisions for Blank " + gameObject.name);
-				Destroy(gameObject.GetComponent<CollisionManager>());
-				// if all letters have been dragged to a blank
-				if (CheckCompletedTargets("MovableLetter")) 
+				//only want to get these components if on the spelling or sound game
+				if (Application.loadedLevelName != "4. Learn Spelling") 
 				{
-					// if the user spelled the word correctly
-					if (CheckCorrectSpelling("TargetBlank")) 
+					//get properties component 
+					Properties prop = other.gameObject.GetComponent<Properties>();
+					//We track whether or not letters have been dragged into the right spots using this isinblank flag, 
+					//which is set to true when the letter is in the right place.
+					//only change the flag if the gameObject has a properties component 
+					if (prop != null) 
 					{
-						// find all movable letters
-						GameObject[] mov = GameObject.FindGameObjectsWithTag
-							(Constants.Tags.TAG_MOVABLE_LETTER);
-						// disable touch gestures for sound & hint buttons
-						gestureManager.DisableGestures(GameObject.Find("SoundButton"));
-						gestureManager.GetComponent<GestureManager>().DisableGestures(GameObject.Find
-							("HintButton"));
-						// mark all correct letters by changing their colors
-						MarkCorrectLetters(0f);
-						// sound out the word
-						SpellingGameDirector.SpellOutWord();
-						// play celebratory animation
-						SpellingGameDirector.CelebratoryAnimation((mov.Length + 1.5f) *
-							AudioManager.clipLength);
-						// add word to completedWord list
-						ProgressManager.AddCompletedWord(ProgressManager.currentWord);
+						prop.isinblank = true; 
 					}
-					// if user spelled word incorrectly
-					if (!CheckCorrectSpelling("TargetBlank")) 
+					else
 					{
-						// play try again animation
-						SpellingGameDirector.TryAgainAnimation();
-						// mark the correct letters by changing their color
-						MarkCorrectLetters(1f);
-						// move incorrect letters back to original position
-						ResetIncorrectLetters(1f);
-						// play word's sound
-						GameObject.FindGameObjectWithTag(Constants.Tags.TAG_WORD_OBJECT).
-							GetComponent<AudioSource>().PlayDelayed(1f);
-						// flash hint button to call attention to it
-						FlashHintButton(2f);
+						Debug.LogError("Properties are not attached");
+					}
+					//check if word is spelled correctly
+					if (other.name == gameObject.name)
+					{
+						prop.iscorrect = true;
+					}
+					// if the current scene is Spelling Game
+					if (Application.loadedLevelName == "5. Spelling Game") 
+					{
+						Debug.Log("Collision on " + other.name);
+						// stop pulsing letter
+						other.gameObject.GetComponent<PulseBehavior>().StopPulsing(other.gameObject);
+						// move letter to center of target blank
+						// z-position of letter = -1, so letter is in front of the blank (z-position of blank = 0)
+						other.gameObject.transform.position = new Vector3(gameObject.transform.position.x, 
+							gameObject.transform.position.y, -1);
+						// change color of letter to indicate collision succesfully occurred
+						other.gameObject.GetComponent<SpriteRenderer>().color = Color.blue;
+						Debug.Log("I changed my color");
+						// pulse letter once
+						LeanTween.scale(other.gameObject, new Vector3(WordCreation.letterScale * 1.25f,
+							WordCreation.letterScale * 1.25f, 1), .3f);
+						LeanTween.scale(other.gameObject, new Vector3(WordCreation.letterScale,
+							WordCreation.letterScale, 1), .3f).setDelay(.2f);
+						// disable collisions for target blank
+						// so no other movable letters can collide with this blank anymore
+						Debug.Log("Disabled collisions for Blank " + gameObject.name);
+						Destroy(gameObject.GetComponent<CollisionManager>());
+						// if all letters have been dragged to a blank
+						if (CheckCompletedTargets(Constants.Tags.TAG_MOVABLE_LETTER)) 
+						{
+							// if user spelled word incorrectly
+							if (!CheckCorrectSpelling(Constants.Tags.TAG_MOVABLE_LETTER)) 
+							{
+								// play try again animation
+								SpellingGameDirector.TryAgainAnimation();
+								// mark the correct letters by changing their color
+								MarkCorrectLetters(1f);
+								// move incorrect letters back to original position
+								ResetIncorrectLetters(1f);
+								// play word's sound
+								GameObject.FindGameObjectWithTag(Constants.Tags.TAG_WORD_OBJECT).
+								GetComponent<AudioSource>().PlayDelayed(1f);
+								// flash hint button to call attention to it
+								FlashHintButton(2f);
+							}
+							// if the user spelled the word correctly
+							else  
+							{
+								// find all movable letters
+								GameObject[] mov = GameObject.FindGameObjectsWithTag
+								(Constants.Tags.TAG_MOVABLE_LETTER);
+								// disable touch gestures for sound & hint buttons
+								gestureManager.DisableGestures(GameObject.Find("SoundButton"));
+								gestureManager.GetComponent<GestureManager>().DisableGestures(GameObject.Find
+								("HintButton"));
+								// mark all correct letters by changing their colors
+								MarkCorrectLetters(0f);
+								// sound out the word
+								SpellingGameDirector.SpellOutWord();
+								// play celebratory animation
+								SpellingGameDirector.CelebratoryAnimation((mov.Length + 1.5f) *
+								AudioManager.clipLength);
+								// add word to completedWord list
+								ProgressManager.AddCompletedWord(ProgressManager.currentWord);
+								//reset letters in case user wants to play again on the same screen
+								foreach (GameObject letter in mov) 
+								{
+									letter.GetComponent<Properties>().isinblank = false;
+									letter.GetComponent<Properties>().iscorrect = false;
+								}
+							}
+						}
+					}
+					// if current scene is Sound Game
+					if (Application.loadedLevelName == "6. Sound Game") 
+					{
+						Debug.Log("Collision on " + other.name);
+						// stop pulsing sound blank
+						other.gameObject.GetComponent<PulseBehavior>().StopPulsing(other.gameObject);
+						// place sound blank at opening of jar
+						other.gameObject.transform.position = new Vector3(gameObject.transform.position.x,
+							gameObject.transform.position.y + 2.2f, 1);
+						// pulse sound blank once
+						LeanTween.scale(other.gameObject, new Vector3(.4f, .4f, 1), .3f);
+						LeanTween.scale(other.gameObject, new Vector3(.3f, .3f, 1), .3f).setDelay(.2f);
+						// change color of jar to match color of sound blank
+						// to indicate successful collision
+						Color color = other.gameObject.GetComponent<SpriteRenderer>().color;
+						Vector2 posn = gameObject.transform.position;
+						Collider2D[] jar = Physics2D.OverlapCircleAll(posn, .1f, 1, 1.5f, 0f);
+						LeanTween.color(jar[0].gameObject, color, .01f);
+						// disable collisions for target letter
+						Debug.Log("Disabled collisions for Letter " + gameObject.name);
+						Destroy(gameObject.GetComponent<CollisionManager>());
+						// if all sound blanks have been dragged onto a jar
+						if (CheckCompletedTargets(Constants.Tags.TAG_MOVABLE_BLANK)) 
+						{
+							// if user did not drag all sound blanks to correct letter
+							if (!CheckCorrectSpelling(Constants.Tags.TAG_MOVABLE_BLANK)) 
+							{
+								// play try again animation
+								SoundGameDirector.TryAgainAnimation();
+								// reset correct sound blanks back to original size
+								MarkCorrectSounds(1f);
+								// move incorrect sound blanks back to original position
+								ResetIncorrectSounds(1f);
+								// play word's sound 
+								GameObject.FindGameObjectWithTag(Constants.Tags.TAG_WORD_OBJECT).
+							    GetComponent<AudioSource>().PlayDelayed(1f);
+								// flash hint button to call attention to it
+								FlashHintButton(2f);	
+							}
+							// if user dragged all sound blanks to their correct corresponding letters
+							else
+							{
+								// find all sound blanks
+								GameObject[] mov = GameObject.FindGameObjectsWithTag
+								(Constants.Tags.TAG_MOVABLE_BLANK);
+								// disable touch gestures for sound + hint buttons
+								gestureManager.DisableGestures(GameObject.Find("SoundButton"));
+								gestureManager.DisableGestures(GameObject.Find("HintButton"));
+								// reset correct sound blanks back to original size
+								MarkCorrectSounds(0f);
+								// sound out word
+								GameObject[] tar = GameObject.FindGameObjectsWithTag
+								(Constants.Tags.TAG_TARGET_LETTER);
+								GameObject audioManager = GameObject.Find("AudioManager");
+								audioManager.GetComponent<AudioManager>().SpellOutWord(tar);
+								// play celebratory animation
+								SoundGameDirector.CelebratoryAnimation((mov.Length + 1.5f) *
+								AudioManager.clipLength);
+								// add completed word to completedWord list
+								ProgressManager.AddCompletedWord(ProgressManager.currentWord);	
+								//reset letters in case user wants to play again on the same screen
+								//or user wants to listen to the sounds 
+								foreach (GameObject letter in mov) 
+								{
+									letter.GetComponent<Properties>().isinblank = false;
+									letter.GetComponent<Properties>().iscorrect = false;
+								}
+							}
+						}
 					}
 				}
-			}
-			// if current scene is Sound Game
-			if (Application.loadedLevelName == "6. Sound Game")
+			} 
+			else 
 			{
-				Debug.Log("Collision on " + other.name);
-				// disable touch gestures for sound blank
-				gestureManager.DisableGestures(other.gameObject);
-				// stop pulsing sound blank
-				other.gameObject.GetComponent<PulseBehavior>().StopPulsing(other.gameObject);
-				// place sound blank at opening of jar
-				other.gameObject.transform.position = new Vector3(gameObject.transform.position.x,
-					gameObject.transform.position.y + 2.2f, 1);
-				// pulse sound blank once
-				LeanTween.scale(other.gameObject, new Vector3(.4f, .4f, 1), .3f);
-				LeanTween.scale(other.gameObject, new Vector3(.3f, .3f, 1), .3f).setDelay(.2f);
-				// change color of jar to match color of sound blank
-				// to indicate successful collision
-				Color color = other.gameObject.GetComponent<SpriteRenderer>().color;
-				Vector2 posn = gameObject.transform.position;
-				Collider2D[] jar = Physics2D.OverlapCircleAll(posn, .1f, 1, 1.5f, 0f);
-				LeanTween.color(jar[0].gameObject, color, .01f);
-				// disable collisions for target letter
-				Debug.Log("Disabled collisions for Letter " + gameObject.name);
-				Destroy(gameObject.GetComponent<CollisionManager>());
-				// if all sound blanks have been dragged onto a jar
-				if (CheckCompletedTargets("MovableBlank")) 
-				{
-					// if user dragged all sound blanks to their correct corresponding letters
-					if (CheckCorrectSpelling("TargetLetter")) 
-					{
-						// find all sound blanks
-						GameObject[] mov = GameObject.FindGameObjectsWithTag
-							(Constants.Tags.TAG_MOVABLE_BLANK);
-						// disable touch gestures for sound + hint buttons
-						gestureManager.DisableGestures(GameObject.Find("SoundButton"));
-						gestureManager.DisableGestures(GameObject.Find("HintButton"));
-						// reset correct sound blanks back to original size
-						MarkCorrectSounds(0f);
-						// sound out word
-						GameObject[] tar = GameObject.FindGameObjectsWithTag
-							(Constants.Tags.TAG_TARGET_LETTER);
-						GameObject audioManager = GameObject.Find("AudioManager");
-						audioManager.GetComponent<AudioManager>().SpellOutWord(tar);
-						// play celebratory animation
-						SoundGameDirector.CelebratoryAnimation((mov.Length + 1.5f) *
-							AudioManager.clipLength);
-						// add completed word to completedWord list
-						ProgressManager.AddCompletedWord(ProgressManager.currentWord);	
-					}
-					// if user did not drag all sound blanks to correct letter
-					if (!CheckCorrectSpelling("TargetLetter")) 
-					{
-						// play try again animation
-						SoundGameDirector.TryAgainAnimation();
-						// reset correct sound blanks back to original size
-						MarkCorrectSounds(1f);
-						// move incorrect sound blanks back to original position
-						ResetIncorrectSounds(1f);
-						// play word's sound 
-						GameObject.FindGameObjectWithTag(Constants.Tags.TAG_WORD_OBJECT).
-							GetComponent<AudioSource>().PlayDelayed(1f);
-						// flash hint button to call attention to it
-						FlashHintButton(2f);	
-					}
-				}
+				Debug.LogError("Cannot find gesture manager");
 			}
 		}
 
@@ -210,12 +256,12 @@ namespace WordTree
 			// set parameters for Physics2D.OverlapCircleAll function 
 			// z = z-position of movable object to search for
 			// radius = distance around target object to search
-			if (tag == "TargetBlank") 
+			if (tag == Constants.Tags.TAG_TARGET_BLANK) 
 			{
 				z = -1;
 				radius = .5f;
 			}
-			if (tag == "TargetLetter") 
+			if (tag == Constants.Tags.TAG_TARGET_LETTER) 
 			{
 				z = 1;
 				radius = 1.5f;
@@ -269,7 +315,8 @@ namespace WordTree
 				// If more than one collider found, need to decrease radius parameter 
 				// of Physics2D.OverlapCircleAll function so that results are accurate.
 				// Want to get the one movable object that has been dragged onto the target object.
-				if (mov.Length > 1) {
+				if (mov.Length > 1)
+				{
 					Debug.LogError("Decrease OverlapCircleAll radius");
 				}
 				// if only one collider found, add the letter to the user's spelling of the word
@@ -352,7 +399,7 @@ namespace WordTree
 		void MarkCorrectLetters(float delayTime)
 		{
 			// get the correct letters
-			List<GameObject> correctLetters = CorrectObjects("TargetBlank");
+			List<GameObject> correctLetters = CorrectObjects(Constants.Tags.TAG_TARGET_BLANK);
 			foreach (GameObject go in correctLetters)
 			{
 				// change color of letter
@@ -367,10 +414,10 @@ namespace WordTree
 		//</summary>
 		void MarkCorrectSounds(float delayTime)
 		{
-			List<GameObject> correctSounds = CorrectObjects("TargetLetter");
+			List<GameObject> correctSounds = CorrectObjects(Constants.Tags.TAG_TARGET_LETTER);
 			foreach (GameObject go in correctSounds)
 			{
-				go.transform.localScale = new Vector3(.3f, .3f, 1);
+					go.transform.localScale = new Vector3(.3f, .3f, 1);
 			}
 		}
 
@@ -380,7 +427,7 @@ namespace WordTree
 		//</summary>
 		public void ResetIncorrectLetters(float delayTime)
 		{
-			List<GameObject> incorrectLetters = IncorrectObjects("TargetBlank");
+			List<GameObject> incorrectLetters = IncorrectObjects(Constants.Tags.TAG_TARGET_BLANK);
 			foreach (GameObject go in incorrectLetters) 
 			{
 				// make sure letters are scaled back to original size
@@ -391,11 +438,15 @@ namespace WordTree
 				Debug.Log("Resetting incorrect letter " + go.name);
 				// move letter up in y-direction and away from the target blanks
 				Vector3 posn = new Vector3(go.transform.position.x, 0, -2);
+				//spin incorrect letters
+				LeanTween.rotateAroundLocal(go, Vector3.up, 360f, 1);
 				LeanTween.move(go, posn, 1.0f).setDelay(delayTime);
 				// begin pulsing letters
 				go.GetComponent<PulseBehavior>().StartPulsing(go, delayTime);
 				// allow for letters to be dragged again by user
 				go.GetComponent<GestureManager>().EnableGestures(go);
+				//reset the blank variable so user can try again with these letters
+				go.GetComponent<Properties>().isinblank = false;
 			}
 		}
 
@@ -405,7 +456,7 @@ namespace WordTree
 		//</summary>
 		public void ResetIncorrectSounds(float delayTime)
 		{
-			List<GameObject> incorrectSounds = IncorrectObjects("TargetLetter");
+			List<GameObject> incorrectSounds = IncorrectObjects(Constants.Tags.TAG_TARGET_LETTER);
 			foreach (GameObject go in incorrectSounds) 
 			{
 				// make sure sound blank is correct scale
@@ -421,8 +472,12 @@ namespace WordTree
 				// find the jar that the sound object was dragged onto
 				Vector2 position = go.transform.position;
 				Collider2D[] jar = Physics2D.OverlapCircleAll(position, 2f, 1, 1.5f, 0);
+				//spin incorrect letters
+				LeanTween.rotateAroundLocal(go, Vector3.up, 360f, 1);
 				// change color of letter back to white
 				LeanTween.color(jar[0].gameObject, Color.white, .01f).setDelay(delayTime);
+				//reset the is in blank variable so user can try again with incorrect sounds
+				go.GetComponent<Properties>().isinblank = false;
 			}	
 		}
 
@@ -432,7 +487,7 @@ namespace WordTree
 		//<//summary>
 		public static void ShowLetterHint()
 		{
-			List<GameObject> unoccupiedTargets = UnoccupiedTargets("TargetBlank");
+			List<GameObject> unoccupiedTargets = UnoccupiedTargets(Constants.Tags.TAG_TARGET_BLANK);
 			int i = 0;
 			string letterName = unoccupiedTargets[i].name; // get letter that we want to create a hint for
 			// create a letter if not already created
@@ -465,7 +520,7 @@ namespace WordTree
 		public static void ShowSoundHint()
 		{
 			// find movable sound blanks
-			GameObject[] mov = GameObject.FindGameObjectsWithTag("MovableBlank");
+			GameObject[] mov = GameObject.FindGameObjectsWithTag(Constants.Tags.TAG_MOVABLE_BLANK);
 			// loop through sound blanks
 			foreach (GameObject go in mov) 
 			{
@@ -538,16 +593,23 @@ namespace WordTree
 			GameObject[] mov = GameObject.FindGameObjectsWithTag(tag);
 			foreach (GameObject go in mov) 
 			{
-				// if pan gesture is still enabled, user has not dragged the movable object yet
-				// pan gesture becomes disabled after the movable object collides with a target object
-				if (go.GetComponent<TransformGesture>().enabled == true)
+				Properties props = go.GetComponent<Properties>();
+				if (props != null)
 				{
+					if (!props.isinblank) 
+					{
+						Debug.Log("GameObject " + go.name + " is not in place yet.");
+						return false;
+					}
+				} 
+				else 
+				{
+					Debug.LogWarning("Tried to get Properties component for GameObject " + go.name + " but it was null!");
 					return false;
 				}
 			}
 			Debug.Log("Word Completed");
-			//return true if all objects have pan gesture disabled
-			return true;	
+			return true;
 		}
 
 		//<summary>
@@ -555,23 +617,26 @@ namespace WordTree
 		//</summary>
 		bool CheckCorrectSpelling(string tag)
 		{
-			// get the user's spelling of the word
-			GameObject[] userAnswer = UserAnswer(tag);
-			// get the target objects
-			GameObject[] tar = GameObject.FindGameObjectsWithTag(tag);
-			if (userAnswer[0] != null)
+			Debug.Log("Going to check spelling");
+			// find movable objects
+			GameObject[] mov = GameObject.FindGameObjectsWithTag(tag);
+			foreach (GameObject go in mov) 
 			{
-				for (int i = 0; i < tar.Length; i++) 
+				//check to see if all words have their 'is correct' variable set to true
+				if (go.GetComponent<Properties>() != null) 
 				{
-					// check if user's spelling matches the correct spelling
-					if (userAnswer[i].name != tar[i].name) 
+					if (!go.GetComponent<Properties>().iscorrect)
 					{
-						Debug.Log("Incorrect Spelling");
 						return false;
 					}
+				} 
+				else
+				{
+					Debug.LogWarning("Tried to get Properties component for GameObject " + go.name + " but it was null!");
+					return false;
 				}
 			}
-			Debug.Log("Correct spelling");
+			Debug.Log(tag + " is spelled correctly");
 			return true;
 		}
 
@@ -581,7 +646,7 @@ namespace WordTree
 		bool CheckCompletedWord()
 		{
 			// find all movable letters
-			GameObject[] mov = GameObject.FindGameObjectsWithTag("MovableLetter");
+			GameObject[] mov = GameObject.FindGameObjectsWithTag(Constants.Tags.TAG_MOVABLE_LETTER);
 			Debug.Log("Letters left: " + (mov.Length - 1));
 			// if word is completed should only find 1 movable letter
 			// since movable letters are destroyed after colliding with the correct target letter

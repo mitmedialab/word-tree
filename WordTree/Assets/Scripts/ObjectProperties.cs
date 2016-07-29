@@ -54,6 +54,8 @@ namespace WordTree
 			GameObject go = new GameObject();
 			// set name
 			go.name = prop.Name();
+			//Add properties component to each letter/sound created
+			Properties props = go.AddComponent<Properties>();
 			Debug.Log("Created new object " + go.name);
 			// set tag
 			go.tag = prop.Tag();
@@ -67,7 +69,7 @@ namespace WordTree
 			Sprite sprite = Resources.Load<Sprite>("Graphics/" + prop.Sprite());
 			if (sprite == null) 
 			{
-				Debug.Log("ERROR: could not load sprite " + prop.Name());
+				Debug.LogError("ERROR: could not load sprite " + prop.Name());
 			}
 			spriteRenderer.sprite = sprite;
 			// load audio clip
@@ -78,7 +80,7 @@ namespace WordTree
 				AudioClip clip = Resources.Load("Audio/" + prop.AudioFile()) as AudioClip;
 				if (clip == null) 
 				{
-					Debug.Log("ERROR: could not load audioclip " + prop.AudioFile());
+					Debug.LogError("ERROR: could not load audioclip " + prop.AudioFile());
 					audioSource.clip = clip;
 					audioSource.playOnAwake = false;
 				}
