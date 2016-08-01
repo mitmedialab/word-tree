@@ -122,7 +122,7 @@ namespace WordTree
 		{	
 			//load and play file
 			string file = "Audio/IncorrectSound";
-			this.audioManager.PlayFromFile(file);
+			this.audioManager.PlayFromFile(Constants.fileNames.audio + Constants.fileNames.incorrect);
 			Debug.Log("Play incorrect sound");
 		}
 
@@ -145,7 +145,7 @@ namespace WordTree
 			// play cheerful sound
 			string file = "Audio/CongratsSound";
 			Debug.Log("Playing clip for congrats");
-			this.audioManager.PlayFromFileDelay(file, delayTime);
+			this.audioManager.PlayFromFile(file, delayTime);
 		}
 
 		//<summary>

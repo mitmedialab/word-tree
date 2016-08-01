@@ -45,7 +45,7 @@ namespace WordTree
 					AudioSource audioSource = gameObject.AddComponent<AudioSource>();
 					//load the audio file with word's name in it
 					string file = "Audio" + "/Words/" + word.transform.name;
-					audioManager.PlayFromFile(file);
+					audioManager.PlayFromFile(Constants.fileNames.audio + Constants.fileNames.word + "/"+ word.transform.name);
 					StartCoroutine(StartPulsing(.5f));
 					// then explode the letters
 					StartCoroutine(ExplodeWord(1));
@@ -193,7 +193,7 @@ namespace WordTree
 			}
 			// play congratulations sound 
 			string file = "Audio/CongratsSound";
-			this.audioManager.PlayFromFileDelay(file,delayTime);
+			this.audioManager.PlayFromFile(file,delayTime);
 		}
 
 		//<summary>

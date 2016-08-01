@@ -28,5 +28,22 @@ namespace WordTree
 			public const string TAG_HINT = "Hint";
 			public const string TAG_AUDIO_MANAGER = "AudioManager";
 		}
+
+		//<summary>
+		//Names of folders
+		//</summary>
+		public static class fileNames
+		{
+			public const string phoneme = "/Phonemes/";
+			public const string audio = "Audio";
+			public const string word = "/Words";
+			public const string incorrect = "/IncorrectSound";
+			public const string congrats = "/CongratsSound";
+			public const string background_music = "/BackgroundMusic";
+			public const string word_tree = "/WordTree";
+			public const string kid_speaking = "/KidSpeaking";
+			public const string intro = "/Intro";
+			public const string tumble = "/TumbleSound";
+		}
 	}
 }

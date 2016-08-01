@@ -53,7 +53,7 @@ namespace WordTree
 					string[] phonemes = prop.Phonemes(); 
 					//load and play audio file attached to the letters
 					string file = "Audio" + "/Phonemes/" + phonemes[index];
-					PlayFromFileDelay(file, index * clipLength);
+					PlayFromFile(Constants.fileNames.audio + Constants.fileNames.phoneme + phonemes[index], index * clipLength);
 					StartCoroutine(PulseLetter(go, index * clipLength));
 				} 
 				else 
@@ -80,7 +80,7 @@ namespace WordTree
 			{
 				//play audio file
 				string file = "Audio" + "/Words/" + word.name;
-				PlayFromFileDelay(file, gos.Length*clipLength);
+				PlayFromFile(Constants.fileNames.audio + Constants.fileNames.word + "/"+ word.name, gos.Length*clipLength);
 			} 
 			else 
 			{
@@ -170,37 +170,30 @@ namespace WordTree
 		//</summary>
 		public  void PlayFromFile(string file)
 		{
+			PlayFromFile(file,0);
+		}
+		public void PlayFromFile(string file, float delay)
+		{
+			
 			//create audio source component for file
 			AudioSource audioSource = gameObject.AddComponent<AudioSource>();
 			//load audio file
 			audioSource.clip = Resources.Load(file) as AudioClip;
 			if (audioSource.clip != null) 
 			{
-				audioSource.Play();
-			}
-			else 
-			{
-				Debug.LogWarning("Cannot load " + file + " for game object " + gameObject.name);
+				if (delay == 0)
+				{
+					audioSource.Play();
+				}
+				else
+				{
+					audioSource.PlayDelayed(delay);
+				}
+
 			}
 		}
 
-		//<summary>
-		//Play sound from audio file
-		//</summary>
-		public void PlayFromFileDelay(string file, float time)
-		{
-			AudioSource audioSource = gameObject.AddComponent<AudioSource>();
-			audioSource.clip = Resources.Load(file) as AudioClip;
-			if (audioSource.clip != null) 
-			{
 
-				audioSource.PlayDelayed(time);
-			}
-			else 
-			{
-				Debug.LogWarning("Cannot load " + file + " for game object " + gameObject.name);
-			}
-		}
 			
 	}
 }

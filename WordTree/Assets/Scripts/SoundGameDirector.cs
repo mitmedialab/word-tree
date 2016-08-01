@@ -131,7 +131,7 @@ namespace WordTree
 		{	
 			//load and play ping sound
 			string file = "Audio/IncorrectSound";
-			this.audioManager.PlayFromFile(file);
+			this.audioManager.PlayFromFile(Constants.fileNames.audio + Constants.fileNames.incorrect);
 		}
 
 		//<summary>
@@ -152,7 +152,7 @@ namespace WordTree
 			// play cheerful sound
 			Debug.Log("Playing clip for congrats");
 			string file = "Audio/CongratsSound";
-			this.audioManager.PlayFromFileDelay(file, delayTime);
+			this.audioManager.PlayFromFile(file, delayTime);
 		}
 
 		//<summary>

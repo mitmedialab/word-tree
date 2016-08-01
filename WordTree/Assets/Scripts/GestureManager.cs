@@ -211,7 +211,7 @@ namespace WordTree
 				BounceKid(go);
 				//load and play speaking part for kid
 				string file = "Audio/KidSpeaking/Intro";
-				this.audioManager.PlayFromFile(file);
+				this.audioManager.PlayFromFile(Constants.fileNames.audio + Constants.fileNames.kid_speaking + Constants.fileNames.intro);
 				// keep track of which kid was tapped on (boy or girl)
 				ProgressManager.chosenKid = go.name;
 				// go to next scene with the word tree
@@ -294,7 +294,7 @@ namespace WordTree
 				{
 					//load and play audio file for word
 					string file = "Audio" + "/Words/" + word.transform.name;
-					this.audioManager.PlayFromFile(file);
+					this.audioManager.PlayFromFile(Constants.fileNames.audio + Constants.fileNames.word + "/"+ word.transform.name);
 				} 
 				else 
 				{
@@ -461,7 +461,7 @@ namespace WordTree
 			{
 				// Load and play audio for kid exiting scene
 				string file= "Audio/TumbleSound";
-				this.audioManager.PlayFromFile(file);
+				this.audioManager.PlayFromFile(Constants.fileNames.audio + Constants.fileNames.tumble);
 			}
 		}
 
@@ -497,7 +497,7 @@ namespace WordTree
 				{
 					//load and play phoneme for letters
 					string file = "Audio" + "/Phonemes/" + sound;
-					this.audioManager.PlayFromFile(file);
+					this.audioManager.PlayFromFile(Constants.fileNames.audio + Constants.fileNames.phoneme + sound);
 				}
 			}
 		}

@@ -45,7 +45,7 @@ namespace WordTree
 					GrowKid();
 					//Load audio for kid
 					string file ="Audio/KidSpeaking/"+ ProgressManager.currentLevel;
-					audioManager.PlayFromFile(file);
+					audioManager.PlayFromFile(Constants.fileNames.audio + Constants.fileNames.kid_speaking + "/"+ ProgressManager.currentLevel);
 				}
 				else 
 				{
@@ -55,7 +55,7 @@ namespace WordTree
 				string sound_file = "Audio/BackgroundMusic/" + ProgressManager.currentLevel;
 				//set volume for background music
 				audioManager.GetComponent<AudioSource>().volume= .25f;
-				audioManager.PlayFromFile(sound_file);
+				audioManager.PlayFromFile(Constants.fileNames.audio + Constants.fileNames.background_music + "/"+ ProgressManager.currentLevel);
 				//Subscribe buttons to touch gestures
 				GameObject button = GameObject.FindGameObjectWithTag(Constants.Tags.TAG_BUTTON);
 				if (button != null) 

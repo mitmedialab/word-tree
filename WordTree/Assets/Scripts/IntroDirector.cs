@@ -27,7 +27,7 @@ namespace WordTree
 				//GameObject dir = GameObject.Find("IntroDirector");
 				// load Background music onto IntroDirector
 				string file="Audio/BackgroundMusic/WordTree";
-				audioManager.PlayFromFile(file);
+				audioManager.PlayFromFile(Constants.fileNames.audio + Constants.fileNames.background_music +Constants.fileNames.word_tree);
 				//For keeping background music playing in a loop
 				audioManager.GetComponent<AudioSource>().loop = true;
 				// find kid

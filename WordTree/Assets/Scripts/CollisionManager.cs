@@ -134,7 +134,7 @@ namespace WordTree
 							if (!CheckCorrectSpelling(Constants.Tags.TAG_MOVABLE_LETTER)) 
 							{
 								// play try again animation
-								GameObject.FindGameObjectWithTag("SpellingDirector").GetComponent<SpellingGameDirector>().TryAgainAnimation();
+								GameObject.FindGameObjectWithTag("SpellingGameDirector").GetComponent<SpellingGameDirector>().TryAgainAnimation();
 								// mark the correct letters by changing their color
 								MarkCorrectLetters(1f);
 								// move incorrect letters back to original position
