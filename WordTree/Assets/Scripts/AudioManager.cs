@@ -53,7 +53,7 @@ namespace WordTree
 					string[] phonemes = prop.Phonemes(); 
 					//load and play audio file attached to the letters
 					string file = "Audio" + "/Phonemes/" + phonemes[index];
-					PlayFromFile(Constants.fileNames.audio + Constants.fileNames.phoneme + phonemes[index], index * clipLength);
+					PlayFromFile(Constants.Filenames.PHONEME + phonemes[index], index * clipLength);
 					StartCoroutine(PulseLetter(go, index * clipLength));
 				} 
 				else 
@@ -79,8 +79,7 @@ namespace WordTree
 			if (word != null) 
 			{
 				//play audio file
-				string file = "Audio" + "/Words/" + word.name;
-				PlayFromFile(Constants.fileNames.audio + Constants.fileNames.word + "/"+ word.name, gos.Length*clipLength);
+				PlayFromFile( Constants.Filenames.WORD + word.name, gos.Length*clipLength);
 			} 
 			else 
 			{

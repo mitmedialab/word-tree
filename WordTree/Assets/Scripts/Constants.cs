@@ -32,18 +32,18 @@ namespace WordTree
 		//<summary>
 		//Names of folders
 		//</summary>
-		public static class fileNames
+		public static class Filenames
 		{
-			public const string phoneme = "/Phonemes/";
-			public const string audio = "Audio";
-			public const string word = "/Words";
-			public const string incorrect = "/IncorrectSound";
-			public const string congrats = "/CongratsSound";
-			public const string background_music = "/BackgroundMusic";
-			public const string word_tree = "/WordTree";
-			public const string kid_speaking = "/KidSpeaking";
-			public const string intro = "/Intro";
-			public const string tumble = "/TumbleSound";
+			public const string PHONEME = AUDIO + "Phonemes/";
+			public const string AUDIO = "Audio/";
+			public const string WORD =AUDIO + "Words/";
+			public const string INCORRECT = AUDIO + "IncorrectSound";
+			public const string CONGRATS = AUDIO + "CongratsSound";
+			public const string BACKGROUND_MUSIC = AUDIO +"BackgroundMusic/";
+			public const string WORD_TREE =  BACKGROUND_MUSIC + "WordTree";
+			public const string KID_SPEAKING = AUDIO + "KidSpeaking/";
+			public const string INTRO =  AUDIO + "KidSpeaking/Intro";
+			public const string TUMBLE = AUDIO +"TumbleSound";
 		}
 	}
 }

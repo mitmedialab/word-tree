@@ -121,8 +121,7 @@ namespace WordTree
 		public  void TryAgainAnimation()
 		{	
 			//load and play file
-			string file = "Audio/IncorrectSound";
-			this.audioManager.PlayFromFile(Constants.fileNames.audio + Constants.fileNames.incorrect);
+			this.audioManager.PlayFromFile(Constants.Filenames.INCORRECT);
 			Debug.Log("Play incorrect sound");
 		}
 
@@ -144,8 +143,7 @@ namespace WordTree
 			LeanTween.scale(go, new Vector3(objScale * 1f, objScale * 1f, 1), time).setDelay(delayTime + 4 * time);
 			// play cheerful sound
 			string file = "Audio/CongratsSound";
-			Debug.Log("Playing clip for congrats");
-			this.audioManager.PlayFromFile(file, delayTime);
+			this.audioManager.PlayFromFile(Constants.Filenames.CONGRATS, delayTime);
 		}
 
 		//<summary>

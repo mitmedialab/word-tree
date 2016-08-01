@@ -36,8 +36,7 @@ namespace WordTree
 			// grow kid animation
 			GrowKid();
 			// load background music onto the word tree director
-			string file = "Audio/BackgroundMusic/WordTree";
-			this.audioManager.PlayFromFile(Constants.fileNames.audio + Constants.fileNames.background_music + Constants.fileNames.word_tree);
+			this.audioManager.PlayFromFile(Constants.Filenames.WORD_TREE);
 			//set up volume for background music
 			this.audioManager.GetComponent<AudioSource>().volume = .25f;
 			// subscribe home button to gestures

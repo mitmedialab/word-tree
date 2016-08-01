@@ -44,18 +44,16 @@ namespace WordTree
 					//Play Grow Animation for kid
 					GrowKid();
 					//Load audio for kid
-					string file ="Audio/KidSpeaking/"+ ProgressManager.currentLevel;
-					audioManager.PlayFromFile(Constants.fileNames.audio + Constants.fileNames.kid_speaking + "/"+ ProgressManager.currentLevel);
+					audioManager.PlayFromFile( Constants.Filenames.KID_SPEAKING + ProgressManager.currentLevel);
 				}
 				else 
 				{
 					Debug.LogWarning("Cannot load sprite");
 				}
 				//Load background music for scene onto ChooseObjectDirector
-				string sound_file = "Audio/BackgroundMusic/" + ProgressManager.currentLevel;
 				//set volume for background music
 				audioManager.GetComponent<AudioSource>().volume= .25f;
-				audioManager.PlayFromFile(Constants.fileNames.audio + Constants.fileNames.background_music + "/"+ ProgressManager.currentLevel);
+				audioManager.PlayFromFile(Constants.Filenames.BACKGROUND_MUSIC + ProgressManager.currentLevel);
 				//Subscribe buttons to touch gestures
 				GameObject button = GameObject.FindGameObjectWithTag(Constants.Tags.TAG_BUTTON);
 				if (button != null) 
