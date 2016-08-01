@@ -52,7 +52,6 @@ namespace WordTree
 					// phonemes in word
 					string[] phonemes = prop.Phonemes(); 
 					//load and play audio file attached to the letters
-					string file = "Audio" + "/Phonemes/" + phonemes[index];
 					PlayFromFile(Constants.Filenames.PHONEME + phonemes[index], index * clipLength);
 					StartCoroutine(PulseLetter(go, index * clipLength));
 				} 

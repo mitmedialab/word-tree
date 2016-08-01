@@ -150,7 +150,6 @@ namespace WordTree
 			LeanTween.rotateAround(go, Vector3.forward, 80f, time).setDelay(delayTime + 4 * time);
 			// play cheerful sound
 			Debug.Log("Playing clip for congrats");
-			string file = "Audio/CongratsSound";
 			this.audioManager.PlayFromFile(Constants.Filenames.CONGRATS, delayTime);
 		}
 

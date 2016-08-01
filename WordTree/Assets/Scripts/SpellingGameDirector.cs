@@ -142,7 +142,6 @@ namespace WordTree
 			LeanTween.scale(go, new Vector3(objScale * .7f, objScale * .7f, 1), time).setDelay(delayTime + 3 * time);
 			LeanTween.scale(go, new Vector3(objScale * 1f, objScale * 1f, 1), time).setDelay(delayTime + 4 * time);
 			// play cheerful sound
-			string file = "Audio/CongratsSound";
 			this.audioManager.PlayFromFile(Constants.Filenames.CONGRATS, delayTime);
 		}
 
