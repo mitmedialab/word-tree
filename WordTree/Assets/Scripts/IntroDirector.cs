@@ -19,18 +19,16 @@ namespace WordTree
 			//create instance of grestureManager
 			GestureManager gestureManager = GameObject.FindGameObjectWithTag
 				(Constants.Tags.TAG_GESTURE_MANAGER).GetComponent<GestureManager>();
+			//create in stance of audioManager
+			AudioManager audioManager = GameObject.FindGameObjectWithTag(Constants.Tags.TAG_AUDIO_MANAGER).
+				GetComponent<AudioManager>();
 			if (gestureManager != null) 
 			{
-				GameObject dir = GameObject.Find("IntroDirector");
+				//GameObject dir = GameObject.Find("IntroDirector");
 				// load Background music onto IntroDirector
-				dir.AddComponent<AudioSource>().clip = Resources.Load
-				("Audio/BackgroundMusic/WordTree") as AudioClip;
-				// play background music if attached
-				if (dir.GetComponent<AudioSource>().clip != null) {
-					dir.GetComponent<AudioSource>().Play();
-				}
+				audioManager.PlayFromFile(Constants.Filenames.WORD_TREE);
 				//For keeping background music playing in a loop
-				dir.GetComponent<AudioSource>().loop = true;
+				audioManager.GetComponent<AudioSource>().loop = true;
 				// find kid
 				GameObject[] kids = GameObject.FindGameObjectsWithTag(Constants.Tags.TAG_KID);
 				foreach (GameObject kid in kids) 

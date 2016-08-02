@@ -14,6 +14,7 @@ namespace WordTree
 	{
 		// Initalize list of possible locations for letters to go
 		List<Vector3> points = new List<Vector3>();
+		AudioManager audioManager;
 		//<summary>
 		//called on start, initialize stuff
 		//</summary>
@@ -24,7 +25,8 @@ namespace WordTree
 			//create instance of grestureManager
 			GestureManager gestureManager = GameObject.FindGameObjectWithTag
 				(Constants.Tags.TAG_GESTURE_MANAGER).GetComponent<GestureManager>();
-			if (gestureManager != null) 
+			this.audioManager = GameObject.FindGameObjectWithTag(Constants.Tags.TAG_AUDIO_MANAGER).GetComponent<AudioManager>();
+						if (gestureManager != null) 
 			{
 				// create two sets of words - movable and target
 				LoadSpellingLesson(ProgressManager.currentWord);
@@ -42,16 +44,8 @@ namespace WordTree
 					//create new audio source for the sound
 					AudioSource audioSource = gameObject.AddComponent<AudioSource>();
 					//load the audio file with word's name in it
-					string file = "Audio" + "/Words/" + word.transform.name;
-					audioSource.clip = Resources.Load(file) as AudioClip;
-					if (audioSource.clip != null)
-					{
-						audioSource.Play();
-					} 
-					else 
-					{
-						Debug.LogWarning("Cannot find audio file");
-					}
+
+					audioManager.PlayFromFile(Constants.Filenames.WORD+ word.transform.name);
 					StartCoroutine(StartPulsing(.5f));
 					// then explode the letters
 					StartCoroutine(ExplodeWord(1));
@@ -179,7 +173,7 @@ namespace WordTree
 		// play celebratory animation when word is completed
 		// word object spins around to a cheerful sound
 		//</summary>
-		public static void CelebratoryAnimation(float delayTime)
+		public void CelebratoryAnimation(float delayTime)
 		{
 			float time = 1f; // time to complete animation
 			GameObject go = GameObject.FindGameObjectWithTag(Constants.Tags.TAG_WORD_OBJECT);
@@ -197,18 +191,9 @@ namespace WordTree
 			{
 				LeanTween.moveY(letter, -3f, time).setDelay(delayTime);
 			}
-			// play sound 
-			Debug.Log("Playing clip for congrats");
-			AudioSource audio = go.AddComponent<AudioSource>();
-			audio.clip = Resources.Load("Audio/CongratsSound") as AudioClip;
-			if (audio.clip != null) 
-			{
-				audio.PlayDelayed(delayTime);
-			} 
-			else
-			{
-				Debug.LogWarning("Cannot find audio clip");
-			}
+			// play congratulations sound
+			Debug.Log(Constants.Filenames.CONGRATS);
+			this.audioManager.PlayFromFile(Constants.Filenames.CONGRATS,delayTime);
 		}
 
 		//<summary>

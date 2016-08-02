@@ -10,11 +10,16 @@ namespace WordTree
 	public class SoundGameDirector : MonoBehaviour
 	{
 		private GestureManager gestureManager;
+		//set up instance of audio manager
+		AudioManager audioManager;
 		//<summary>
 		// called on start
 		//</summary>
 		void Start()
 		{
+			//assign audioManager a component 
+			 this.audioManager = GameObject.FindGameObjectWithTag(Constants.Tags.TAG_AUDIO_MANAGER)
+				.GetComponent<AudioManager>();
 			//Scale graphics to screen size
 			Utilities.setCameraViewForScreen();
 			//make reference to existing gestureManager 
@@ -32,10 +37,9 @@ namespace WordTree
 				}
 				// sound out word
 				GameObject[] tar = GameObject.FindGameObjectsWithTag(Constants.Tags.TAG_TARGET_LETTER);
-				GameObject audioManager = GameObject.Find("AudioManager");
 				if (audioManager != null) 
 				{
-					audioManager.GetComponent<AudioManager>().SpellOutWord(tar);
+					audioManager.SpellOutWord(tar);
 					// start pulsing sound blanks
 					GameObject[] mov = GameObject.FindGameObjectsWithTag(Constants.Tags.TAG_MOVABLE_BLANK);
 					foreach (GameObject go in mov) 
@@ -45,7 +49,7 @@ namespace WordTree
 				} 
 				else 
 				{
-					Debug.LogWarning("Cannot find auio manager");
+					Debug.LogWarning("Cannot find audio manager");
 					
 				} 
 			}
@@ -123,34 +127,17 @@ namespace WordTree
 		//Play ping sound when word is incorrect
 		//</summary>
 		// TODO: make animation more kid-friendly
-		public static void TryAgainAnimation()
+		public void TryAgainAnimation()
 		{	
-			// find red X object which has sound attached
-			GameObject tryAgain = GameObject.Find("TryAgain");
-			// play "ping" sound
-			if (tryAgain != null) 
-			{
-				tryAgain.AddComponent<AudioSource>().clip = Resources.Load("Audio/IncorrectSound") as AudioClip;
-				if (tryAgain.GetComponent<AudioSource>().clip != null) 
-				{
-					tryAgain.GetComponent<AudioSource>().Play();
-				} 
-				else
-				{
-					Debug.LogWarning("Tried to find TryAgain audio source but it couldn't be found");
-				}
-			} 
-			else 
-			{
-				Debug.LogWarning("Tried to find TryAgain GameObject but it couldn't be found!");
-			}
+			//load and play ping sound
+			this.audioManager.PlayFromFile(Constants.Filenames.INCORRECT);
 		}
 
 		//<summary>
 		// Animation played when user gets word right
 		// Word object wiggles to a cheerful sound
 		//</summary>
-		public static void CelebratoryAnimation(float delayTime)
+		public void CelebratoryAnimation(float delayTime)
 		{	
 			float time = .3f; // time to complete one wiggle
 			GameObject go = GameObject.FindGameObjectWithTag(Constants.Tags.TAG_WORD_OBJECT);
@@ -163,9 +150,7 @@ namespace WordTree
 			LeanTween.rotateAround(go, Vector3.forward, 80f, time).setDelay(delayTime + 4 * time);
 			// play cheerful sound
 			Debug.Log("Playing clip for congrats");
-			AudioSource audio = go.AddComponent<AudioSource>();
-			audio.clip = Resources.Load("Audio/CongratsSound") as AudioClip;
-			audio.PlayDelayed(delayTime);
+			this.audioManager.PlayFromFile(Constants.Filenames.CONGRATS, delayTime);
 		}
 
 		//<summary>

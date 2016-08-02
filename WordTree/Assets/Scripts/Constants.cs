@@ -26,6 +26,24 @@ namespace WordTree
 			public const string TAG_MOVABLE_BLANK = "MovableBlank";
 			public const string TAG_JAR = "Jar";
 			public const string TAG_HINT = "Hint";
+			public const string TAG_AUDIO_MANAGER = "AudioManager";
+		}
+
+		//<summary>
+		//Names of folders
+		//</summary>
+		public static class Filenames
+		{
+			public const string PHONEME = AUDIO + "Phonemes/";
+			public const string AUDIO = "Audio/";
+			public const string WORD =AUDIO + "Words/";
+			public const string INCORRECT = AUDIO + "IncorrectSound";
+			public const string CONGRATS = AUDIO + "CongratsSound";
+			public const string BACKGROUND_MUSIC = AUDIO +"BackgroundMusic/";
+			public const string WORD_TREE =  BACKGROUND_MUSIC + "WordTree";
+			public const string KID_SPEAKING = AUDIO + "KidSpeaking/";
+			public const string INTRO =  AUDIO + "KidSpeaking/Intro";
+			public const string TUMBLE = AUDIO +"TumbleSound";
 		}
 	}
 }

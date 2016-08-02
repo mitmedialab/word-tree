@@ -20,6 +20,8 @@ namespace WordTree
 			//create instance of grestureManager
 			GestureManager gestureManager = GameObject.
 				FindGameObjectWithTag(Constants.Tags.TAG_GESTURE_MANAGER).GetComponent<GestureManager>();
+			AudioManager audioManager = GameObject.FindGameObjectWithTag(Constants.Tags.TAG_AUDIO_MANAGER).
+				GetComponent<AudioManager>();
 			if (gestureManager != null) 
 			{
 				//Create objects and background
@@ -42,49 +44,16 @@ namespace WordTree
 					//Play Grow Animation for kid
 					GrowKid();
 					//Load audio for kid
-					kid.AddComponent<AudioSource>().clip = Resources.Load("Audio/KidSpeaking/"
-					+ ProgressManager.currentLevel) as AudioClip;
-					//Check if audio clip is attached
-					if (kid.GetComponent<AudioSource>().clip != null) 
-					{
-						kid.GetComponent<AudioSource>().priority = 0;
-						kid.GetComponent<AudioSource>().volume = 1.0f;
-						//Play audio clip attached to kid if there is one
-						kid.GetComponent<AudioSource>().Play();
-					} 
-					else 
-					{
-						Debug.LogWarning("No audio found");
-					}
+					audioManager.PlayFromFile( Constants.Filenames.KID_SPEAKING + ProgressManager.currentLevel);
 				}
 				else 
 				{
 					Debug.LogWarning("Cannot load sprite");
 				}
-					//Find ChooseObjectDirector gameObject
-					GameObject dir = GameObject.Find("ChooseObjectDirector");
-				if (dir != null) 
-				{
-					//Load background music for scene onto ChooseObjectDirector
-					dir.AddComponent<AudioSource>().clip = Resources.Load("Audio/BackgroundMusic/"
-					+ ProgressManager.currentLevel) as AudioClip;
-					//Check if audio clip is attached
-					if (dir.GetComponent<AudioSource>().clip != null)
-					{
-						dir.GetComponent<AudioSource>().priority = 0;
-						dir.GetComponent<AudioSource>().volume = .25f;
-						//Start playing background music if attached
-						dir.GetComponent<AudioSource>().Play();
-					} 
-					else 
-					{
-						Debug.LogWarning("No audio file found");
-					}
-				} 
-				else 
-				{
-					Debug.LogWarning("Cannot find ChooseObjectDirector");
-				}
+				//Load background music for scene onto ChooseObjectDirector
+				//set volume for background music
+				audioManager.GetComponent<AudioSource>().volume= .25f;
+				audioManager.PlayFromFile(Constants.Filenames.BACKGROUND_MUSIC + ProgressManager.currentLevel);
 				//Subscribe buttons to touch gestures
 				GameObject button = GameObject.FindGameObjectWithTag(Constants.Tags.TAG_BUTTON);
 				if (button != null) 
@@ -135,21 +104,14 @@ namespace WordTree
 		void Update()
 		{
 			//Find ChooseObjectDirector
-			GameObject dir = GameObject.Find("ChooseObjectDirector");
+			GameObject dir = GameObject.FindGameObjectWithTag("AudioManager");
 			if (dir != null) 
 			{
-				if (dir.GetComponent<AudioSource>() != null) 
+				//If attached audio (background music) has stopped playing, play the audio
+				//For keeping background music playing in a loop
+				if (!dir.GetComponent<AudioSource>().isPlaying) 
 				{
-					//If attached audio (background music) has stopped playing, play the audio
-					//For keeping background music playing in a loop
-					if (!dir.GetComponent<AudioSource>().isPlaying) 
-					{
-						dir.GetComponent<AudioSource>().Play();
-					}
-				} 
-				else 
-				{ 
-					Debug.LogWarning("Cannot load audio component of ChooseObjectDirector");
+					dir.GetComponent<AudioSource>().Play();
 				}
 			}
 			else 
