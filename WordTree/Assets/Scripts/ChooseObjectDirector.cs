@@ -169,22 +169,12 @@ namespace WordTree
 			foreach (GameObject go in gos) 
 			{
 				//if current scene is Learn Spelling
-				if (ProgressManager.currentMode == 1 && ProgressManager.completedWordsLearn.Contains(go.name))
+				if (ProgressManager.currentMode == 1 && ProgressManager.completedWordsLearn.Contains(go.name) || 
+					ProgressManager.currentMode == 2 && ProgressManager.completedWordsSpell.Contains(go.name) || 
+					ProgressManager.currentMode == 3 && ProgressManager.completedWordsSound.Contains(go.name))
 				{
 					//completed a word; update counter
-					numCompleted = numCompleted + 1;
-				}
-				//if current scene is Spelling Game
-				if (ProgressManager.currentMode == 2 && ProgressManager.completedWordsSpell.Contains(go.name))
-				{
-					//completed a word; update counter
-					numCompleted = numCompleted + 1;
-				}
-				//if current scene is Sound Game
-				if (ProgressManager.currentMode == 3 && ProgressManager.completedWordsSound.Contains(go.name)) 
-				{
-				    //completed a word; update counter
-					numCompleted = numCompleted + 1;
+					numCompleted ++ ;
 				}
 			}
 			//check if all words have been completed
